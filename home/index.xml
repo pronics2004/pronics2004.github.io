@@ -38,7 +38,7 @@
       <guid>/home/about/</guid>
       <description>About Me I am a researcher at IBM Research AI and my broad research interests include machine learning, deep learning and signal processing.
 My current work focuses on exploring structure in the data using generative models and developing algorithms that are data efficient. My research also involves developing theory and practical systems for impactful machine learning applications that demand constraints such as robustness, fairness and interpretability.
-Recent News  Our work on co-regularized domain adaptation to appear in NIPS 2018.</description>
+Recent News  We are organizing a workshop on Practical Bayesian Methods for Big Data, MIT Samberg Center, Cambridge, MA, September 20, 2019.</description>
     </item>
     
     <item>
@@ -65,14 +65,13 @@ Recent News  Our work on co-regularized domain adaptation to appear in NIPS 2018
       <pubDate>Wed, 20 Apr 2016 00:00:00 -0400</pubDate>
       
       <guid>/home/publications_selected/</guid>
-      <description>Co-regularized Alignment for Unsupervised Domain Adaptation
+      <description>Understanding Behavior of Clinical Models under Domain Shifts
+Thiagarajan, Jayaraman J., Deepta Rajan, and Prasanna Sattigeri
+KDD 2019 DSHealth workshop (Best Paper) Fairness GAN
+Prasanna Sattigeri, Samuel C. Hoffman, Vijil Chenthamarakshan, and Kush R. Varshney
+Proc. ICLR Workshop Safe Mach. Learn 2, 2019. Co-regularized Alignment for Unsupervised Domain Adaptation
 Abhishek Kumar, Prasanna Sattigeri, Kahini Wadhawan, Leonid Karlinsky, Rogerio Feris, Bill Freeman, Gregory Wornell
-Adv. in Neural Information Processing Systems (NIPS), 2018
- Variational Inference of Disentangled Latent Concepts from Unlabeled Observations
-Abhishek Kumar, Prasanna Sattigeri, Avinash Balakrishnan
-International Conference on Learning Representations (ICLR), 2018
-A shorter version appeared in NIPS 2017 Workshop on Learning Disentangled Representations: from Perception to Control (Spotlight)
- Semi-supervised Learning with GANs: Manifold Invariance with Improved Inference</description>
+Adv. in Neural Information Processing Systems (NIPS), 2018</description>
     </item>
     
     <item>
@@ -99,7 +98,10 @@ A shorter version appeared in NIPS 2017 Workshop on Learning Disentangled Repres
       <pubDate>Wed, 20 Apr 2016 00:00:00 -0400</pubDate>
       
       <guid>/home/talks/</guid>
-      <description>Oct 19 2018
+      <description>Jan 24, 2019
+Tutorial - AI Fairness 360 ComputeFest
+Harvard&amp;rsquo;s Institute for Applied Computational Science , Cambridge, MA, USA
+Oct 19, 2018
 Panel - ARTIFICIAL INTELLIGENCE IN GOVERNMENT AND PUBLIC SECTOR
 AAAI Fall Symposium Series</description>
     </item>
