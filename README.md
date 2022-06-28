@@ -41,7 +41,7 @@ Selected Projects:
 - Investigated the issues of domain shift in healthcare machine learning models and proposed benchmarks. This work received the best paper award.
 - Developed innovative techniques to use the generative adversarial networks for semi-supervised learning. This achieved state-of-the-art on several vision tasks and results was presented at Neural Information Processing Systems.
 - Conducted research on interpretability using generative models and proposed a new regularizer for variational autoencoder to promote disentanglement. This was then used to obtain contrastive explanation for model decisions. Resulted in publications and a patent application.
-- Developed techniques to enhance the latent space of generative models to promote algorithmic fairness and interpretability. Contributed to the development of the AI Fairness and Expandability research toolbox that has seen wide adoption from researchers and practitioners. Received worldwide media attention and coverage.
+- Developed techniques to enhance the latent space of generative models to promote algorithmic fairness and interpretability. Contributed to the development of the AI Fairness and Explainability research toolbox that has seen wide adoption from researchers and practitioners. Received worldwide media attention and coverage.
 
 _Software Engineer_ Dec. 2014 to Dec. 2015
 
