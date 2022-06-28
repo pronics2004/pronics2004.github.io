@@ -1,5 +1,7 @@
 # Prasanna Sattigeri
 
+![profile picture](profile.png "Title")
+
 Research Staff Member,
 IBM Research AI
 
