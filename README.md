@@ -70,7 +70,6 @@ School of ECEE, Arizona State University, Tempe, AZ 85287
 - Served as TA for Signals and Systems course which covered the fundamentals of DSP, communication and control systems.
 - Responsibilities included updating, conducting and grading lab sessions.
 - Assisted around 400 students.
-- Worked as a part-time employee (10 hours/week).
 
 **Research Interests**
 
