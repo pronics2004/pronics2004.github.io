@@ -73,7 +73,7 @@ School of ECEE, Arizona State University, Tempe, AZ 85287
 
 **Research Interests**
 
-Machine learning, artificial intelligence, signal processing, generative modeling, AI trustworthiness and applications to computer vision, healthcare and other data science problems.
+Machine learning, artificial intelligence, signal processing, generative modeling, AI trustworthiness and applications to computer vision, natural language processing, healthcare and other data science problems.
 
 **Honors and Awards**
 
