@@ -2,8 +2,7 @@
 
 ![profile picture](profile.png "Title")
 
-Research Staff Member,
-IBM Research AI
+I am a Research Staff Member at IBM Research and MIT-IBM Watson AI Lab. My main research goal is build reliable AI solutions. My research interests span several areas in machine learning and artificial intelligence this includes Bayesian inference, deep generative modeling, uncertainty quantification and learning with limited data. My current work focuses on developing theory and practical systems for machine learning applications that demand constraints such as reliability, fairness, and interpretability. I am  a core contributor to several open-source trustworthy AI toolkits - AI Fairness 360, AI Explainability 360, and Uncertainty Quantification 360.
 
 Google Scholar: [https://scholar.google.com/citations?hl=en&amp;user=m-s38ikAAAAJ&amp;view\_op=list\_works](https://scholar.google.com/citations?hl=en&amp;user=m-s38ikAAAAJ&amp;view_op=list_works)
 
@@ -70,10 +69,6 @@ School of ECEE, Arizona State University, Tempe, AZ 85287
 - Served as TA for Signals and Systems course which covered the fundamentals of DSP, communication and control systems.
 - Responsibilities included updating, conducting and grading lab sessions.
 - Assisted around 400 students.
-
-**Research Interests**
-
-Machine learning, artificial intelligence, signal processing, generative modeling, AI trustworthiness and applications to computer vision, natural language processing, healthcare and other data science problems.
 
 **Honors and Awards**
 
