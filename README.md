@@ -6,20 +6,6 @@ I am a Research Staff Member at IBM Research and MIT-IBM Watson AI Lab. My main 
 
 Google Scholar: [https://scholar.google.com/citations?hl=en&amp;user=m-s38ikAAAAJ&amp;view\_op=list\_works](https://scholar.google.com/citations?hl=en&amp;user=m-s38ikAAAAJ&amp;view_op=list_works)
 
-**Education**
-
-Ph.D. Electrical Engineering; Dec. 2014
-
-- School of ECEE, Arizona State University, Tempe, AZ
-
-- Research Advisor: Andreas Spanias
-
--  Thesis Title: Exploring Latent Structure in Data: Algorithms and Implementations
-
-Bachelor of Technology, Electronics Engineering; Apr. 2008
-
- - National Institute of Technology, India.
-
 **Professional Experience**
 
 _Research Staff Member_ Dec. 2015-present
@@ -70,6 +56,17 @@ School of ECEE, Arizona State University, Tempe, AZ 85287
 - Responsibilities included updating, conducting and grading lab sessions.
 - Assisted around 400 students.
 
+**Education**
+
+Ph.D. Electrical Engineering; Dec. 2014
+
+- Arizona State University, USA
+
+
+Bachelor of Technology, Electronics Engineering; Apr. 2008
+
+ - National Institute of Technology, India.
+ 
 **Honors and Awards**
 
 - IBM Outstanding Technical Achievement Award for contributions to Trustworthy AI (2019).
