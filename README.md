@@ -171,4 +171,4 @@ _Conference Proceedings_
 
 **Membership**
 
-IEEE Member
+IEEE Senior Member
