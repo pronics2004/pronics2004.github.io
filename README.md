@@ -8,11 +8,15 @@ Google Scholar: [https://scholar.google.com/citations?hl=en&amp;user=m-s38ikAAAA
 
 **Professional Experience**
 
-_Research Staff Member_ Dec. 2015-present
+_Senior Research Scientist_ Dec. 2015-present
 
-IBM Thomas J. Watson Research Center, NY, 10598
+IBM Research AI, MIT-IBM Watson AI Lab
+
+- Principal Investigator on joint project with Prof. Greg Wornell from MIT titled – “Principles and Methods for Trustworthy Learning With Limited Data”.
+- Principal Investigator on joint project with Prof. David Sontag from MIT titled – “Human-Centric AI: Novel Algorithms for Shared Decision Making”.
 
 Responsibilities:
+
 
 - Conduct research on foundational topics in machine learning and artificial intelligence including efficiency, robustness, interpretability and trustworthiness of AI models.
 - Develop analytical tools to solve challenging business problems.
