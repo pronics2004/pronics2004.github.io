@@ -1,5 +1,5 @@
-# theme: jekyll-theme-cayman
-theme: no-style-please
+theme: jekyll-theme-chirpy
+#theme: no-style-please
 
 url: "https://prasannasattigeri.com/"
 baseurl: ""
