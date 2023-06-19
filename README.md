@@ -8,7 +8,7 @@ Google Scholar: [https://scholar.google.com/citations?hl=en&amp;user=m-s38ikAAAA
 
 **Professional Experience**
 
-_Senior Research Scientist_ Dec. 2015-present
+_Principal Research Scientist_ Dec. 2015-present
 
 IBM Research AI, MIT-IBM Watson AI Lab
 
