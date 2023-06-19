@@ -1,4 +1,5 @@
-theme: jekyll-theme-cayman
+# theme: jekyll-theme-cayman
+theme: no-style-please
 
 url: "https://prasannasattigeri.com/"
 baseurl: ""
