@@ -10,4 +10,9 @@ Detailed [CV](CV.md)
 
 **News**
 
-Invited talk at the NAACL TrustNLP Workshop, June 2024. [Slides](slides/naacl_trustnlp_talk.pdf)
+- Invited talk on LLM Governance and Aligment. NAACL TrustNLP Workshop, June 2024. [Slides](slides/naacl_trustnlp_talk.pdf)
+- Panel participation and talk on Reliable AI-assisted Decision Making. National Academy of Sciences Decadal Survey
+- Invted talk on Uncertainty Calibration and AI-assisted Decision Making. Workshop on Uncertainty Reasoning and Quantification in Decision Making, KDD, August 2023.
+- Panel participation and talk on Generative AI and Safety. DSHealth Workshop, KDD, August 2023.
+- Panel participation on Trustworthy LLMs. AI for Open Society Day, KDD, August 2023.
+
