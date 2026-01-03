@@ -1,6 +1,11 @@
+---
+layout: default
+title: CV - Prasanna Sattigeri
+---
+
 # Curriculum Vitae
 
-[Back to Home](README.md)
+[Back to Home](index.html)
 
 ---
 
