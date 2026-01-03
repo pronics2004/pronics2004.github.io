@@ -78,7 +78,9 @@ title: CV - Prasanna Sattigeri
 
 | Year | Award |
 |------|-------|
-| 2024 | Granite Guardian tops third-party AI benchmark (GuardBench) |
+| 2025 | Granite Guardian #1 on GuardBench (86% accuracy across 40 datasets) |
+| 2025 | Granite Guardian #1 on REVEAL benchmark (outperforms GPT-4o) |
+| 2025 | Granite Guardian #3 on LLM-AggreFact benchmark |
 | 2021 | IBM Research Technical Achievement Award - Science of Uncertainty Quantification |
 | 2021 | IBM Research Technical Achievement Award - Science of Accurate, Robust, and Generalizable AI |
 | 2020 | IBM Research Technical Achievement Award - Science in Learning with Less Labels (LwLL) |
@@ -109,10 +111,13 @@ title: CV - Prasanna Sattigeri
 
 | Year | Event | Topic |
 |------|-------|-------|
+| 2024 | MIT AI Conference | AI Ethics and Change Management |
 | 2024 | NAACL TrustNLP Workshop | LLM Governance and Alignment |
 | 2024 | National Academy of Sciences | Reliable AI-assisted Decision Making |
+| 2024 | CHI TREW Workshop | Trust and Reliance in Evolving Human-AI Workflows |
 | 2023 | KDD Workshop | Uncertainty Calibration and AI-assisted Decision Making |
 | 2023 | DSHealth Workshop, KDD | Generative AI and Safety |
+| 2023 | AI for Open Society Day, KDD | Trustworthy LLMs (Panel) |
 | 2021 | KDD Responsible AI Workshop | Trustworthy AI Toolkits |
 | 2021 | PyData Global | AI Uncertainty Quantification Tutorial |
 | 2021 | ACM CODS-COMAD | UQ360 Hands-on Tutorial |
@@ -125,9 +130,10 @@ title: CV - Prasanna Sattigeri
 
 ## Selected Press Coverage
 
-- **IBM Research Blog** - "How we slimmed down Granite Guardian" (February 2025)
-- **IBM Research Blog** - "IBM Granite now has adapters designed to control AI outputs" (March 2025)
-- **IBM Research Blog** - "Granite Guardian tops third-party AI benchmark" (2024)
+- **IBM Research Blog** - ["Granite Guardian tops third-party AI benchmark"](https://research.ibm.com/blog/granite-guardian-tops-guardbench) (April 2025)
+- **IBM Research Blog** - ["IBM Granite now has adapters designed to control AI outputs"](https://research.ibm.com/blog/Granite-adapter-experiments) (March 2025)
+- **IBM Research Blog** - ["How we slimmed down Granite Guardian"](https://research.ibm.com/blog/ibm-granite-guardian-5b-3b) (February 2025)
+- **MIT IDE Medium** - ["What Does Ethical AI Look Like?"](https://medium.com/mit-initiative-on-the-digital-economy/what-does-ethical-ai-look-like-1c91c3a5b378) - featuring MIT AI Conference remarks (2024)
 - **BBC News** - "IBM launches tool aimed at detecting AI bias" by Zoe Kleinman (September 2018)
 - **Economic Times ETCIO** - "What to do when your ML model suffers from overconfidence?" by Riya Pahuja (November 2021)
 - **VentureBeat** - "What to do when AI brings more questions than answers?" by Kyle Wiggers (July 2021)
@@ -139,9 +145,12 @@ title: CV - Prasanna Sattigeri
 
 ### 2025
 
-1. Miehling, E., Desmond, M., Ramamurthy, K.N., Daly, E.M., Varshney, K.R., et al., Sattigeri, P. "Evaluating the Prompt Steerability of Large Language Models." *NAACL*, 2025.
-2. Padhi, I., Nagireddy, M., Cornacchia, G., et al., Sattigeri, P. "Granite Guardian: Comprehensive LLM Safeguarding." *NAACL Industry Track*, 2025.
-3. Richards, J.T., Dhurandhar, A., Daly, E.M., Hind, M., Sattigeri, P., Wei, D. "Agentic AI Needs a Systems Theory." *arXiv preprint*, 2025.
+1. Paes, L.M., Wei, D., Do, H.J., Strobelt, H., Luss, R., Dhurandhar, A., Nagireddy, M., Ramamurthy, K.N., Sattigeri, P., Geyer, W., Ghosh, S. "Multi-Level Explanations for Generative Language Models." *ACL*, 2025.
+2. Miehling, E., Desmond, M., Ramamurthy, K.N., Daly, E.M., Varshney, K.R., et al., Sattigeri, P. "Evaluating the Prompt Steerability of Large Language Models." *NAACL*, 2025.
+3. Padhi, I., Nagireddy, M., Cornacchia, G., et al., Sattigeri, P. "Granite Guardian: Comprehensive LLM Safeguarding." *NAACL Industry Track*, 2025.
+4. Huang, Y., Hua, H., Zhou, Y., et al., Sattigeri, P., Zhang, X. "Building a Foundational Guardrail for General Agentic Systems via Synthetic Data." *arXiv:2510.09781*, 2025.
+5. 66 co-authors incl. Sattigeri, P. "On the Trustworthiness of Generative Foundation Models: Guideline, Assessment, and Perspective." *arXiv:2502.14296*, 2025.
+6. Richards, J.T., Dhurandhar, A., Daly, E.M., Hind, M., Sattigeri, P., Wei, D., et al. "Agentic AI Needs a Systems Theory." *arXiv:2503.00237*, 2025.
 
 ### 2024
 
