@@ -1,17 +1,28 @@
 theme: jekyll-theme-minimal
-#theme: no-style-please
 
 url: "https://www.prasannasattigeri.com/"
 baseurl: ""
 
-# If you are building a GitHub project page then use these settings:
-#url: "http://username.github.io/projectname"
-#baseurl: "/projectname"
+# Site Information
+title: "Prasanna Sattigeri"
+description: "Principal Research Scientist at IBM Research AI and MIT-IBM Watson AI Lab, focusing on reliable AI, LLM governance, uncertainty quantification, and trustworthy machine learning."
 
-# Of course don't forget to change the username and projectname to YOUR username and project
+# Author Information
+author:
+  name: Prasanna Sattigeri
+  email: prasanna.sattigeri@ibm.com
 
-# Name of website
-title: Personal Homepage
+# Social Links
+google_scholar: "https://scholar.google.com/citations?hl=en&user=m-s38ikAAAAJ"
+github_username: pronics2004
 
-# Short description of your site
-# description: 
+# SEO
+logo: /profile.png
+
+# Build Settings
+markdown: kramdown
+highlighter: rouge
+
+# Plugins
+plugins:
+  - jekyll-seo-tag
