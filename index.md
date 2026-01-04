@@ -4,8 +4,6 @@ layout: default
 
 # Prasanna Sattigeri
 
-<img src="profile.png" alt="profile" width="180"/>
-
 I am a **Principal Research Scientist** at [IBM Research AI](https://research.ibm.com/) and the [MIT-IBM Watson AI Lab](https://mitibmwatsonailab.mit.edu/), where my primary focus is on developing reliable AI solutions.
 
 My current projects establish both theoretical frameworks and practical systems that ensure large language models are reliable and trustworthy. I lead the [Granite Guardian](https://github.com/ibm-granite/granite-guardian) project — IBM's state-of-the-art LLM safeguarding models.
@@ -33,7 +31,7 @@ I lead and contribute to widely-adopted trustworthy AI toolkits:
 
 ## Links
 
-- [Google Scholar](https://scholar.google.com/citations?hl=en&user=m-s38ikAAAAJ&view_op=list_works) — 7,700+ citations
+- [Google Scholar](https://scholar.google.com/citations?hl=en&user=m-s38ikAAAAJ&view_op=list_works)
 - [IBM Research Profile](https://research.ibm.com/people/prasanna-sattigeri)
 - [MIT-IBM Watson AI Lab](https://mitibmwatsonailab.mit.edu/people/prasanna-sattigeri/)
 - [Papers With Code](https://paperswithcode.com/author/prasanna-sattigeri)
