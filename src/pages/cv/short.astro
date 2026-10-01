@@ -1,0 +1,274 @@
+---
+import Base from '../../layouts/Base.astro';
+import { profile, links, scholar, awards } from '../../data/site.js';
+import { publications } from '../../data/publications.js';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const pick = ['agentic-guardrail', 'decocted', 'trace-inversion', 'granite-guardian', 'mexgen', 'thermometer', 'graph-uncertainty', 'onboarding', 'fair-ij', 'dip-vae', 'ssl-gan'];
+const byId = Object.fromEntries(publications.filter((p) => p.id).map((p) => [p.id, p]));
+const papers = pick.map((id) => byId[id]);
+const venue = (p) => [p.venue, p.year].join(' ') + (p.note ? `, ${p.note.toLowerCase()}` : '');
+---
+
+<Base title="Short CV · Prasanna Sattigeri" description="Two-page curriculum vitae of Prasanna Sattigeri." current="cv">
+  <article class="cv wrap">
+    <header class="cv-head">
+      <div>
+        <h1>{profile.name}</h1>
+        <p class="role">{profile.title}, {profile.org} · Principal Investigator, {profile.lab}</p>
+        <p class="contact">
+          {profile.location} ·{' '}
+          <a href={links.linkedin}>linkedin.com/in/prasannasattigeri</a> ·{' '}
+          <a href={links.scholar}>Google Scholar</a> ·{' '}
+          <a href={links.github}>github.com/pronics2004</a>
+        </p>
+      </div>
+      <div class="cv-links no-print">
+        <a class="btn" href={`${base}/Prasanna_Sattigeri_Short_CV.pdf`}>Download PDF</a>
+        <a class="btn" href={`${base}/cv/`}>Full CV</a>
+      </div>
+    </header>
+
+    <section>
+      <h2>Summary</h2>
+      <p>
+        I lead post-training for agent reliability at IBM Research: judge models, reward models and base-model
+        capabilities that check tool calls, groundedness and requirements at each step of an LLM agent’s workflow. The
+        team, spread across IBM Research sites in the United States, India, Japan and Ireland, trains Granite Guardian
+        and the Granite Guardian and Core libraries.
+        Research spans post-training and generative modeling. {scholar.citations.toLocaleString('en-US')} citations,
+        h-index {scholar.hIndex}{' '}(Google Scholar, {scholar.asOf}).
+      </p>
+    </section>
+
+    <section>
+      <h2>Experience</h2>
+      <div class="job">
+        <div class="job-head">
+          <h3>IBM Research and MIT-IBM Watson AI Lab · Principal Research Scientist and Manager</h3>
+          <span>2015 – present</span>
+        </div>
+        <ul>
+          <li>
+            Lead the Granite Guardian team through five releases in 18 months, from 3.0 (October 2024) to 4.1 (April
+            2026): training data, post-training, evaluation and open-source release.
+          </li>
+          <li>
+            Granite Guardian 4.1 8B: fifth of 20 guardrail configurations on the Artificial Analysis benchmark (F1
+            0.859, 59 ms), first among models that take their policy at runtime. As a reward model, 70.29 on JETTS
+            best-of-N selection, ahead of reward models up to 70B. Six of the top ten places on GuardBench (April 2025).
+          </li>
+          <li>
+            Lead the Granite Guardian and Core libraries: post-trained capabilities for policy compliance, factuality
+            detection and correction, requirement checking, calibrated uncertainty and context attribution. Requirement
+            checking raises IFEval balanced accuracy from 0.569 (prompted base model) to 0.855.
+          </li>
+          <li>
+            Adoption: used in IBM watsonx.ai and watsonx.governance, deployed as the guardrails in Red Hat’s Ask Red Hat assistant, integrated in
+            Traefik Hub, deepset Haystack and Mozilla.ai any-guardrail. 1.15M Hugging Face downloads and 371K Ollama
+            pulls (October 2026).
+          </li>
+          <li>
+            Principal investigator on two MIT-IBM Watson AI Lab projects, with Gregory Wornell and David Sontag.
+            Thesis committee member for PhD students at MIT and RPI.
+          </li>
+          <li>
+            Core contributor to AI Fairness 360, AI Explainability 360 and Uncertainty Quantification 360. Generative
+            modeling research including DIP-VAE (ICLR 2018) and semi-supervised GANs (NeurIPS 2017).
+          </li>
+        </ul>
+      </div>
+      <div class="job">
+        <div class="job-head">
+          <h3>Yelp Inc. · Software Engineer</h3>
+          <span>2014 – 2015</span>
+        </div>
+        <ul>
+          <li>Machine learning for search, using natural language processing and image understanding.</li>
+        </ul>
+      </div>
+      <div class="job">
+        <div class="job-head">
+          <h3>Arizona State University · Research Assistant</h3>
+          <span>2009 – 2014</span>
+        </div>
+        <ul>
+          <li>Sparse and low-rank representation learning; lead student researcher on an NSF sensor project.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section>
+      <h2>Education</h2>
+      <ul class="rows">
+        <li><span>2014</span><span>Ph.D., Electrical Engineering, Arizona State University</span></li>
+        <li><span>2008</span><span>B.Tech., Electronics Engineering, National Institute of Technology, India</span></li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Selected publications</h2>
+      <ul class="pubs">
+        {papers.map((p) => <li>{p.title}. <em>{venue(p)}</em></li>)}
+      </ul>
+    </section>
+
+    <section>
+      <h2>Awards</h2>
+      <ul class="rows">
+        {awards.map(([y, a, f]) => <li><span>{y}</span><span>{a}: {f}</span></li>)}
+      </ul>
+    </section>
+
+    <section>
+      <h2>Patents and service</h2>
+      <ul>
+        <li>Seven granted US patents and six applications.</li>
+        <li>Associate Editor, Pattern Recognition. Area chair and senior program committee: NeurIPS, ICML, ICLR, AAAI.</li>
+        <li>IEEE Senior Member.</li>
+      </ul>
+    </section>
+  </article>
+</Base>
+
+<style>
+  .cv {
+    max-width: 860px;
+    padding-block: clamp(32px, 6vw, 72px);
+    font-size: 0.95rem;
+  }
+  .cv-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--rule-strong);
+  }
+  .cv-links {
+    display: grid;
+    gap: 8px;
+  }
+  .cv h1 {
+    font-size: clamp(2rem, 4vw, 2.6rem);
+  }
+  .role {
+    margin: 8px 0 4px;
+    font-weight: 500;
+  }
+  .contact {
+    margin: 0;
+    color: var(--ink-2);
+    font-size: 0.9rem;
+  }
+  section {
+    margin-top: 28px;
+  }
+  .cv h2 {
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+    margin-bottom: 10px;
+  }
+  .cv h3 {
+    font-family: var(--sans);
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0;
+  }
+  .job {
+    margin-top: 14px;
+  }
+  .job-head {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 2px 16px;
+    margin-bottom: 6px;
+  }
+  .job-head span {
+    color: var(--ink-3);
+    font-size: 0.86rem;
+  }
+  .cv ul {
+    margin: 0;
+    padding-left: 1.15em;
+    display: grid;
+    gap: 5px;
+  }
+  .rows,
+  .pubs {
+    list-style: none;
+    padding-left: 0 !important;
+  }
+  .rows li {
+    display: grid;
+    grid-template-columns: 64px 1fr;
+    gap: 12px;
+  }
+  .rows li > span:first-child {
+    color: var(--ink-3);
+    font-variant-numeric: tabular-nums;
+  }
+  .pubs {
+    font-size: 0.92rem;
+  }
+
+  @media (max-width: 600px) {
+    .cv-head {
+      flex-direction: column;
+    }
+  }
+
+  @media print {
+    .no-print {
+      display: none;
+    }
+    .cv {
+      max-width: none;
+      padding: 0;
+      font-size: 9.2pt;
+      line-height: 1.36;
+    }
+    .cv h1 {
+      font-size: 20pt;
+    }
+    section {
+      margin-top: 11pt;
+    }
+    .cv a {
+      color: inherit;
+      text-decoration: none;
+    }
+    .job {
+      break-inside: avoid;
+    }
+  }
+</style>
+
+<style is:global>
+  @media print {
+    @page {
+      size: letter;
+      margin: 0.6in 0.7in;
+    }
+    html:root {
+      color-scheme: light;
+      --bg: #ffffff;
+      --surface: #ffffff;
+      --ink: #000000;
+      --ink-2: #333333;
+      --ink-3: #555555;
+      --rule: #dddddd;
+      --rule-strong: #999999;
+      --link: #000000;
+    }
+    body {
+      background: #ffffff;
+    }
+  }
+</style>

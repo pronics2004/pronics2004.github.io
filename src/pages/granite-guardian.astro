@@ -1,0 +1,589 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import aaChart from '../assets/aa-average-f1.png';
+import Dumbbell from '../components/Dumbbell.astro';
+import { models, guardbench, benchmark } from '../data/site.js';
+import { quotes, usage } from '../data/research.js';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const criteria = [
+  {
+    head: 'Harm',
+    items: ['General harm', 'Social bias', 'Jailbreaking', 'Violence', 'Profanity', 'Unethical behavior'],
+  },
+  {
+    head: 'Retrieval-augmented generation',
+    items: ['Context relevance', 'Groundedness', 'Answer relevance'],
+  },
+  {
+    head: 'Agentic workflows',
+    items: ['Function-call hallucination'],
+  },
+  {
+    head: 'Bring your own criteria',
+    items: ['Any rule written in natural language, such as a format, length or domain constraint'],
+  },
+];
+
+// Granite Guardian 3.3 8B vs 4.1 8B, both in no-think mode. Source: the 4.1 model card.
+const versions = [
+  { metric: 'Custom criteria: IFEval multi-constraint', unit: 'balanced accuracy', v33: '0.458', v41: '0.844' },
+  { metric: 'Custom criteria: InfoBench, human-annotated', unit: 'balanced accuracy', v33: '0.535', v41: '0.706' },
+  { metric: 'Custom criteria: InfoBench, GPT-4-annotated', unit: 'balanced accuracy', v33: '0.585', v41: '0.726' },
+  { metric: 'Function-call hallucination: FC Reward Bench', unit: 'balanced accuracy', v33: '0.74', v41: '0.79' },
+  { metric: 'RAG groundedness: LLM-AggreFact average', unit: 'balanced accuracy', v33: '0.761', v41: '0.760' },
+  { metric: 'Out-of-distribution safety: aggregate', unit: 'F1', v33: '0.81', v41: '0.79' },
+];
+
+const versionRows = [
+  { label: 'IFEval multi-constraint', before: 0.458, after: 0.844 },
+  { label: 'InfoBench, human-annotated', before: 0.535, after: 0.706 },
+  { label: 'InfoBench, GPT-4-annotated', before: 0.585, after: 0.726 },
+  { label: 'FC Reward Bench', before: 0.74, after: 0.79, beforeText: '0.74', afterText: '0.79' },
+  { label: 'LLM-AggreFact average', before: 0.761, after: 0.76 },
+];
+
+const guardianQuotes = quotes.slice(0, 2);
+
+// Best-of-N selection on the verifiable JETTS tasks. Source: the 4.1 model card.
+const jetts = [
+  { model: 'Granite Guardian 4.1 8B', overall: '70.29', granite: true },
+  { model: 'Skywork-Reward 27B', overall: '68.67' },
+  { model: 'Skywork-Reward 8B', overall: '68.62' },
+  { model: 'SFR-Judge 70B', overall: '68.22' },
+  { model: 'OffsetBias 8B', overall: '67.99' },
+];
+
+const timeline = [
+  { when: 'Dec 2024', what: 'Granite Guardian paper released', url: 'https://arxiv.org/abs/2412.07724' },
+  {
+    when: 'Feb 2025',
+    what: 'Granite Guardian 3.2 adds smaller 5B and 3B variants',
+    url: 'https://research.ibm.com/blog/ibm-granite-guardian-5b-3b',
+  },
+  { when: 'Apr 2025', what: 'Six of the top ten places on GuardBench', url: guardbench.url },
+  { when: '2025', what: 'Paper published at NAACL 2025, Industry Track', url: models.guardian.paper },
+  { when: 'Apr 2026', what: 'Granite Guardian 4.1 8B: custom criteria, hybrid thinking', url: models.guardian.hf },
+  {
+    when: '2026',
+    what: 'Guardian and Core libraries for Granite 4.1',
+    url: models.guardianLib.hf,
+  },
+  {
+    when: 'Jun 2026',
+    what: 'Top five of 20 on the Artificial Analysis guardrail benchmark',
+    url: 'https://artificialanalysis.ai/articles/guardrail-safety-benchmark',
+  },
+];
+---
+
+<Base
+  title="Granite Guardian · Prasanna Sattigeri"
+  description="How Granite Guardian works, how it is trained, and how it performs on independent benchmarks."
+>
+  <section class="top">
+    <div class="wrap">
+      <p class="eyebrow"><a href={`${base}/`}>Home</a> / Case study</p>
+      <h1>Granite Guardian</h1>
+      <p class="lede">
+        An open-source judge model for LLM systems. It decides whether a prompt, a response, a retrieved passage or a
+        tool call meets a stated criterion, and it does so fast enough to sit inside an agent loop.
+      </p>
+      <dl class="facts">
+        <div>
+          <dt>Role</dt>
+          <dd>Project and training lead</dd>
+        </div>
+        <div>
+          <dt>Current release</dt>
+          <dd>Granite Guardian 4.1 8B, April 2026</dd>
+        </div>
+        <div>
+          <dt>Base model</dt>
+          <dd>Granite 4.1 8B</dd>
+        </div>
+        <div>
+          <dt>License</dt>
+          <dd>Apache 2.0</dd>
+        </div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap two">
+      <div>
+        <p class="eyebrow">What it does</p>
+        <h2>A yes/no verdict against a criterion</h2>
+      </div>
+      <div class="prose">
+        <p>
+          Every call pairs a conversation with one criterion. The model answers yes or no, and in thinking mode it also
+          writes out its reasoning. The criteria below are built in. Since 4.1, users can also write their own.
+        </p>
+        <div class="criteria">
+          {
+            criteria.map((c) => (
+              <div>
+                <h3>{c.head}</h3>
+                <ul>
+                  {c.items.map((i) => (
+                    <li>{i}</li>
+                  ))}
+                </ul>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap two">
+      <div>
+        <p class="eyebrow">Training</p>
+        <h2>What post-training adds</h2>
+      </div>
+      <div class="prose">
+        <p>
+          Granite Guardian is fine-tuned from the Granite base model on human-annotated data combined with synthetic data
+          informed by internal red-teaming. Additional synthetic data improves hallucination and jailbreak assessment.
+        </p>
+        <p>
+          The clearest measure of what training contributes is the comparison with prompting the same base model. On
+          IFEval multi-constraint checks, the base Granite 4.1 8B reaches 0.569 balanced accuracy when prompted as a
+          judge. Granite Guardian 4.1 8B reaches 0.844.
+        </p>
+        <p>
+          The model runs in two modes. No-think returns the verdict directly for low latency. Think produces a
+          reasoning trace first, for cases where the justification matters more than speed.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="benchmark">
+    <div class="wrap two">
+      <div>
+        <p class="eyebrow">Independent evaluation</p>
+        <h2>Artificial Analysis guardrail benchmark</h2>
+      </div>
+      <div class="prose">
+        <p>
+          In June 2026 Artificial Analysis, in partnership with NVIDIA, scored twenty guardrail configurations from
+          seven vendors on 7,232 prompts drawn from WildGuardTest, ToxicChat and XSTest. Models that take a policy at
+          runtime, Granite Guardian among them, were all given the same broad safety policy, written by Artificial
+          Analysis and not tuned per dataset.
+        </p>
+        <dl class="results">
+          <div>
+            <dt>Average F1</dt>
+            <dd>0.859</dd>
+            <dd class="note">Fifth of 20, within 0.03 of the leader</dd>
+          </div>
+          <div>
+            <dt>Among policy-at-runtime models</dt>
+            <dd>First</dd>
+            <dd class="note">Ahead of gpt-oss-safeguard 20B and 120B and ShieldGemma 9B</dd>
+          </div>
+          <div>
+            <dt>Average latency</dt>
+            <dd>59 ms</dd>
+            <dd class="note">No-think mode</dd>
+          </div>
+          <div>
+            <dt>Benign prompts passed</dt>
+            <dd>91.4%</dd>
+            <dd class="note">Second among the top five</dd>
+          </div>
+        </dl>
+        <p>
+          Thinking mode costs about 1.3 seconds per check and scores 0.832 on F1, below the no-think mode. On this task,
+          thinking adds an explanation but does not improve accuracy.
+        </p>
+        <figure class="shot">
+          <a href={benchmark.url}>
+            <Image
+              src={aaChart}
+              alt="Bar chart from Artificial Analysis of average F1 for 19 guardrail models. Granite Guardian 4.1 8B is the fifth bar at 85.9%."
+              widths={[720, 1200, 1990]}
+              sizes="(max-width: 860px) 100vw, 660px"
+            />
+          </a>
+          <figcaption>
+            Screenshot from Artificial Analysis, captured October 1, 2026. Granite Guardian 4.1 8B is the fifth bar, in
+            IBM blue.
+          </figcaption>
+        </figure>
+        <p><a href={benchmark.url}>Read the full results at Artificial Analysis</a>.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap two">
+      <div>
+        <p class="eyebrow">Beyond safety</p>
+        <h2>From Guardian 3.3 to 4.1</h2>
+      </div>
+      <div class="prose">
+        <p>
+          The 4.1 release turned a safety classifier into a general judge. Custom-criteria accuracy rose sharply and
+          tool-call checking improved, while groundedness held level and out-of-distribution safety dipped slightly.
+        </p>
+        <Dumbbell
+          title="Balanced accuracy by benchmark"
+          sub="Custom criteria, tool calls and RAG groundedness. Both versions in no-think mode."
+          rows={versionRows}
+          min={0.4}
+          max={0.9}
+          ticks={[0.4, 0.5, 0.6, 0.7, 0.8, 0.9]}
+          beforeLabel="Granite Guardian 3.3 8B"
+          afterLabel="Granite Guardian 4.1 8B"
+          labelWidth={196}
+        />
+        <div class="table-scroll after-chart">
+          <table>
+            <thead>
+              <tr>
+                <th>Capability and benchmark</th>
+                <th>Measure</th>
+                <th class="num">3.3 8B</th>
+                <th class="num">4.1 8B</th>
+              </tr>
+            </thead>
+            <tbody>
+              {
+                versions.map((v) => (
+                  <tr>
+                    <td>{v.metric}</td>
+                    <td>{v.unit}</td>
+                    <td class="num">{v.v33}</td>
+                    <td class="num strong">{v.v41}</td>
+                  </tr>
+                ))
+              }
+            </tbody>
+          </table>
+        </div>
+        <p class="fine">Both versions in no-think mode. Source: Granite Guardian 4.1 8B model card.</p>
+
+        <h3 class="gap">As a reward model</h3>
+        <p>
+          The same verdicts can rank candidate responses. On the verifiable tasks in the JETTS benchmark, which cover
+          math, code and instruction following, Granite Guardian 4.1 8B selects better answers than every reward model
+          it was compared with.
+        </p>
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>Reward model</th>
+                <th class="num">JETTS overall</th>
+              </tr>
+            </thead>
+            <tbody>
+              {
+                jetts.map((j) => (
+                  <tr>
+                    <td class:list={[{ strong: j.granite }]}>{j.model}</td>
+                    <td class:list={['num', { strong: j.granite }]}>{j.overall}</td>
+                  </tr>
+                ))
+              }
+            </tbody>
+          </table>
+        </div>
+        <p class="fine">Best-of-N selection, no-think mode. An oracle selector scores 81.54.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Adoption</p>
+        <h2>Public testimonials and adoption</h2>
+      </div>
+      <div class="quotes">
+        {
+          guardianQuotes.map((q) => (
+            <figure class="card quote">
+              <blockquote>“{q.quote}”</blockquote>
+              <figcaption>
+                <a href={q.url}>{q.who}</a>
+                <span>{q.context}</span>
+              </figcaption>
+            </figure>
+          ))
+        }
+      </div>
+      <dl class="usage">
+        {
+          usage.map((u) => (
+            <div>
+              <dt>{u.label}</dt>
+              <dd>{u.value}</dd>
+            </div>
+          ))
+        }
+      </dl>
+      <p class="fine">
+        Counts read on October 1, 2026. More on the <a href={`${base}/#adoption`}>home page</a>.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap two">
+      <div>
+        <p class="eyebrow">Timeline</p>
+        <h2>Releases and results</h2>
+      </div>
+      <ol class="timeline">
+        {
+          timeline.map((t) => (
+            <li>
+              <span class="when">{t.when}</span>
+              <a href={t.url}>{t.what}</a>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap links">
+      <a class="btn primary" href={models.guardian.hf}>Model card on Hugging Face</a>
+      <a class="btn" href={models.guardian.github}>GitHub</a>
+      <a class="btn" href={models.guardian.paper}>NAACL 2025 paper</a>
+      <a class="btn" href={`${base}/#post-training`}>Post-training and the Granite libraries</a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .top {
+    padding-block: clamp(40px, 7vw, 88px) clamp(40px, 6vw, 72px);
+  }
+  .top h1 {
+    margin-bottom: 20px;
+  }
+  .eyebrow a {
+    color: inherit;
+  }
+  .facts {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px 24px;
+    margin: clamp(28px, 4vw, 44px) 0 0;
+    padding-top: 20px;
+    border-top: 1px solid var(--rule-strong);
+  }
+  .facts dt {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+  .facts dd {
+    margin: 4px 0 0;
+    font-weight: 500;
+  }
+
+  .two {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.7fr);
+    gap: clamp(20px, 5vw, 72px);
+  }
+  .prose p {
+    color: var(--ink-2);
+    max-width: 68ch;
+  }
+  .criteria {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px 28px;
+    margin-top: 24px;
+  }
+  .criteria h3 {
+    font-family: var(--sans);
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: 0;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--rule-strong);
+  }
+  .criteria ul {
+    list-style: none;
+    margin: 10px 0 0;
+    padding: 0;
+    display: grid;
+    gap: 4px;
+    font-size: 0.92rem;
+    color: var(--ink-2);
+  }
+
+  .shot {
+    margin: 0 0 20px;
+  }
+  .shot > a {
+    display: block;
+    padding: 14px;
+    background: #ffffff;
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+  }
+  .shot figcaption {
+    margin-top: 8px;
+    font-size: 0.8rem;
+    color: var(--ink-3);
+  }
+  .results {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px 28px;
+    margin: 24px 0;
+    padding: 20px 0;
+    border-block: 1px solid var(--rule-strong);
+  }
+  .results dt {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+  .results dd {
+    margin: 4px 0 0;
+    font-size: 1.7rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+  }
+  .results dd.note {
+    font-size: 0.86rem;
+    font-weight: 400;
+    letter-spacing: 0;
+    color: var(--ink-2);
+  }
+
+  .strong {
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .fine {
+    font-size: 0.82rem;
+    color: var(--ink-3) !important;
+    margin-top: 10px;
+  }
+  .gap {
+    margin: 40px 0 12px;
+  }
+
+  .after-chart {
+    margin-top: 20px;
+  }
+  .quotes {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+  .quote {
+    margin: 0;
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .quote blockquote {
+    margin: 0;
+    font-family: var(--serif);
+    font-size: 1.14rem;
+    line-height: 1.35;
+  }
+  .quote figcaption {
+    margin-top: auto;
+    display: grid;
+    gap: 6px;
+    font-size: 0.84rem;
+    color: var(--ink-2);
+  }
+  .usage {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px 24px;
+    margin: 32px 0 0;
+    padding-top: 20px;
+    border-top: 1px solid var(--rule-strong);
+  }
+  .usage div {
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: flex-end;
+    gap: 6px;
+  }
+  .usage dd {
+    margin: 0;
+    font-size: 1.7rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }
+  .usage dt {
+    font-size: 0.84rem;
+    color: var(--ink-2);
+  }
+
+  .timeline {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .timeline li {
+    display: grid;
+    grid-template-columns: 92px 1fr;
+    gap: 16px;
+    padding-block: 12px;
+    border-top: 1px solid var(--rule);
+  }
+  .timeline li:first-child {
+    border-top: 0;
+    padding-top: 0;
+  }
+  .when {
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    color: var(--ink-3);
+    padding-top: 3px;
+  }
+
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  @media (max-width: 860px) {
+    .two,
+    .quotes {
+      grid-template-columns: 1fr;
+    }
+    .usage {
+      grid-template-columns: 1fr 1fr;
+    }
+    .facts {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  @media (max-width: 480px) {
+    .criteria {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

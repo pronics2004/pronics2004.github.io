@@ -1,0 +1,297 @@
+---
+// Before → after per row, on one shared axis. Gray dot is the baseline, accent dot is the trained model.
+const {
+  title,
+  sub,
+  rows,
+  min,
+  max,
+  ticks,
+  beforeLabel,
+  afterLabel,
+  digits = 3,
+  source,
+  labelWidth = 132,
+} = Astro.props;
+
+const pos = (v) => ((v - min) / (max - min)) * 100;
+const fmt = (v) => v.toFixed(digits);
+// A row may carry its own display strings (beforeText / afterText) when the source reports fewer digits.
+const text = (r, k) => r[`${k}Text`] ?? fmt(r[k]);
+const delta = (r) => `${r.after - r.before >= 0 ? '+' : '−'}${Math.abs(r.after - r.before).toFixed(digits)}`;
+// When the two dots nearly coincide, one combined label replaces the pair.
+const close = (r) => Math.abs(pos(r.after) - pos(r.before)) < 9;
+---
+
+<figure class="dbl" data-dumbbell style={`--label-w:${labelWidth}px`}>
+  <p class="dbl-title">{title}</p>
+  {sub && <p class="dbl-sub">{sub}</p>}
+  <ul class="dbl-legend" aria-label="Legend">
+    <li><span class="dbl-key"></span>{beforeLabel}</li>
+    <li><span class="dbl-key after"></span>{afterLabel}</li>
+  </ul>
+
+  <div class="dbl-plot">
+    <div class="dbl-grid" aria-hidden="true">
+      {ticks.map((t) => <span style={`left:${pos(t)}%`} />)}
+    </div>
+    <ul class="dbl-rows">
+      {
+        rows.map((r) => {
+          const up = r.after >= r.before;
+          return (
+            <li
+              class="dbl-row"
+              tabindex="0"
+              data-tip={`${r.label}: ${text(r, 'before')} → ${text(r, 'after')} (${delta(r)})`}
+            >
+              <span class="dbl-name">{r.label}</span>
+              <span class="dbl-track">
+                <span
+                  class="dbl-bar"
+                  style={`left:${Math.min(pos(r.before), pos(r.after))}%;width:${Math.abs(pos(r.after) - pos(r.before))}%`}
+                />
+                <span class="dbl-dot" style={`left:${pos(r.before)}%`} />
+                <span class="dbl-dot after" style={`left:${pos(r.after)}%`} />
+                {close(r) ? (
+                  <span class="dbl-val after right" style={`left:${Math.max(pos(r.before), pos(r.after))}%`}>
+                    {text(r, 'before')} → {text(r, 'after')}
+                  </span>
+                ) : (
+                  <>
+                    <span class:list={['dbl-val', up ? 'left' : 'right']} style={`left:${pos(r.before)}%`}>
+                      {text(r, 'before')}
+                    </span>
+                    <span class:list={['dbl-val', 'after', up ? 'right' : 'left']} style={`left:${pos(r.after)}%`}>
+                      {text(r, 'after')}
+                    </span>
+                  </>
+                )}
+              </span>
+            </li>
+          );
+        })
+      }
+    </ul>
+    <div class="dbl-axis" aria-hidden="true">
+      {ticks.map((t) => <span style={`left:${pos(t)}%`}>{t.toFixed(1)}</span>)}
+    </div>
+  </div>
+  <div class="dbl-tip" data-tip-box hidden></div>
+  {source && <figcaption set:html={source} />}
+</figure>
+
+<style is:global>
+  .dbl {
+    --label-w: 132px;
+    --pad: 52px;
+    position: relative;
+    margin: 0;
+    padding: clamp(16px, 2.4vw, 24px);
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+  }
+  .dbl-title {
+    margin: 0;
+    font-weight: 600;
+  }
+  .dbl-sub {
+    margin: 4px 0 0;
+    font-size: 0.86rem;
+    color: var(--ink-2);
+  }
+  .dbl-legend {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 16px;
+    margin: 12px 0 10px;
+    padding: 0;
+    font-size: 0.8rem;
+    color: var(--ink-2);
+  }
+  .dbl-legend li {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+  }
+  .dbl-key {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--mark-muted);
+  }
+  .dbl-key.after {
+    background: var(--accent);
+  }
+
+  .dbl-plot {
+    position: relative;
+  }
+  .dbl-grid {
+    position: absolute;
+    top: 0;
+    bottom: 24px;
+    left: calc(var(--label-w) + var(--pad));
+    right: var(--pad);
+  }
+  .dbl-grid span {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: var(--rule);
+  }
+  .dbl-axis {
+    position: relative;
+    height: 24px;
+    margin-left: calc(var(--label-w) + var(--pad));
+    margin-right: var(--pad);
+  }
+  .dbl-axis span {
+    position: absolute;
+    top: 7px;
+    transform: translateX(-50%);
+    font-size: 0.72rem;
+    color: var(--ink-3);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .dbl-rows {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    position: relative;
+  }
+  .dbl-row {
+    display: grid;
+    grid-template-columns: var(--label-w) 1fr;
+    align-items: center;
+    min-height: 34px;
+    border-radius: 6px;
+    font-size: 0.84rem;
+    color: var(--ink-2);
+  }
+  .dbl-row:hover,
+  .dbl-row:focus-visible {
+    background: color-mix(in srgb, var(--ink) 6%, transparent);
+  }
+  .dbl-row:focus-visible {
+    outline-offset: -2px;
+  }
+  .dbl-name {
+    padding-left: 6px;
+    line-height: 1.25;
+  }
+  .dbl-track {
+    position: relative;
+    height: 34px;
+    margin-inline: var(--pad);
+  }
+  .dbl-bar {
+    position: absolute;
+    top: 50%;
+    height: 2px;
+    margin-top: -1px;
+    background: var(--rule-strong);
+  }
+  .dbl-dot {
+    position: absolute;
+    top: 50%;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--mark-muted);
+    border: 2px solid var(--surface);
+    transform: translate(-50%, -50%);
+  }
+  .dbl-dot.after {
+    background: var(--accent);
+    width: 16px;
+    height: 16px;
+  }
+  .dbl-val {
+    position: absolute;
+    top: 50%;
+    font-size: 0.76rem;
+    font-variant-numeric: tabular-nums;
+    color: var(--ink-3);
+    white-space: nowrap;
+  }
+  .dbl-val.left {
+    transform: translate(calc(-100% - 11px), -50%);
+  }
+  .dbl-val.right {
+    transform: translate(12px, -50%);
+  }
+  .dbl-val.after {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  .dbl-tip {
+    position: absolute;
+    z-index: 5;
+    padding: 7px 10px;
+    background: var(--ink);
+    color: var(--bg);
+    border-radius: 7px;
+    font-size: 0.78rem;
+    pointer-events: none;
+    white-space: nowrap;
+    box-shadow: 0 6px 24px rgb(0 0 0 / 0.18);
+  }
+  .dbl figcaption {
+    margin-top: 12px;
+    font-size: 0.78rem;
+    color: var(--ink-3);
+  }
+
+  @media (max-width: 560px) {
+    .dbl {
+      --label-w: 0px !important;
+      --pad: 46px;
+    }
+    .dbl-row {
+      grid-template-columns: 1fr;
+      padding-top: 6px;
+    }
+    .dbl-name {
+      padding-left: 0;
+    }
+    .dbl-track {
+      height: 28px;
+    }
+    .dbl-grid {
+      display: none;
+    }
+    .dbl-tip {
+      white-space: normal;
+      max-width: 240px;
+    }
+  }
+</style>
+
+<script>
+  document.querySelectorAll('[data-dumbbell]').forEach((root) => {
+    const tip = root.querySelector('[data-tip-box]');
+    const show = (row) => {
+      tip.textContent = row.dataset.tip;
+      tip.hidden = false;
+      const rootBox = root.getBoundingClientRect();
+      const rowBox = row.getBoundingClientRect();
+      const tipBox = tip.getBoundingClientRect();
+      const left = Math.max(8, Math.min(rowBox.right - rootBox.left - tipBox.width - 8, rootBox.width - tipBox.width - 8));
+      tip.style.left = `${left}px`;
+      tip.style.top = `${rowBox.top - rootBox.top - tipBox.height - 4}px`;
+    };
+    const hide = () => (tip.hidden = true);
+    root.querySelectorAll('.dbl-row').forEach((row) => {
+      row.addEventListener('mouseenter', () => show(row));
+      row.addEventListener('mouseleave', hide);
+      row.addEventListener('focus', () => show(row));
+      row.addEventListener('blur', hide);
+    });
+  });
+</script>

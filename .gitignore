@@ -1,1 +1,7 @@
-_site/
+node_modules/
+dist/
+.astro/
+.DS_Store
+
+# Talk deck: kept local, not published
+talk/

@@ -1,0 +1,194 @@
+---
+import { publications } from '../data/publications.js';
+import { threads as allThreads } from '../data/research.js';
+
+// `only` picks threads by id, in the order given. Without it, every thread is shown.
+const { only, jump = false } = Astro.props;
+const threads = only ? only.map((id) => allThreads.find((t) => t.id === id)) : allThreads;
+
+const byId = Object.fromEntries(publications.filter((p) => p.id).map((p) => [p.id, p]));
+const me = (authors) => authors.replace('P. Sattigeri', '<strong>P. Sattigeri</strong>');
+---
+
+<div class="threads">
+  {
+    jump && (
+      <nav class="jump" aria-label="Research threads">
+        {threads.map((t) => (
+          <a href={`#thread-${t.id}`}>{t.title}</a>
+        ))}
+      </nav>
+    )
+  }
+
+  {
+    threads.map((t) => (
+      <section class="thread" id={`thread-${t.id}`}>
+        <div class="thread-head">
+          <h3>{t.title}</h3>
+          <p class="framing">{t.framing}</p>
+          {t.ships && (
+            <p class="ships">
+              <span class="tag">Ships as</span> {t.ships}
+            </p>
+          )}
+        </div>
+        <ol class="papers">
+          {t.papers.map((id) => {
+            const p = byId[id];
+            return (
+              <li>
+                <div class="venue">
+                  <span class="v">{p.venue}</span>
+                  <span class="y">{p.year}</span>
+                  {p.track && <span class="t">{p.track}</span>}
+                  {p.note && <span class="t">{p.note}</span>}
+                </div>
+                <div class="body">
+                  <p class="title">{p.url ? <a href={p.url}>{p.title}</a> : p.title}</p>
+                  <p class="summary">{p.summary}</p>
+                  <p class="authors" set:html={me(p.authors)} />
+                </div>
+              </li>
+            );
+          })}
+        </ol>
+      </section>
+    ))
+  }
+</div>
+
+<style>
+  .jump {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: clamp(24px, 4vw, 40px);
+  }
+  .jump a {
+    font-size: 0.84rem;
+    padding: 6px 12px;
+    border-radius: 999px;
+    border: 1px solid var(--rule-strong);
+    color: var(--ink-2);
+    text-decoration: none;
+  }
+  .jump a:hover {
+    border-color: var(--ink-2);
+    color: var(--ink);
+  }
+
+  .thread {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+    gap: clamp(20px, 4vw, 56px);
+    padding-block: clamp(28px, 4vw, 44px);
+    border-top: 1px solid var(--rule-strong);
+  }
+  .thread-head {
+    align-self: start;
+    position: sticky;
+    top: 84px;
+  }
+  .thread h3 {
+    font-size: 1.45rem;
+  }
+  .framing {
+    margin: 12px 0 0;
+    font-size: 0.93rem;
+    color: var(--ink-2);
+  }
+  .ships {
+    margin: 14px 0 0;
+    font-size: 0.86rem;
+    color: var(--ink-2);
+  }
+  .ships .tag {
+    margin-right: 4px;
+    border-color: var(--accent);
+    color: var(--ink);
+  }
+
+  .papers {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .papers li {
+    display: grid;
+    grid-template-columns: 104px 1fr;
+    gap: 6px 20px;
+    padding-block: 14px;
+    border-top: 1px solid var(--rule);
+  }
+  .papers li:first-child {
+    border-top: 0;
+    padding-top: 0;
+  }
+  .venue {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    align-content: start;
+    gap: 2px 8px;
+    font-family: var(--mono);
+    font-size: 0.8rem;
+  }
+  .venue .v {
+    font-weight: 600;
+  }
+  .venue .y {
+    color: var(--ink-3);
+  }
+  .venue .t {
+    flex-basis: 100%;
+    font-size: 0.7rem;
+    color: var(--ink-3);
+  }
+  .body p {
+    margin: 0;
+  }
+  .title {
+    font-family: var(--serif);
+    font-size: 1.12rem;
+    line-height: 1.3;
+  }
+  .title a {
+    color: var(--ink);
+    text-decoration-color: var(--rule-strong);
+  }
+  .title a:hover {
+    color: var(--link);
+  }
+  .summary {
+    margin-top: 6px !important;
+    font-size: 0.92rem;
+    color: var(--ink-2);
+  }
+  .authors {
+    margin-top: 6px !important;
+    font-size: 0.8rem;
+    color: var(--ink-3);
+  }
+  .authors :global(strong) {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  @media (max-width: 860px) {
+    .thread {
+      grid-template-columns: 1fr;
+    }
+    .thread-head {
+      position: static;
+    }
+  }
+  @media (max-width: 520px) {
+    .papers li {
+      grid-template-columns: 1fr;
+    }
+    .venue .t {
+      flex-basis: auto;
+    }
+  }
+</style>

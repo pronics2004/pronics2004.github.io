@@ -1,0 +1,495 @@
+---
+import Base from '../layouts/Base.astro';
+import { profile, links, scholar } from '../data/site.js';
+import { collaborators } from '../data/research.js';
+import { publications } from '../data/publications.js';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const me = (authors) => authors.replace('P. Sattigeri', '<strong>P. Sattigeri</strong>');
+
+const years = [...new Set(publications.map((p) => p.year))].sort((a, b) => b - a);
+const byYear = years.map((y) => ({ year: y, items: publications.filter((p) => p.year === y) }));
+const venueLabel = (p) => [p.venue, p.track && `(${p.track})`, p.year].filter(Boolean).join(' ');
+
+const awards = [
+  ['2025', 'IBM Research Outstanding Accomplishment: AI Governance Innovations to watsonx.governance and Open Source'],
+  ['2025', 'IBM Research Technical Achievement Award: Granite Guardian'],
+  ['2024', 'IBM Research Outstanding Accomplishment: Granite 3.0 Release'],
+  ['2024', 'IBM Research Technical Achievement Award: Causal Inference for Business Decision Making'],
+  ['2021', 'IBM Research Technical Achievement Award: Science of Uncertainty Quantification'],
+  ['2021', 'IBM Research Technical Achievement Award: Science of Accurate, Robust, and Generalizable AI'],
+  ['2020', 'IBM Research Technical Achievement Award: Science in Learning with Less Labels'],
+  ['2020', 'IBM Research Technical Achievement Award: Dynamic Neural Networks for Efficient AI'],
+  ['2020', 'Harvard Belfer Center Tech Spotlight, runner-up, for AI Fairness 360'],
+  ['2019', 'IBM Outstanding Technical Achievement Award: Contributions to Trustworthy AI'],
+  ['2019', 'Best Paper, KDD Applied Data Science for Healthcare Workshop'],
+  ['2014', 'University Graduate Fellowship, Arizona State University'],
+];
+
+const talks = [
+  ['2024', 'MIT AI Conference', 'AI Ethics and Change Management'],
+  ['2024', 'NAACL TrustNLP Workshop', 'LLM Governance and Alignment'],
+  ['2024', 'National Academy of Sciences', 'Reliable AI-assisted Decision Making'],
+  ['2024', 'CHI TREW Workshop', 'Trust and Reliance in Evolving Human-AI Workflows'],
+  ['2023', 'KDD Workshop on Uncertainty Reasoning', 'Uncertainty Calibration and AI-assisted Decision Making'],
+  ['2023', 'DSHealth Workshop, KDD', 'Generative AI and Safety (panel)'],
+  ['2023', 'AI for Open Society Day, KDD', 'Trustworthy LLMs (panel)'],
+  ['2021', 'KDD Responsible AI Workshop', 'Trustworthy AI Toolkits'],
+  ['2021', 'PyData Global', 'AI Uncertainty Quantification (tutorial)'],
+  ['2021', 'ACM CODS-COMAD', 'UQ360 (hands-on tutorial)'],
+  ['2021', 'ARC Training Centre, Australia', 'AI Uncertainty Quantification'],
+  ['2019', 'AI Research Week, MIT', 'Trusted AI (talk and panel)'],
+  ['2019', 'Harvard ComputeFest', 'AI Fairness (talk and tutorial)'],
+  ['2018', 'AAAI Fall Symposium', 'AI and Trust (talk and panel)'],
+];
+
+const patentsGranted = [
+  ['US 12,725,081', 'Causal learning model', '2026'],
+  ['US 12,724,965', 'Reliable gradient-free and likelihood-free prompt tuning', '2026'],
+  ['US 12,639,623', 'Fair selective classification via a variational mutual information upper bound for imposing sufficiency', '2026'],
+  ['US 12,561,612', 'Mitigating the influence of biased training instances without refitting', '2026'],
+  ['US 11,514,318', 'Multi-source transfer learning from pre-trained networks', '2022'],
+  ['US 11,222,242', 'Contrastive explanations for images with monotonic attribute functions', '2022'],
+  ['US 9,875,428', 'Ensemble sparse models for image analysis and restoration', '2018'],
+];
+
+const patentsPending = [
+  ['App. 18/925,251', 'Contextual moral value alignment through context-based aggregation'],
+  ['App. 18/595,630', 'Context large language model output explanation'],
+  ['App. 18/538,726', 'Post-hoc uncertainty quantification for machine learning systems'],
+  ['App. 18/503,166', 'Sensitive attribute driven predictive modeling'],
+  ['App. 17/368,925', 'Conditionally independent data generation for training machine learning systems'],
+  ['App. 16/926,407', 'Efficient search of robust accurate neural networks'],
+];
+
+const press = [
+  ['Artificial Analysis', 'Benchmarking guardrail models for safety, refusal, and latency', 'June 2026', 'https://artificialanalysis.ai/articles/guardrail-safety-benchmark'],
+  ['IBM Research Blog', 'Granite Guardian tops third-party AI benchmark', 'April 2025', 'https://research.ibm.com/blog/granite-guardian-tops-guardbench'],
+  ['IBM Research Blog', 'IBM Granite now has adapters designed to control AI outputs', 'March 2025', 'https://research.ibm.com/blog/Granite-adapter-experiments'],
+  ['IBM Research Blog', 'How we slimmed down Granite Guardian', 'February 2025', 'https://research.ibm.com/blog/ibm-granite-guardian-5b-3b'],
+  ['MIT IDE', 'What Does Ethical AI Look Like?', '2024', 'https://medium.com/mit-initiative-on-the-digital-economy/what-does-ethical-ai-look-like-1c91c3a5b378'],
+  ['VentureBeat', 'What to do when AI brings more questions than answers?', 'July 2021'],
+  ['SiliconANGLE', 'IBM is teaching AI models to express how confident they are about their decisions', 'June 2021'],
+  ['BBC News', 'IBM launches tool aimed at detecting AI bias', 'September 2018'],
+];
+---
+
+<Base title="CV · Prasanna Sattigeri" description="Curriculum vitae of Prasanna Sattigeri." current="cv">
+  <article class="cv wrap">
+    <header class="cv-head">
+      <div>
+        <h1>{profile.name}</h1>
+        <p class="role">{profile.title}, {profile.org} · Principal Investigator, {profile.lab}</p>
+        <p class="contact">
+          {profile.location} ·{' '}
+          <a href={links.linkedin}>linkedin.com/in/prasannasattigeri</a> ·{' '}
+          <a href={links.scholar}>Google Scholar</a> ·{' '}
+          <a href={links.github}>github.com/pronics2004</a>
+        </p>
+      </div>
+      <div class="cv-links no-print">
+        <a class="btn" href={`${base}/Prasanna_Sattigeri_CV.pdf`}>Download PDF</a>
+        <a class="btn" href={`${base}/cv/short/`}>Two-page version</a>
+      </div>
+    </header>
+
+    <section>
+      <h2>Summary</h2>
+      <p>
+        I lead post-training for agent reliability at IBM Research: judge models, reward models and base-model
+        capabilities that check tool calls, groundedness and requirements at each step of an LLM agent’s workflow. The
+        team, spread across IBM Research sites in the United States, India, Japan and Ireland, trains Granite Guardian,
+        an open-source judge model, and the Granite Guardian and Core libraries, which add calibrated uncertainty,
+        context attribution, policy compliance, and factuality detection and correction to a base model. These models are used in IBM watsonx.ai and watsonx.governance, deployed as the guardrails in Red Hat’s Ask Red Hat assistant, and integrated in external products and projects such as Traefik Hub, deepset Haystack and Mozilla.ai
+        any-guardrail.
+      </p>
+      <p>
+        Research spans post-training and generative modeling: agent memory (COLM 2026), guardrails that check an
+        agent’s plan before it executes (ICLR 2026), abstention for reasoning models (ACL 2026), calibration for LLMs
+        (ICML 2024), and disentangled representation learning and GANs (ICLR 2018, NeurIPS 2017). Core contributor to
+        the open-source toolkits AI Fairness 360, AI Explainability 360 and UQ360.
+        {scholar.citations.toLocaleString('en-US')} citations, h-index {scholar.hIndex}{' '}
+        (Google Scholar, {scholar.asOf}).
+      </p>
+    </section>
+
+    <section>
+      <h2>Experience</h2>
+
+      <div class="job">
+        <div class="job-head">
+          <h3>IBM Research and MIT-IBM Watson AI Lab</h3>
+          <span>December 2015 – present · Cambridge, MA</span>
+        </div>
+        <p class="job-title">Principal Research Scientist and Manager</p>
+        <ul>
+          <li>
+            Lead the Granite Guardian team, spread across IBM Research sites in the United States, India, Japan and
+            Ireland. Five releases in 18 months, from 3.0 (October 2024) to 4.1 (April 2026).
+          </li>
+          <li>
+            Lead Granite Guardian, IBM’s open-source judge and guardrail models, from training data and post-training
+            through evaluation and release. Granite Guardian 4.1 8B (April 2026) covers harm and jailbreaks, RAG
+            groundedness, function-call hallucination and user-written criteria.
+          </li>
+          <li>
+            Lead the Granite Guardian Library and the Granite Core Library: post-trained capabilities for the Granite 4.0
+            and 4.1 base models covering policy guardrails, factuality detection and correction, requirement checking, calibrated
+            uncertainty and context attribution.
+          </li>
+          <li>
+            Artificial Analysis guardrail benchmark (June 2026): Granite Guardian 4.1 8B scores F1 0.859, fifth of 20
+            configurations and first among models that take their policy at runtime, at 59 ms average latency.
+          </li>
+          <li>
+            GuardBench (April 2025): Granite Guardian models held six of the top ten places across 40 datasets. Also
+            ranked first on REVEAL and third on LLM-AggreFact (2025).
+          </li>
+          <li>
+            Granite Guardian 4.1 as a reward model: 70.29 overall on JETTS best-of-N selection, ahead of every reward
+            model tested, up to 70B parameters.
+          </li>
+          <li>
+            Adoption (October 2026): 1.15M all-time Hugging Face downloads across the Guardian models and the two
+            libraries, 371K Ollama pulls and 45 community quantized builds. Integrated in Traefik Hub, deepset Haystack
+            and Mozilla.ai any-guardrail.
+          </li>
+          <li>
+            Research that shipped: calibrated uncertainty in the Core Library is trained to reproduce a Thermometer
+            calibrator (ICML 2024), and context attribution to reproduce MExGen attributions (ACL 2025).
+          </li>
+          <li>
+            Principal investigator, MIT-IBM Watson AI Lab: “Principles and Methods for Trustworthy Learning With Limited
+            Data” with Prof. Gregory Wornell, and “Human-Centric AI: Novel Algorithms for Shared Decision Making” with
+            Prof. David Sontag.
+          </li>
+          <li>
+            Research on calibration and uncertainty quantification for foundation models (Thermometer, ICML 2024;
+            NeurIPS 2024), abstention (ACL 2026) and guardrails for agentic systems (ICLR 2026).
+          </li>
+          <li>
+            Core contributor to the open-source toolkits AI Fairness 360 (2,872 GitHub stars; paper cited 2,907 times),
+            AI Explainability 360 (1,806 stars), Uncertainty Quantification 360 and ICX360.
+          </li>
+          <li>
+            Generative modeling: DIP-VAE for disentangled representation learning (ICLR 2018), implemented in Google’s
+            disentanglement_lib and in PyTorch-VAE; semi-supervised learning with GANs (NeurIPS 2017); Fairness GAN;
+            wavelet-domain image synthesis (not-so-BigGAN).
+          </li>
+          <li>
+            Earlier work: co-regularized alignment for unsupervised domain adaptation (NeurIPS 2018) and domain shift in
+            clinical models (Best Paper, KDD healthcare workshop, 2019).
+          </li>
+        </ul>
+      </div>
+
+      <div class="job">
+        <div class="job-head">
+          <h3>Yelp Inc.</h3>
+          <span>December 2014 – December 2015 · San Francisco, CA</span>
+        </div>
+        <p class="job-title">Software Engineer</p>
+        <ul>
+          <li>Built machine learning models for products used by a large consumer base.</li>
+          <li>Applied natural language processing and image understanding to improve search results.</li>
+          <li>Prototyped systems for measuring deployed data science algorithms.</li>
+        </ul>
+      </div>
+
+      <div class="job">
+        <div class="job-head">
+          <h3>Arizona State University, School of ECEE</h3>
+          <span>January 2009 – December 2014 · Tempe, AZ</span>
+        </div>
+        <p class="job-title">Research Assistant; Teaching Assistant (2011–2013)</p>
+        <ul>
+          <li>
+            Developed methods for learning hierarchical representations from low-rank and sparse structure, and ensemble
+            sparse models for image classification and retrieval.
+          </li>
+          <li>Lead student researcher on an NSF project on ion-channel sensors.</li>
+          <li>Teaching assistant for Signals and Systems, about 400 students.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section>
+      <h2>Education</h2>
+      <ul class="rows">
+        <li><span>2014</span><span>Ph.D., Electrical Engineering, Arizona State University</span></li>
+        <li><span>2008</span><span>B.Tech., Electronics Engineering, National Institute of Technology, India</span></li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Honors and awards</h2>
+      <ul class="rows">
+        {awards.map(([y, a]) => <li><span>{y}</span><span>{a}</span></li>)}
+      </ul>
+    </section>
+
+    <section>
+      <h2>Professional service</h2>
+      <ul>
+        <li>Associate Editor: Pattern Recognition; Digital Signal Processing</li>
+        <li>Area chair and senior program committee: NeurIPS, ICML, ICLR, AAAI</li>
+        <li>
+          Organizer: Workshop on Practical Bayesian Methods for Big Data, AI Research Week, MIT (2019); AAAI Fall
+          Symposium on Gathering for Artificial Intelligence and Natural Systems (2018)
+        </li>
+        <li>Reviewer: NeurIPS, ICML, ICLR, AAAI, ACL, EMNLP, IEEE TPAMI, IEEE Transactions on Signal Processing</li>
+        <li>IEEE Senior Member</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Mentoring</h2>
+      <ul>
+        <li>
+          Thesis committee member for Joshua Lee and Maohao Shen, PhD students of Gregory Wornell at MIT, and for Burak
+          Varıcı at RPI.
+        </li>
+        <li>Research interns hosted throughout ten years at IBM Research.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Academic collaborations</h2>
+      <ul class="rows wide">
+        {collaborators.map((k) => <li><span>{k.place}</span><span>{k.people}</span></li>)}
+      </ul>
+    </section>
+
+    <section>
+      <h2>Publications</h2>
+      <p class="note">
+        Selected publications. The full list is on <a href={links.scholar}>Google Scholar</a>.
+      </p>
+      {
+        byYear.map((g) => (
+          <div class="year">
+            <h3>{g.year}</h3>
+            <ol class="pubs">
+              {g.items.map((p) => (
+                <li>
+                  <span set:html={me(p.authors)} />{p.authors.endsWith('.') ? '' : '.'} “{p.url ? <a href={p.url}>{p.title}</a> : p.title}{/[?!]$/.test(p.title) ? '' : '.'}”{' '}
+                  <em>{venueLabel(p)}</em>
+                  {p.note && <strong> {p.note}.</strong>}
+                </li>
+              ))}
+            </ol>
+          </div>
+        ))
+      }
+    </section>
+
+    <section>
+      <h2>Patents</h2>
+      <h3 class="minor">Granted</h3>
+      <ul class="rows wide">
+        {patentsGranted.map(([n, t, y]) => <li><span>{n}</span><span>{t} ({y})</span></li>)}
+      </ul>
+      <h3 class="minor">Applications</h3>
+      <ul class="rows wide">
+        {patentsPending.map(([n, t]) => <li><span>{n}</span><span>{t}</span></li>)}
+      </ul>
+    </section>
+
+    <section>
+      <h2>Invited talks, tutorials and panels</h2>
+      <ul class="rows">
+        {talks.map(([y, e, t]) => <li><span>{y}</span><span>{e}: {t}</span></li>)}
+      </ul>
+    </section>
+
+    <section>
+      <h2>Selected coverage</h2>
+      <ul>
+        {
+          press.map(([outlet, headline, date, url]) => (
+            <li>
+              {outlet}, “{url ? <a href={url}>{headline}</a> : headline}” ({date})
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+  </article>
+</Base>
+
+<style>
+  .cv {
+    max-width: 860px;
+    padding-block: clamp(32px, 6vw, 72px);
+    font-size: 0.95rem;
+  }
+  .cv-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--rule-strong);
+  }
+  .cv-links {
+    display: grid;
+    gap: 8px;
+  }
+  .cv h1 {
+    font-size: clamp(2rem, 4vw, 2.6rem);
+  }
+  .role {
+    margin: 8px 0 4px;
+    font-weight: 500;
+  }
+  .contact {
+    margin: 0;
+    color: var(--ink-2);
+    font-size: 0.9rem;
+  }
+
+  section {
+    margin-top: 32px;
+  }
+  .cv h2 {
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+    margin-bottom: 12px;
+  }
+  .cv h3 {
+    font-family: var(--sans);
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0;
+  }
+  .cv h3.minor {
+    font-size: 0.88rem;
+    color: var(--ink-2);
+    margin: 14px 0 6px;
+  }
+
+  .job {
+    margin-top: 18px;
+    break-inside: avoid-page;
+  }
+  .job-head {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 2px 16px;
+  }
+  .job-head span {
+    color: var(--ink-3);
+    font-size: 0.86rem;
+  }
+  .job-title {
+    margin: 2px 0 8px;
+    color: var(--ink-2);
+  }
+
+  .cv ul,
+  .cv ol {
+    margin: 0;
+    padding-left: 1.15em;
+    display: grid;
+    gap: 5px;
+  }
+  .rows {
+    list-style: none;
+    padding-left: 0 !important;
+  }
+  .rows li {
+    display: grid;
+    grid-template-columns: 52px 1fr;
+    gap: 12px;
+  }
+  .rows.wide li {
+    grid-template-columns: 150px 1fr;
+  }
+  .rows li > span:first-child {
+    color: var(--ink-3);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .note {
+    color: var(--ink-2);
+    font-size: 0.88rem;
+  }
+  .year {
+    margin-top: 14px;
+  }
+  .year h3 {
+    margin-bottom: 6px;
+  }
+  .pubs {
+    list-style: none;
+    padding-left: 0 !important;
+    font-size: 0.9rem;
+  }
+  .pubs li {
+    break-inside: avoid;
+  }
+  .pubs :global(strong) {
+    font-weight: 600;
+  }
+
+  @media (max-width: 600px) {
+    .cv-head {
+      flex-direction: column;
+    }
+    .rows.wide li {
+      grid-template-columns: 1fr;
+      gap: 0;
+    }
+  }
+
+  @media print {
+    .no-print {
+      display: none;
+    }
+    .cv {
+      max-width: none;
+      padding: 0;
+      font-size: 9.6pt;
+      line-height: 1.4;
+    }
+    .cv h1 {
+      font-size: 22pt;
+    }
+    section {
+      margin-top: 16pt;
+    }
+    .cv a {
+      color: inherit;
+      text-decoration: none;
+    }
+  }
+</style>
+
+<style is:global>
+  @media print {
+    @page {
+      size: letter;
+      margin: 0.65in 0.7in;
+    }
+    html:root {
+      color-scheme: light;
+      --bg: #ffffff;
+      --surface: #ffffff;
+      --ink: #000000;
+      --ink-2: #333333;
+      --ink-3: #555555;
+      --rule: #dddddd;
+      --rule-strong: #999999;
+      --link: #000000;
+    }
+    body {
+      background: #ffffff;
+    }
+  }
+</style>

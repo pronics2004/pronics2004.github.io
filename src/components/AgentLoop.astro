@@ -1,0 +1,197 @@
+---
+// Where each post-trained check sits in an agent workflow.
+// Source tags name the artifact that provides the check: G = Granite Guardian (model or the
+// Guardian Core adapter), GL = Granite Guardian Library, CL = Granite Core Library.
+const steps = [
+  {
+    stage: 'A request arrives',
+    question: 'Is it safe and in policy?',
+    checks: [
+      { name: 'Harm and jailbreak screening', src: 'G' },
+      { name: 'Policy compliance, with an “ambiguous” verdict', src: 'GL' },
+    ],
+  },
+  {
+    stage: 'The agent calls a tool',
+    question: 'Is the call valid for these tools and this request?',
+    checks: [{ name: 'Function-call hallucination', src: 'G' }],
+  },
+  {
+    stage: 'Context comes back',
+    question: 'Is the retrieved material relevant?',
+    checks: [{ name: 'Context relevance', src: 'G' }],
+  },
+  {
+    stage: 'The model drafts an answer',
+    question: 'Is it grounded, and does it meet the requirements?',
+    checks: [
+      { name: 'Groundedness and answer relevance', src: 'G' },
+      { name: 'Factuality detection against conflicting context', src: 'GL' },
+      { name: 'Requirement check', src: 'CL' },
+    ],
+  },
+  {
+    stage: 'The draft is repaired',
+    question: 'Can a failing draft be fixed or replaced?',
+    checks: [
+      { name: 'Factuality correction', src: 'GL' },
+      { name: 'Best-of-N selection, Guardian as reward model', src: 'G' },
+    ],
+  },
+  {
+    stage: 'The answer goes out',
+    question: 'How sure is the model, and what is it based on?',
+    checks: [
+      { name: 'Calibrated uncertainty score', src: 'CL' },
+      { name: 'Context attribution, sentence by sentence', src: 'CL' },
+    ],
+  },
+];
+
+const sources = {
+  G: 'Guardian',
+  GL: 'Guardian Library',
+  CL: 'Core Library',
+};
+---
+
+<div class="loop">
+  <ol class="steps">
+    {
+      steps.map((s, i) => (
+        <li class="step">
+          <div class="step-head">
+            <span class="n">{String(i + 1).padStart(2, '0')}</span>
+            <h3>{s.stage}</h3>
+          </div>
+          <p class="q">{s.question}</p>
+          <ul>
+            {s.checks.map((c) => (
+              <li>
+                <span class="check-name">{c.name}</span>
+                <span class="tag">{sources[c.src]}</span>
+              </li>
+            ))}
+          </ul>
+        </li>
+      ))
+    }
+  </ol>
+  <dl class="key">
+    <div>
+      <dt><span class="tag">Guardian</span></dt>
+      <dd>Granite Guardian 4.1, or its criteria trained onto a base Granite model</dd>
+    </div>
+    <div>
+      <dt><span class="tag">Guardian Library</span></dt>
+      <dd>Policy compliance, factuality detection and factuality correction</dd>
+    </div>
+    <div>
+      <dt><span class="tag">Core Library</span></dt>
+      <dd>Requirement checking, calibrated uncertainty and context attribution</dd>
+    </div>
+  </dl>
+</div>
+
+<style>
+  .steps {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+  .step {
+    position: relative;
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    padding: 18px 18px 16px;
+  }
+  /* Connector to the next step in the row */
+  .step:not(:nth-child(3n))::after {
+    content: '';
+    position: absolute;
+    top: 30px;
+    right: -15px;
+    width: 15px;
+    border-top: 1px solid var(--rule-strong);
+  }
+  .step-head {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+  .n {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    color: var(--ink-3);
+  }
+  .step h3 {
+    font-family: var(--sans);
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0;
+  }
+  .q {
+    margin: 6px 0 14px;
+    font-size: 0.88rem;
+    color: var(--ink-2);
+  }
+  .step ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 8px;
+  }
+  .step ul li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding-top: 8px;
+    border-top: 1px solid var(--rule);
+    font-size: 0.88rem;
+  }
+  .check-name {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+  .step .tag {
+    flex: none;
+  }
+
+  .key {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin: 20px 0 0;
+    font-size: 0.82rem;
+    color: var(--ink-2);
+  }
+  .key div {
+    display: grid;
+    gap: 6px;
+    align-content: start;
+  }
+  .key dd {
+    margin: 0;
+  }
+
+  @media (max-width: 900px) {
+    .steps {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .step::after {
+      display: none;
+    }
+  }
+  @media (max-width: 600px) {
+    .steps,
+    .key {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
