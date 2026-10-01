@@ -6,9 +6,9 @@ export const threads = [
     id: 'agents',
     title: 'Agents, memory and guardrails',
     framing:
-      'Agents fail in ways single-turn models do not. A plan can be unsafe before any action runs, a risk can build over many turns, and agents can leak context to each other through shared caches. This work puts the checks where those failures happen, and studies how agents improve at test time without weight updates.',
+      'Agents fail in ways single-turn models do not. A plan can be unsafe before any action runs, a risk can build over many turns, and agents can leak context to each other through shared caches. This work puts the checks where those failures happen.',
     ships: 'Granite Guardian',
-    papers: ['agentic-guardrail', 'decocted', 'blindspot', 'lcguard', 'granite-guardian', 'cascade'],
+    papers: ['agentic-guardrail', 'blindspot', 'lcguard', 'granite-guardian', 'cascade'],
   },
   {
     id: 'uncertainty',

@@ -488,6 +488,47 @@ the criteria, return 'yes'; otherwise, return 'no'.
       </p>
 
       <h3 class="sub-h">The research behind it</h3>
+      <article class="card feature">
+        <p class="eyebrow">Featured · COLM 2026</p>
+        <h3>
+          <a href="https://arxiv.org/abs/2604.04373">
+            Decocted Experience: context as a second axis for scaling agents at test time
+          </a>
+        </h3>
+        <p class="feature-lede">
+          Test-time scaling usually means more compute: longer reasoning, more samples, more search. For agents that is
+          expensive, and much of the budget goes to exploring poor paths. This paper scales the input instead, building
+          the agent’s context from its own past experience.
+        </p>
+        <div class="feature-grid">
+          <div>
+            <h4>Distill, then consolidate</h4>
+            <p>
+              Lessons distilled from past trajectories beat raw experience on agentic tasks, and scale better as the
+              context grows. Memory has a sweet spot: an intermediate size can outperform keeping everything.
+            </p>
+          </div>
+          <div>
+            <h4>What makes context effective</h4>
+            <p>
+              In theory, context with higher information gain about the agent’s output makes inference more efficient.
+              In practice, good context balances relevance against diversity.
+            </p>
+          </div>
+          <div>
+            <h4>A structure for agent memory</h4>
+            <p>
+              Concepts extracted from experience and organized as a tree let retrieval draw on diverse but relevant
+              groups, and outperform baseline memory methods.
+            </p>
+          </div>
+        </div>
+        <p class="fine">
+          Validated on math reasoning, web shopping and software engineering agents. With Maohao Shen, Kaiwen Zha, Zexue
+          He, Zhang-Wei Hong, Siru Ouyang, J. Jon Ryu, Suhas Diggavi and Gregory Wornell.
+        </p>
+      </article>
+
       <ResearchThreads only={['agents', 'uncertainty', 'attribution']} />
     </div>
   </section>
@@ -869,6 +910,42 @@ the criteria, return 'yes'; otherwise, return 'no'.
     align-items: start;
   }
 
+  .feature {
+    padding: clamp(20px, 3vw, 32px);
+    margin-bottom: clamp(20px, 3vw, 32px);
+    border-left: 3px solid var(--accent);
+  }
+  .feature h3 {
+    font-size: clamp(1.4rem, 2.4vw, 1.8rem);
+    max-width: 30ch;
+  }
+  .feature h3 a {
+    color: var(--ink);
+    text-decoration-color: var(--rule-strong);
+  }
+  .feature-lede {
+    margin: 12px 0 0;
+    max-width: 72ch;
+    color: var(--ink-2);
+  }
+  .feature-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: clamp(18px, 3vw, 36px);
+    margin-top: 22px;
+    padding-top: 20px;
+    border-top: 1px solid var(--rule);
+  }
+  .feature h4 {
+    margin: 0 0 6px;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+  .feature-grid p {
+    margin: 0;
+    font-size: 0.92rem;
+    color: var(--ink-2);
+  }
   .caps td {
     font-size: 0.9rem;
     color: var(--ink-2);
@@ -1135,6 +1212,9 @@ the criteria, return 'yes'; otherwise, return 'no'.
     }
     .pillar + .pillar {
       border-top: 1px solid var(--rule);
+    }
+    .feature-grid {
+      grid-template-columns: 1fr;
     }
     .usage,
     .band {
