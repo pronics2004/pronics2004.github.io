@@ -216,10 +216,6 @@ export const adoption = [
         url: 'https://access.redhat.com/ai/system-card/ask-red-hat',
       },
       {
-        text: 'Red Hat OpenShift AI: the guardrails documentation uses the Granite Guardian HAP model as its example detector.',
-        url: 'https://docs.redhat.com/en/documentation/red_hat_openshift_ai_self-managed/3.2/html-single/enabling_ai_safety_with_guardrails/index',
-      },
-      {
         text: 'Traefik Hub ships an LLM Guard built on Granite Guardian, alongside guards from Microsoft and NVIDIA.',
         url: 'https://traefik.io/press/traefik-labs-new-multi-vendor-composable-ai-safety-pipeline',
       },
@@ -251,23 +247,27 @@ export const adoption = [
     ],
   },
   {
-    head: 'Used and built on in other research',
+    head: 'Research others have built on',
     items: [
       {
-        text: 'ROC Guardian, a family of Romanian offensive-language guard models, is fine-tuned from Granite Guardian 3 (IEEE Access, 2026).',
-        url: 'https://doi.org/10.1109/access.2026.3728109',
-      },
-      {
-        text: 'Used as a baseline by ServiceNow’s AprielGuard, and evaluated as a reference guard model in DARWIN, the PolyGuard benchmark and LettuceDetect.',
-        url: 'https://arxiv.org/abs/2607.19829',
-      },
-      {
-        text: 'Cited among current guardrail models by Apple researchers (Krishna et al., ICLR 2026 workshop).',
-        url: 'https://arxiv.org/abs/2506.00166',
-      },
-      {
-        text: 'DIP-VAE is among the methods in the ICML 2019 best paper by Locatello et al., which trained more than 12,000 disentanglement models.',
+        text: 'DIP-VAE (ICLR 2018, 749 citations) is one of the methods in the ICML 2019 best paper by Locatello et al., which trained more than 12,000 disentanglement models. It is implemented in disentanglement_lib and PyTorch-VAE.',
         url: 'https://arxiv.org/abs/1811.12359',
+      },
+      {
+        text: 'AI Fairness 360: the toolkit paper has 2,907 citations, and the project is hosted by LF AI & Data at the Linux Foundation.',
+        url: 'https://lfaidata.foundation/projects/ai-fairness-360/',
+      },
+      {
+        text: 'AI Explainability 360: the taxonomy paper has 800 citations.',
+        url: 'https://arxiv.org/abs/1909.03012',
+      },
+      {
+        text: '“Uncertainty as a Form of Transparency” (AIES 2021) has 487 citations.',
+        url: 'https://arxiv.org/abs/2011.07586',
+      },
+      {
+        text: '“Who Should Predict?” (AISTATS 2023), on exact algorithms for learning to defer, has 145 citations.',
+        url: 'https://arxiv.org/abs/2301.06197',
       },
     ],
   },
