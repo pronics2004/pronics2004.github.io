@@ -107,7 +107,7 @@ const press = [
         Research spans post-training and generative modeling: agent memory (COLM 2026), guardrails that check an
         agent’s plan before it executes (ICLR 2026), abstention for reasoning models (ACL 2026), calibration for LLMs
         (ICML 2024), and disentangled representation learning and GANs (ICLR 2018, NeurIPS 2017). Core contributor to
-        the open-source toolkits AI Fairness 360, AI Explainability 360 and UQ360.
+        the open-source toolkits AI Fairness 360, AI Explainability 360 and UQ360.{' '}
         {scholar.citations.toLocaleString('en-US')} citations, h-index {scholar.hIndex}{' '}
         (Google Scholar, {scholar.asOf}).
       </p>
@@ -374,7 +374,6 @@ const press = [
 
   .job {
     margin-top: 18px;
-    break-inside: avoid-page;
   }
   .job-head {
     display: flex;
@@ -451,6 +450,15 @@ const press = [
   @media print {
     .no-print {
       display: none;
+    }
+    .cv h2,
+    .cv h3,
+    .job-head,
+    .job-title {
+      break-after: avoid;
+    }
+    .cv li {
+      break-inside: avoid;
     }
     .cv {
       max-width: none;
