@@ -113,7 +113,7 @@ export const collaborators = [
   {
     place: 'MIT',
     people: 'Gregory Wornell, David Sontag, William Freeman, Aude Oliva',
-    with: 'Maohao Shen, Joshua Lee, Abhin Shah, J. Jon Ryu, Hussein Mozannar, Hunter Lang, Abinitha Gourabathina, Kaiwen Zha',
+    with: 'Maohao Shen, Joshua Lee, Abhin Shah, J. Jon Ryu, Hussein Mozannar, Hunter Lang, Abinitha Gourabathina',
     topics: 'Calibration and uncertainty, learning to defer, abstention, agents that learn from experience, domain adaptation',
   },
   {
@@ -127,29 +127,6 @@ export const collaborators = [
     people: 'Tatsunori Hashimoto',
     with: 'Mingjian Jiang, Yangjun Ruan, Zexue He',
     topics: 'Uncertainty for long-form generation, experience-driven agents',
-  },
-  {
-    place: 'University of Notre Dame',
-    people: 'Xiangliang Zhang',
-    with: 'Yue Huang',
-    topics: 'Guardrails for agentic systems, trustworthiness benchmarks for generative models',
-  },
-  {
-    place: 'University of Illinois Urbana-Champaign',
-    people: 'Lav Varshney, Katherine Driggs-Campbell',
-    with: 'Sourya Basu, Pulkit Katdare, Siru Ouyang',
-    topics: 'Equivariant fine-tuning of pretrained models',
-  },
-  {
-    place: 'UCLA',
-    people: 'Suhas Diggavi',
-    topics: 'Experience-driven agents',
-  },
-  {
-    place: 'Carnegie Mellon University',
-    people: 'Ameet Talwalkar',
-    with: 'Valerie Chen',
-    topics: 'Evaluating LLMs as programming assistants',
   },
   {
     place: 'Mila and McGill University',
