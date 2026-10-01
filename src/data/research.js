@@ -157,32 +157,6 @@ export const collaborators = [
     with: 'Paula Harder, Qidong Yang, Alex Hernandez-Garcia, Venkatesh Ramesh',
     topics: 'Hard-constrained deep learning for climate downscaling',
   },
-  {
-    place: 'Harvard University',
-    people: 'Lucas Monteiro Paes',
-    topics: 'Attribution for generative language models',
-  },
-  {
-    place: 'University of Florida',
-    people: 'Yuheng Bu',
-    topics: 'Uncertainty quantification, fair selective prediction',
-  },
-  {
-    place: 'Boston University',
-    people: 'Kate Saenko',
-    topics: 'Efficient video recognition',
-  },
-  {
-    place: 'Tel Aviv University',
-    people: 'Raja Giryes',
-    with: 'Moshe Lichtenstein',
-    topics: 'Few-shot learning',
-  },
-  {
-    place: 'University of Utah',
-    people: 'P. Thomas Fletcher',
-    topics: 'Semi-supervised learning with GANs',
-  },
 ];
 
 // Public testimonials. Quotes are verbatim from the linked source.
