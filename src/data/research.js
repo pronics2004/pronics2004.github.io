@@ -258,15 +258,16 @@ export const adoption = [
     head: 'Used and built on in other research',
     items: [
       {
-        text: 'Apple researchers name Granite Guardian among state-of-the-art guardrails (Krishna et al., 2025).',
-        url: 'https://arxiv.org/abs/2506.00166',
-      },
-      {
-        text: 'ROC Guardian, a family of Romanian offensive-language guard models, is fine-tuned from Granite Guardian (IEEE Access, 2026).',
+        text: 'ROC Guardian, a family of Romanian offensive-language guard models, is fine-tuned from Granite Guardian 3 (IEEE Access, 2026).',
+        url: 'https://doi.org/10.1109/access.2026.3728109',
       },
       {
         text: 'Used as a baseline by ServiceNow’s AprielGuard, and evaluated as a reference guard model in DARWIN, the PolyGuard benchmark and LettuceDetect.',
         url: 'https://arxiv.org/abs/2607.19829',
+      },
+      {
+        text: 'Cited among current guardrail models by Apple researchers (Krishna et al., ICLR 2026 workshop).',
+        url: 'https://arxiv.org/abs/2506.00166',
       },
       {
         text: 'DIP-VAE is among the methods in the ICML 2019 best paper by Locatello et al., which trained more than 12,000 disentanglement models.',
