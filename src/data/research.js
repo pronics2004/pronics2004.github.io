@@ -68,7 +68,7 @@ export const openSource = [
     name: 'AI Fairness 360',
     role: 'Core contributor',
     what: 'Fairness metrics and bias mitigation algorithms for datasets and models.',
-    adoption: '2,872 GitHub stars; the paper has 2,907 citations',
+    adoption: '2,872 GitHub stars; the paper has 2,907 citations; an LF AI & Data (Linux Foundation) project',
     url: 'https://github.com/Trusted-AI/AIF360',
   },
   {
@@ -187,6 +187,10 @@ export const adoption = [
     head: 'Independent benchmarks',
     items: [
       {
+        text: 'LLM-AggreFact fact-checking leaderboard: Granite Guardian 3.3 (8B) ranks third of 39 models, behind Bespoke-MiniCheck and Claude 3.5 Sonnet and ahead of GPT-4o, Mistral Large 2 and Llama 3.1 405B.',
+        url: 'https://llm-aggrefact.github.io/',
+      },
+      {
         text: 'GuardBench, built at the European Commission’s Joint Research Centre: six of the top ten places across 40 datasets (April 2025).',
         url: 'https://research.ibm.com/blog/granite-guardian-tops-guardbench',
       },
@@ -216,6 +220,10 @@ export const adoption = [
         url: 'https://docs.redhat.com/en/documentation/red_hat_openshift_ai_self-managed/3.2/html-single/enabling_ai_safety_with_guardrails/index',
       },
       {
+        text: 'NVIDIA has offered Granite Guardian 3.0 8B as a NIM microservice on build.nvidia.com.',
+        url: 'https://build.nvidia.com/ibm/granite-guardian-3_0-8b',
+      },
+      {
         text: 'Traefik Hub ships an LLM Guard built on Granite Guardian, alongside guards from Microsoft and NVIDIA.',
         url: 'https://traefik.io/press/traefik-labs-new-multi-vendor-composable-ai-safety-pipeline',
       },
@@ -224,6 +232,14 @@ export const adoption = [
   {
     head: 'In open-source projects and tutorials',
     items: [
+      {
+        text: 'Google Cloud’s community blog builds guardrails for the Agent Development Kit with Granite Guardian 3.3, Llama Guard 3 and ShieldGemma (November 2025).',
+        url: 'https://medium.com/google-cloud/guardrails-with-agent-development-kit-featuring-safeguard-llm-models-6d696198a063',
+      },
+      {
+        text: 'Turing Post’s explainer on guardian models covers Granite Guardian with Llama Guard and ShieldGemma (September 2025).',
+        url: 'https://www.turingpost.com/p/guardianmodels',
+      },
       {
         text: 'deepset’s Haystack safety cookbook covers Granite Guardian with Llama Guard, ShieldGemma and NemoGuard.',
         url: 'https://haystack.deepset.ai/cookbook/safety_moderation_open_lms',
@@ -249,7 +265,7 @@ export const adoption = [
         text: 'ROC Guardian, a family of Romanian offensive-language guard models, is fine-tuned from Granite Guardian (IEEE Access, 2026).',
       },
       {
-        text: 'Evaluated as a reference guard model in DARWIN, the PolyGuard benchmark and LettuceDetect’s baselines.',
+        text: 'Used as a baseline by ServiceNow’s AprielGuard, and evaluated as a reference guard model in DARWIN, the PolyGuard benchmark and LettuceDetect.',
         url: 'https://arxiv.org/abs/2607.19829',
       },
       {
