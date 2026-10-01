@@ -220,10 +220,6 @@ export const adoption = [
         url: 'https://docs.redhat.com/en/documentation/red_hat_openshift_ai_self-managed/3.2/html-single/enabling_ai_safety_with_guardrails/index',
       },
       {
-        text: 'NVIDIA has offered Granite Guardian 3.0 8B as a NIM microservice on build.nvidia.com.',
-        url: 'https://build.nvidia.com/ibm/granite-guardian-3_0-8b',
-      },
-      {
         text: 'Traefik Hub ships an LLM Guard built on Granite Guardian, alongside guards from Microsoft and NVIDIA.',
         url: 'https://traefik.io/press/traefik-labs-new-multi-vendor-composable-ai-safety-pipeline',
       },
