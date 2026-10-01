@@ -256,7 +256,7 @@ const press = [
     <section>
       <h2>Academic collaborations</h2>
       <ul class="rows wide">
-        {collaborators.map((k) => <li><span>{k.place}</span><span>{k.people}</span></li>)}
+        {collaborators.map((k) => <li><span>{k.place}</span><span>{k.people}{k.with && `; with ${k.with}`}</span></li>)}
       </ul>
     </section>
 

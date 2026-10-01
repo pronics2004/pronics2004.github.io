@@ -107,12 +107,13 @@ export const adoptedElsewhere = [
   },
 ];
 
-// Academic collaborators, with affiliations as listed on the joint papers.
+// Academic collaborations, with affiliations as listed on the joint papers.
+// `with` lists the students and postdocs on those papers; always show it wherever `people` is shown.
 export const collaborators = [
   {
     place: 'MIT',
     people: 'Gregory Wornell, David Sontag, William Freeman, Aude Oliva',
-    with: 'Maohao Shen, J. Jon Ryu, Hussein Mozannar, Hunter Lang, Abinitha Gourabathina, Kaiwen Zha',
+    with: 'Maohao Shen, Joshua Lee, Abhin Shah, J. Jon Ryu, Hussein Mozannar, Hunter Lang, Abinitha Gourabathina, Kaiwen Zha',
     topics: 'Calibration and uncertainty, learning to defer, abstention, agents that learn from experience, domain adaptation',
   },
   {
@@ -153,7 +154,7 @@ export const collaborators = [
   {
     place: 'Mila and McGill University',
     people: 'David Rolnick',
-    with: 'Paula Harder, Qidong Yang, Alex Hernandez-Garcia',
+    with: 'Paula Harder, Qidong Yang, Alex Hernandez-Garcia, Venkatesh Ramesh',
     topics: 'Hard-constrained deep learning for climate downscaling',
   },
   {
@@ -174,6 +175,7 @@ export const collaborators = [
   {
     place: 'Tel Aviv University',
     people: 'Raja Giryes',
+    with: 'Moshe Lichtenstein',
     topics: 'Few-shot learning',
   },
   {
