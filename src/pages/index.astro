@@ -92,23 +92,23 @@ const halfTicks = [0.5, 0.6, 0.7, 0.8, 0.9];
   description="Prasanna Sattigeri leads post-training for agent reliability at IBM Research: Granite Guardian, modular post-training for Granite models, and research in agents, calibration and generative modeling."
 >
   <section class="hero">
-    <div class="wrap">
-    <div class="hero-body">
-      <p class="eyebrow">{profile.title} · {profile.org} · {profile.lab}</p>
-      <h1>Post-trained models that make agent workflows reliable.</h1>
-      <Image class="photo" src={photo} alt="Portrait of Prasanna Sattigeri" width={440} height={440} loading="eager" />
-      <p class="lede">{pitch[0]}</p>
-      <p class="lede">
-        {pitch[1]} {scholar.citations.toLocaleString('en-US')} citations, h-index {scholar.hIndex} (Google Scholar,{' '}
-        {scholar.asOf}).
-      </p>
-      <div class="actions">
-        <a class="btn primary" href={`${base}/granite-guardian/`}>Granite Guardian case study</a>
-        <a class="btn" href="#post-training">Post-training</a>
-        <a class="btn" href="#generative">Generative modeling</a>
-        <a class="btn" href={`${base}/cv/`}>CV</a>
+    <div class="wrap hero-grid">
+      <div>
+        <p class="eyebrow">{profile.title} · {profile.org} · {profile.lab}</p>
+        <h1>Post-trained models that make agent workflows reliable.</h1>
+        <p class="lede">{pitch[0]}</p>
+        <p class="lede">
+          {pitch[1]} {scholar.citations.toLocaleString('en-US')} citations, h-index {scholar.hIndex} (Google Scholar,{' '}
+          {scholar.asOf}).
+        </p>
+        <div class="actions">
+          <a class="btn primary" href={`${base}/granite-guardian/`}>Granite Guardian case study</a>
+          <a class="btn" href="#post-training">Post-training</a>
+          <a class="btn" href="#generative">Generative modeling</a>
+          <a class="btn" href={`${base}/cv/`}>CV</a>
+        </div>
       </div>
-    </div>
+      <Image class="photo" src={photo} alt="Portrait of Prasanna Sattigeri" width={440} height={440} loading="eager" />
     </div>
 
     <div class="wrap">
@@ -506,29 +506,26 @@ the criteria, return 'yes'; otherwise, return 'no'.
   .hero {
     padding-block: clamp(48px, 7vw, 96px) clamp(40px, 6vw, 72px);
   }
-  .hero-body {
-    max-width: 960px;
-  }
-  .hero-body::after {
-    content: '';
-    display: block;
-    clear: both;
+  .hero-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(180px, 240px);
+    gap: clamp(24px, 5vw, 72px);
+    align-items: start;
   }
   .hero :global(.photo) {
-    float: right;
-    width: clamp(160px, 20vw, 232px);
+    width: 100%;
     aspect-ratio: 1;
     object-fit: cover;
     border-radius: 14px;
     border: 1px solid var(--rule);
-    margin: 4px 0 16px clamp(24px, 4vw, 44px);
+    margin-top: 34px;
   }
   .hero h1 {
     max-width: 17ch;
     margin-bottom: 24px;
   }
   .hero .lede {
-    max-width: none;
+    max-width: 72ch;
     font-size: 1.05rem;
     color: var(--ink);
   }
@@ -983,16 +980,14 @@ the criteria, return 'yes'; otherwise, return 'no'.
     }
   }
   @media (max-width: 640px) {
-    .hero-body {
-      display: flex;
-      flex-direction: column;
+    .hero-grid {
+      grid-template-columns: 1fr;
     }
     .hero :global(.photo) {
-      float: none;
-      order: -1;
       width: 104px;
-      margin: 0 0 18px;
+      order: -1;
       border-radius: 12px;
+      margin-top: 0;
     }
   }
 </style>
