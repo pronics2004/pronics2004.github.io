@@ -167,6 +167,35 @@ const timeline = [
     </div>
   </section>
 
+  <section class="section">
+    <div class="wrap two">
+      <div>
+        <p class="eyebrow">Decisions</p>
+        <h2>Three calls that were mine</h2>
+      </div>
+      <div class="prose">
+        <h3>A judge, not a classifier</h3>
+        <p>
+          Guardian is fine-tuned to answer with a yes or no token and its probability, instead of a classification head
+          on top of the base model. That kept the whole language model in play. It is what later let 4.1 take criteria
+          it had never seen and serve as a reward model.
+        </p>
+        <h3>Criteria at runtime</h3>
+        <p>
+          4.1 moved from a fixed risk taxonomy to criteria written in the request. Out-of-distribution safety F1
+          slipped from 0.81 to 0.79; IFEval multi-constraint checking went from 0.458 to 0.844. The trade was the point:
+          a judge that applies the user’s rule beats a classifier that applies ours.
+        </p>
+        <h3>A reasoning mode from the same weights</h3>
+        <p>
+          Think mode writes its justification before the verdict. It costs latency, 59 ms to 1.3 s on the Artificial
+          Analysis benchmark, and buys three things: a justification where one is needed, a way to see why a custom
+          criterion misfires and tighten its wording, and a trace for debugging verdicts in production.
+        </p>
+      </div>
+    </div>
+  </section>
+
   <section class="section" id="benchmark">
     <div class="wrap two">
       <div>
