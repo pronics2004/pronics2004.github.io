@@ -14,14 +14,14 @@ export const threads = [
     id: 'uncertainty',
     title: 'Calibration, uncertainty and abstention',
     framing: 'A model that knows when it is likely wrong. Calibration that transfers, uncertainty for long outputs, abstention for reasoning models.',
-    ships: 'calibrated uncertainty in the Granite Core Library',
+    ships: 'calibrated uncertainty in Granite Switch',
     papers: ['thermometer', 'graph-uncertainty', 'edl-mirage', 'trace-inversion'],
   },
   {
     id: 'attribution',
     title: 'Attribution and interpretability',
     framing: 'Which part of the context, and which part of the model, produced this sentence.',
-    ships: 'context attribution in the Granite Core Library, and the ICX360 toolkit',
+    ships: 'context attribution in Granite Switch, and the ICX360 toolkit',
     papers: ['mexgen', 'causal-tracing'],
   },
   {
@@ -55,11 +55,11 @@ export const openSource = [
     url: 'https://github.com/ibm-granite/granite-guardian',
   },
   {
-    name: 'Granite Guardian Library and Granite Core Library',
+    name: 'Granite Switch',
     role: 'Lead',
-    what: 'Seven checks trained into the Granite 4.0 and 4.1 base models.',
+    what: 'Adapter functions for safety, factuality and RAG, composed into one Granite model.',
     adoption: '58K Hugging Face downloads',
-    url: 'https://huggingface.co/collections/ibm-granite/granite-libraries',
+    url: 'https://github.com/generative-computing/granite-switch',
   },
   {
     name: 'AI Fairness 360',
@@ -152,7 +152,7 @@ export const quotes = [
 
 // Usage counts. Hugging Face read on 2026-10-13; Ollama on 2026-10-01.
 export const usage = [
-  { value: '1.16M', label: 'Hugging Face downloads, all time, across the Granite Guardian models and the two libraries' },
+  { value: '1.16M', label: 'Hugging Face downloads, all time, across the Granite Guardian models and the Granite Switch libraries' },
   { value: '371K', label: 'Ollama pulls of granite3-guardian and granite4.1-guardian' },
   { value: '45', label: 'community quantized builds on Hugging Face' },
   { value: '56K', label: 'downloads of Granite Guardian 4.1 8B in the past 30 days' },
