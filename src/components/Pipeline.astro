@@ -1,0 +1,79 @@
+---
+// The post-training recipe as five steps.
+const steps = [
+  ['Define', 'One output you can check: a verdict, a score, a ranking, a rewrite.'],
+  ['Build data', 'Human labels where judgment is needed. Synthetic data where scale is. Red-teaming for the rest.'],
+  ['Train', 'A full fine-tune for the judge; capabilities trained into the base model for the libraries.'],
+  ['Measure', 'Held-out sets, and the same base model prompted, so the gain is visible.'],
+  ['Release', 'Open weights, Apache 2.0, signed.'],
+];
+---
+
+<ol class="pipe">
+  {
+    steps.map(([name, note], i) => (
+      <li>
+        <span class="n">{i + 1}</span>
+        <strong>{name}</strong>
+        <p>{note}</p>
+      </li>
+    ))
+  }
+</ol>
+
+<style>
+  .pipe {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+  }
+  .pipe li {
+    position: relative;
+    padding: 14px 14px 14px 16px;
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+  }
+  .pipe li:not(:last-child)::after {
+    content: '→';
+    position: absolute;
+    right: -11px;
+    top: 14px;
+    color: var(--ink-3);
+    font-size: 0.9rem;
+    background: var(--bg);
+    padding: 0 2px;
+    z-index: 1;
+  }
+  .n {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    color: var(--ink-3);
+  }
+  .pipe strong {
+    display: block;
+    margin: 2px 0 6px;
+  }
+  .pipe p {
+    margin: 0;
+    font-size: 0.85rem;
+    line-height: 1.4;
+    color: var(--ink-2);
+  }
+  @media (max-width: 900px) {
+    .pipe {
+      grid-template-columns: 1fr 1fr;
+    }
+    .pipe li::after {
+      display: none;
+    }
+  }
+  @media (max-width: 480px) {
+    .pipe {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

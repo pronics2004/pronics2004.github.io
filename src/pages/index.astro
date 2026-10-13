@@ -4,30 +4,35 @@ import Base from '../layouts/Base.astro';
 import Dumbbell from '../components/Dumbbell.astro';
 import AgentLoop from '../components/AgentLoop.astro';
 import ResearchThreads from '../components/ResearchThreads.astro';
+import Timeline from '../components/Timeline.astro';
+import Pipeline from '../components/Pipeline.astro';
+import Verdict from '../components/Verdict.astro';
+import Axes from '../components/Axes.astro';
+import Bars from '../components/Bars.astro';
+import Strip from '../components/Strip.astro';
 import photo from '../assets/profile.png';
 import aaChart from '../assets/aa-average-f1.png';
-import { profile, links, scholar, models, guardbench, benchmark, pitch, team, releases, awards } from '../data/site.js';
+import { profile, links, scholar, models, benchmark, pitch, team, awards } from '../data/site.js';
 import { openSource, adoptedElsewhere, collaborators, quotes, usage, adoption } from '../data/research.js';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
-// The three things the work rests on, given equal weight.
 const pillars = [
   {
     kicker: 'Post-training · judge model',
     name: 'Granite Guardian',
     href: '#guardian',
-    body: 'A fine-tuned Granite 4.1 8B that returns a yes/no verdict on a criterion: harm, jailbreaks, groundedness, tool-call validity, or a rule written at runtime.',
+    body: 'A judge model. Give it a conversation and a criterion; it answers yes or no, with a probability.',
     facts: [
       ['Fifth of 20', 'on the Artificial Analysis guardrail benchmark, F1 0.859 at 59 ms'],
-      ['1.09M', 'Hugging Face downloads across Guardian versions, plus 371K Ollama pulls'],
+      ['1.1M', 'Hugging Face downloads across Guardian versions, plus 371K Ollama pulls'],
     ],
   },
   {
     kicker: 'Post-training · capabilities and agents',
-    name: 'Granite libraries, agent memory and guardrails',
+    name: 'Granite libraries, agent memory, guardrails',
     href: '#post-training',
-    body: 'Capabilities trained onto Granite base models, and research on agent memory, guardrails that act before execution, calibration and abstention.',
+    body: 'Seven checks trained into Granite base models, and research on agent memory, pre-execution guardrails and abstention.',
     facts: [
       ['0.569 → 0.855', 'IFEval balanced accuracy, prompted base model vs post-trained'],
       ['5 papers in 2026', 'COLM, two at ICLR and two at ACL'],
@@ -37,84 +42,35 @@ const pillars = [
     kicker: 'Generative modeling',
     name: 'From disentangled VAEs to data engines',
     href: '#generative',
-    body: 'Disentangled representation learning, GANs for semi-supervised learning and fair data generation, and the synthetic data that now trains judge models.',
+    body: 'Disentangled VAEs, GANs for semi-supervised and fair data, and now the synthetic data that trains judges.',
     facts: [
-      ['DIP-VAE', 'ICLR 2018, cited 753 times and implemented in widely used libraries'],
+      ['DIP-VAE', 'ICLR 2018, cited 753 times, in disentanglement_lib and PyTorch-VAE'],
       [scholar.citations.toLocaleString('en-US'), `citations overall, h-index ${scholar.hIndex} (Google Scholar, ${scholar.asOf})`],
     ],
   },
 ];
 
-// Team and delivery facts shown directly under the three pillars.
 const leading = [
-  ['4 countries', 'where the Granite Guardian team I lead is based: the US, India, Japan and Ireland'],
-  ['5 releases', 'of Granite Guardian since October 2024, from 3.0 to 4.1'],
-  ['2 awards', 'IBM Research Outstanding Accomplishments, for the Granite 3.0 release (2024) and AI governance (2025)'],
+  ['4 countries', 'where the Granite Guardian team I lead is based'],
+  ['5 releases', 'of Granite Guardian since October 2024'],
+  ['2 awards', 'IBM Research Outstanding Accomplishments, 2024 and 2025'],
   ['2 projects', 'as principal investigator at the MIT-IBM Watson AI Lab'],
 ];
 
 const guardianFacts = [
-  {
-    head: 'Tool calls',
-    value: '0.79',
-    body: 'balanced accuracy detecting hallucinated function calls on FC Reward Bench, up from 0.74 in Guardian 3.3.',
-  },
-  {
-    head: 'Custom criteria',
-    value: '0.844',
-    body: 'balanced accuracy on IFEval multi-constraint checks. Prompting the base Granite 4.1 8B model scores 0.569.',
-  },
-  {
-    head: 'Reward model',
-    value: '70.29',
-    body: 'overall on JETTS best-of-N selection, ahead of every reward model tested, including a 70B judge.',
-  },
+  { head: 'Harm, out of distribution', value: 'Fifth of 20', body: 'Artificial Analysis, June 2026. F1 0.859, 59 ms per check, first among models that take their policy at runtime.' },
+  { head: 'Fact-checking', value: 'Third of 39', body: 'LLM-AggreFact leaderboard, Guardian 3.3 at 8B. Ahead of GPT-4o, Mistral Large 2 and Llama 3.1 405B.' },
+  { head: 'Reward model', value: '70.29', body: 'JETTS best-of-N selection. Ahead of every reward model tested, up to 70B.' },
 ];
 
-// The seven capabilities in the two Granite libraries: what each returns and what it was trained on.
 const capabilities = [
-  {
-    name: 'Judging against a criterion',
-    lib: 'Guardian Library',
-    returns: 'Yes or no, with a continuous risk score.',
-    trained: 'Human-annotated and synthetic data covering safety, RAG hallucination and function-call hallucination.',
-  },
-  {
-    name: 'Policy compliance',
-    lib: 'Guardian Library',
-    returns: 'Compliant, non-compliant or ambiguous.',
-    trained: 'Human-written policies across about 40 domains, with human-written and human-validated synthetic scenarios.',
-  },
-  {
-    name: 'Factuality detection',
-    lib: 'Guardian Library',
-    returns: 'Yes if any claim is unsupported or contradicted by context that may itself conflict.',
-    trained: '17,522 ELI5-Category instances, half with injected errors, supervised by FactReasoner (EMNLP 2025).',
-  },
-  {
-    name: 'Factuality correction',
-    lib: 'Guardian Library',
-    returns: 'A corrected response, or none when no change is needed.',
-    trained: 'The same corpus, supervised by FactCorrector (ACL 2026).',
-  },
-  {
-    name: 'Requirement checking',
-    lib: 'Core Library',
-    returns: 'Yes or no, with the probability of yes as a score.',
-    trained: 'Multi-constraint instruction-following prompts with programmatic labels, plus HelpSteer3 ratings.',
-  },
-  {
-    name: 'Calibrated uncertainty',
-    lib: 'Core Library',
-    returns: 'A confidence where, of answers scored X%, about X% are correct.',
-    trained: 'About 240K question–answer pairs per base model, labeled by a Thermometer calibrator (ICML 2024).',
-  },
-  {
-    name: 'Context attribution',
-    lib: 'Core Library',
-    returns: 'For each response sentence, the context sentences that influenced it, ranked.',
-    trained: '4,101 conversation rounds labeled with leave-one-out MExGen attributions (ACL 2025).',
-  },
+  ['Judging against a criterion', 'yes or no, with a risk score', 'human-labeled and synthetic data for safety, RAG and tool calls'],
+  ['Policy compliance', 'compliant, non-compliant or ambiguous', 'human-written policies across about 40 domains'],
+  ['Factuality detection', 'yes if any claim is unsupported by the context', '17,522 ELI5 instances, half with injected errors'],
+  ['Factuality correction', 'a corrected response, or none', 'the same corpus, supervised by FactCorrector (ACL 2026)'],
+  ['Requirement checking', 'yes or no, with P(yes)', 'multi-constraint prompts with programmatic labels'],
+  ['Calibrated uncertainty', 'a confidence that is right about X% of the time at X%', '240K answers per base model, labeled by a Thermometer calibrator'],
+  ['Context attribution', 'the context sentences behind each response sentence, ranked', '4,101 conversation rounds labeled with leave-one-out MExGen'],
 ];
 
 const requirementRows = [
@@ -122,7 +78,6 @@ const requirementRows = [
   { label: 'Granite 4.1 8B', before: 0.5689, after: 0.8554 },
   { label: 'Granite 4.1 30B', before: 0.6237, after: 0.8492 },
 ];
-
 const uncertaintyRows = [
   { label: 'Granite 4.0 micro', before: 0.6748, after: 0.6903 },
   { label: 'Granite 4.1 3B', before: 0.6291, after: 0.7713 },
@@ -142,8 +97,6 @@ const halfTicks = [0.5, 0.6, 0.7, 0.8, 0.9];
         <p class="eyebrow">{profile.title} · {profile.org} · {profile.lab}</p>
         <h1>Post-trained models that make agent workflows reliable.</h1>
         <p class="lede">{pitch[0]}</p>
-        <p class="pitch">{pitch[1]}</p>
-        <p class="pitch">{pitch[2]}</p>
         <div class="actions">
           <a class="btn primary" href={`${base}/granite-guardian/`}>Granite Guardian case study</a>
           <a class="btn" href="#post-training">Post-training</a>
@@ -195,30 +148,12 @@ const halfTicks = [0.5, 0.6, 0.7, 0.8, 0.9];
         <p class="eyebrow">Impact</p>
         <h2>Team, releases and recognition</h2>
         <p class="lede">
-          The team is spread across IBM Research sites in {team.sites}. I lead its research direction and its
-          releases, from data and training through evaluation and open-source release to use in IBM and Red Hat
-          products.
+          The team sits in {team.sites}. I set its direction and own its releases, from data to open weights. Five
+          versions of Granite Guardian in eighteen months, each adding something the last one could not do.
         </p>
       </div>
-
+      <Timeline />
       <div class="lead-grid">
-        <div>
-          <h3>Delivery</h3>
-          <p>Five Granite Guardian releases in 18 months, each adding a capability.</p>
-          <ol class="yr-list">
-            {
-              releases.map((r) => (
-                <li>
-                  <span>{r.when}</span>
-                  <span>
-                    <strong>{r.version}</strong> {r.what}
-                  </span>
-                </li>
-              ))
-            }
-          </ol>
-        </div>
-
         <div>
           <h3>Recognition</h3>
           <ol class="yr-list">
@@ -227,42 +162,25 @@ const halfTicks = [0.5, 0.6, 0.7, 0.8, 0.9];
                 <li>
                   <span>{year}</span>
                   <span>
-                    <strong>{award}</strong> {forWhat}
+                    <strong>{award}.</strong> {forWhat}
                   </span>
                 </li>
               ))
             }
           </ol>
         </div>
-
         <div>
           <h3>MIT-IBM Watson AI Lab</h3>
-          <p>Principal investigator on two joint projects with MIT faculty.</p>
-          <ul class="plain">
-            <li>
-              <strong>Trustworthy learning with limited data</strong>, with Prof. Gregory Wornell. Calibration and
-              uncertainty for foundation models, and agents that learn from experience (ICML 2024, NeurIPS 2024, COLM
-              2026).
-            </li>
-            <li>
-              <strong>Human-centric AI for shared decision making</strong>, with Prof. David Sontag. Learning to defer
-              and onboarding for human–AI teams (AISTATS 2023, NeurIPS 2023).
-            </li>
-          </ul>
-        </div>
-
-        <div>
+          <p>
+            Principal investigator on two projects: trustworthy learning with limited data, with Gregory Wornell, and
+            human-centric AI for shared decisions, with David Sontag. They produced Thermometer, the EDL paper, the COLM
+            paper, and the learning-to-defer and onboarding papers.
+          </p>
           <h3>Mentoring</h3>
-          <ul class="plain">
-            <li>
-              Thesis committee member for Joshua Lee and Maohao Shen, PhD students of Gregory Wornell at MIT, and for
-              Burak Varıcı at RPI.
-            </li>
-            <li>
-              Research interns hosted throughout ten years at IBM Research. Papers with interns and visiting students
-              include Trace Inversion (ACL 2026) and the pre-execution guardrail for agents (ICLR 2026).
-            </li>
-          </ul>
+          <p>
+            Thesis committees for Joshua Lee and Maohao Shen at MIT and Burak Varıcı at RPI. Interns most years for a
+            decade; two of the 2026 papers below started as internships.
+          </p>
         </div>
       </div>
     </div>
@@ -271,42 +189,19 @@ const halfTicks = [0.5, 0.6, 0.7, 0.8, 0.9];
   <section class="section" id="guardian">
     <div class="wrap">
       <div class="section-head">
-        <p class="eyebrow">Judge model · Granite Guardian</p>
-        <h2>One judge model for the checks an agent needs</h2>
+        <p class="eyebrow">Judge model</p>
+        <h2>Granite Guardian</h2>
         <p class="lede">
-          Granite Guardian is IBM’s open-source judge model. It scores prompts, responses, retrieved context and tool
-          calls against built-in or user-written criteria and returns a yes/no verdict. I lead the project and its
-          training.
+          One model, one call, one answer. The conversation goes in with a criterion appended; a verdict comes out. The
+          criterion can be a built-in risk or a sentence you wrote a minute ago. I lead the project and its training.
         </p>
       </div>
 
+      <Verdict />
+
       <div class="how">
-        <div>
-          <h3>How a verdict is produced</h3>
-          <p>
-            The conversation under review is followed by one extra user turn, the guardian block. It carries a mode
-            directive, a criterion in natural language and a fixed scoring schema. The model answers inside{' '}
-            <code>&lt;score&gt;</code> tags.
-          </p>
-          <ul class="tech">
-            <li>
-              <strong>Criteria.</strong> Harm, social bias, jailbreaking, violence, profanity and unethical behavior;
-              context relevance, groundedness and answer relevance for RAG; function-call hallucination for agents; or any
-              rule supplied at runtime.
-            </li>
-            <li>
-              <strong>Modes.</strong> No-think returns the verdict directly. Think writes a reasoning trace first.
-            </li>
-            <li>
-              <strong>Training.</strong> Fine-tuned from Granite 4.1 8B on human-annotated data and synthetic data
-              informed by internal red-teaming.
-            </li>
-          </ul>
-        </div>
         <pre class="code" aria-label="Guardian block format"><code>{`<guardian><no-think>As a judge agent, assess whether the
-provided text meets the given judging criteria using all
-available information, including conversations, documents,
-and tools. Provide your score immediately ...
+provided text meets the given judging criteria ...
 
 ### Criteria: The response contains no more than
 3 sentences.
@@ -315,60 +210,17 @@ and tools. Provide your score immediately ...
 the criteria, return 'yes'; otherwise, return 'no'.
 
 → <score>no</score>`}</code></pre>
-      </div>
-
-      <h3>Independent benchmark, June 2026</h3>
-      <p class="bench-lede">
-        Artificial Analysis, with NVIDIA, scored 20 guardrail configurations on {benchmark.prompts.toLocaleString('en-US')}{' '}
-        prompts from WildGuardTest, ToxicChat and XSTest. Models that take a policy at runtime were all given the same
-        broad policy, written by Artificial Analysis.
-      </p>
-      <div class="beyond">
-        <div class="card fact">
-          <p class="fact-head">Detection quality</p>
-          <p class="fact-value">F1 0.859</p>
-          <p class="fact-body">Fifth of 20 configurations, within 0.03 of the leader.</p>
-        </div>
-        <div class="card fact">
-          <p class="fact-head">Policy at runtime</p>
-          <p class="fact-value">First</p>
-          <p class="fact-body">
-            The highest-scoring model that takes its policy at runtime, ahead of gpt-oss-safeguard 20B and 120B and
-            ShieldGemma 9B.
-          </p>
-        </div>
-        <div class="card fact">
-          <p class="fact-head">Speed and over-refusal</p>
-          <p class="fact-value">59 ms</p>
-          <p class="fact-body">
-            Average latency per check, with 91.4% of benign prompts passed. Second among the top five on precision and
-            on benign pass rate.
+        <div>
+          <h3>What the training is</h3>
+          <p>
+            A fine-tune of Granite 4.1 8B on human-annotated conversations and synthetic data from internal red-teaming.
+            Prompting the base model as a judge gets 0.569 balanced accuracy on IFEval multi-constraint checks; the
+            trained model gets 0.844. The 4.1 release added arbitrary criteria and a thinking mode. Safety and
+            groundedness held level while it learned that; out-of-distribution F1 slipped from 0.81 to 0.79.
           </p>
         </div>
       </div>
-      <figure class="shot">
-        <a href={benchmark.url}>
-          <Image
-            src={aaChart}
-            alt="Bar chart from Artificial Analysis of average F1 for 19 guardrail models. Granite Guardian 4.1 8B is the fifth bar at 85.9%, behind WildGuard at 88.9%, Qwen3Guard 8B at 87.3%, gpt-oss-120B prompted at 86.7% and Nemotron Safety Guard 8B at 85.9%."
-            widths={[720, 1200, 1990]}
-            sizes="(max-width: 1160px) 100vw, 1080px"
-          />
-        </a>
-        <figcaption>
-          Screenshot from <a href={benchmark.url}>Artificial Analysis</a>, “Benchmarking guardrail models for safety,
-          refusal, and latency” ({benchmark.published}), captured October 1, 2026. Granite Guardian 4.1 8B is the fifth
-          bar, in IBM blue.
-        </figcaption>
-      </figure>
-      <p class="more">
-        <a href={benchmark.url}>Full results at Artificial Analysis</a>. On the{' '}
-        <a href="https://llm-aggrefact.github.io/">LLM-AggreFact</a> fact-checking leaderboard, Granite Guardian 3.3
-        ranks third of 39 models, ahead of GPT-4o. Earlier, Granite Guardian models took six of the top ten places on{' '}
-        <a href={guardbench.url}>GuardBench</a> ({guardbench.date}), an independent benchmark spanning 40 datasets.
-      </p>
 
-      <h3 class="sub-h">Beyond safety: a general-purpose judge</h3>
       <div class="beyond">
         {
           guardianFacts.map((b) => (
@@ -380,11 +232,23 @@ the criteria, return 'yes'; otherwise, return 'no'.
           ))
         }
       </div>
-      <p class="more">
-        <a href={`${base}/granite-guardian/`}>Read the case study</a> · <a href={models.guardian.hf}>Model card</a> · <a
-          href={models.guardian.paper}>NAACL 2025 paper</a
-        >
-      </p>
+
+      <figure class="shot">
+        <a href={benchmark.url}>
+          <Image
+            src={aaChart}
+            alt="Bar chart from Artificial Analysis of average F1 for 19 guardrail models. Granite Guardian 4.1 8B is the fifth bar at 85.9%."
+            widths={[720, 1200, 1990]}
+            sizes="(max-width: 1160px) 100vw, 1080px"
+          />
+        </a>
+        <figcaption>
+          Artificial Analysis, “Benchmarking guardrail models for safety, refusal, and latency”, June 2026. Screenshot
+          taken October 1, 2026; Granite Guardian 4.1 8B is the fifth bar.{' '}
+          <a href={`${base}/granite-guardian/`}>Case study</a> · <a href={models.guardian.hf}>Model card</a> ·{' '}
+          <a href={models.guardian.paper}>NAACL 2025 paper</a>
+        </figcaption>
+      </figure>
     </div>
   </section>
 
@@ -392,41 +256,17 @@ the criteria, return 'yes'; otherwise, return 'no'.
     <div class="wrap">
       <div class="section-head">
         <p class="eyebrow">Post-training</p>
-        <h2>Making a pretrained model dependable in use</h2>
+        <h2>Teaching a base model to check its own work</h2>
         <p class="lede">
-          Post-training here covers everything done to a pretrained model so that it can be relied on: training judge
-          models, adding capabilities to a base model, calibration, and the memory and guardrails an agent runs with at
-          test time. I lead this work for the Granite Guardian and Core libraries.
+          Post-training, as I use the word, is everything that happens to a pretrained model before it can be trusted:
+          judges, calibration, capabilities trained into the base model, and the memory and guardrails an agent runs
+          with. The recipe is the same each time.
         </p>
       </div>
 
-      <div class="mech">
-        <div>
-          <h3>Define the capability</h3>
-          <p>
-            Each capability has one checkable output: a verdict, a calibrated score, a ranked list of sources, or a
-            corrected response. A narrow output can be evaluated on its own and placed at a specific step of a workflow.
-          </p>
-        </div>
-        <div>
-          <h3>Build the data</h3>
-          <p>
-            Human annotation where judgment is needed, such as policies across about 40 domains with scenarios
-            validated by at least two annotators. Synthetic generation where scale is needed, such as 300K contrastive samples or
-            240K calibrator-labeled answers. Red-teaming to find what both miss.
-          </p>
-        </div>
-        <div>
-          <h3>Supervise and measure</h3>
-          <p>
-            Several capabilities distill a slower research method into one forward pass: a Thermometer calibrator, or
-            leave-one-out MExGen attributions. Each is measured on held-out data against the same base model when
-            prompted.
-          </p>
-        </div>
-      </div>
+      <Pipeline />
 
-      <h3 class="sub-h">What training adds over the prompted base model</h3>
+      <h3 class="sub-h">The gain over the same model, prompted</h3>
       <div class="charts">
         <Dumbbell
           title="Requirement checking"
@@ -441,21 +281,21 @@ the criteria, return 'yes'; otherwise, return 'no'.
         />
         <Dumbbell
           title="Calibrated uncertainty"
-          sub="MMLU, AUROC for separating correct from incorrect answers. Chance is 0.5."
+          sub="MMLU, AUROC for telling right answers from wrong. Chance is 0.5."
           rows={uncertaintyRows}
           min={0.5}
           max={0.9}
           ticks={halfTicks}
           beforeLabel="Base model, sequence probability"
           afterLabel="Post-trained"
-          source="14,042 MMLU questions, not used in training. Expected calibration error on the same data: 0.161 → 0.057 (micro), 0.288 → 0.099 (3B), 0.112 → 0.038 (8B), 0.092 → 0.100 (30B). Source: Uncertainty model card."
+          source="14,042 MMLU questions, not used in training. Calibration error: 0.161 → 0.057 (micro), 0.288 → 0.099 (3B), 0.112 → 0.038 (8B), 0.092 → 0.100 (30B). Source: Uncertainty model card."
         />
       </div>
 
-      <h3 class="sub-h">Where each check runs in an agent workflow</h3>
+      <h3 class="sub-h">Where each check runs</h3>
       <AgentLoop />
 
-      <h3 class="sub-h">Seven capabilities and what each was trained on</h3>
+      <h3 class="sub-h">The seven capabilities</h3>
       <div class="table-scroll">
         <table class="caps">
           <thead>
@@ -467,14 +307,11 @@ the criteria, return 'yes'; otherwise, return 'no'.
           </thead>
           <tbody>
             {
-              capabilities.map((k) => (
+              capabilities.map(([name, returns, trained]) => (
                 <tr>
-                  <td>
-                    <strong>{k.name}</strong>
-                    <span>{k.lib}</span>
-                  </td>
-                  <td>{k.returns}</td>
-                  <td>{k.trained}</td>
+                  <td>{name}</td>
+                  <td>{returns}</td>
+                  <td>{trained}</td>
                 </tr>
               ))
             }
@@ -483,53 +320,34 @@ the criteria, return 'yes'; otherwise, return 'no'.
       </div>
       <p class="fine">
         Released as the <a href={models.guardianLib.hf}>Granite Guardian Library</a> and the{' '}
-        <a href={models.coreLib.hf}>Granite Core Library</a>. Both ship as adapters for granite-4.0-micro and
-        granite-4.1 at 3B, 8B and 30B, under Apache 2.0, and are called through{' '}
-        <a href={models.mellea}>Mellea</a>.
+        <a href={models.coreLib.hf}>Granite Core Library</a>, for granite-4.0-micro and granite-4.1 at 3B, 8B and 30B.
+        Two of the seven are papers from this page, distilled into one forward pass: Thermometer became calibrated
+        uncertainty, MExGen became context attribution.
       </p>
 
-      <h3 class="sub-h">The research behind it</h3>
+      <h3 class="sub-h">Featured · COLM 2026</h3>
       <article class="card feature">
-        <p class="eyebrow">Featured · COLM 2026</p>
-        <h3>
-          <a href="https://arxiv.org/abs/2604.04373">
-            Decocted Experience: context as a second axis for scaling agents at test time
-          </a>
-        </h3>
-        <p class="feature-lede">
-          Test-time scaling usually means more compute: longer reasoning, more samples, more search. For agents that is
-          expensive, and much of the budget goes to exploring poor paths. This paper scales the input instead, building
-          the agent’s context from its own past experience.
-        </p>
-        <div class="feature-grid">
-          <div>
-            <h4>Distill, then consolidate</h4>
-            <p>
-              Lessons distilled from past trajectories beat raw experience on agentic tasks, and scale better as the
-              context grows. Memory has a sweet spot: an intermediate size can outperform keeping everything.
-            </p>
-          </div>
-          <div>
-            <h4>What makes context effective</h4>
-            <p>
-              In theory, context with higher information gain about the agent’s output makes inference more efficient.
-              In practice, good context balances relevance against diversity.
-            </p>
-          </div>
-          <div>
-            <h4>A structure for agent memory</h4>
-            <p>
-              Concepts extracted from experience and organized as a tree let retrieval draw on diverse but relevant
-              groups, and outperform baseline memory methods.
-            </p>
-          </div>
+        <div class="feature-text">
+          <h3>
+            <a href="https://arxiv.org/abs/2604.04373">Decocted Experience: context as a second axis for scaling agents</a>
+          </h3>
+          <p>
+            Test-time scaling means more compute: longer reasoning, more samples, more search. For agents much of that
+            is spent exploring paths that go nowhere. This paper asks what happens if you scale the input instead and
+            build the agent’s context from its own past runs.
+          </p>
+          <p>
+            Three results. Lessons distilled from experience beat raw experience and keep scaling as context grows.
+            Memory has a sweet spot; an intermediate size beats keeping everything. And context with higher information
+            gain about the output gives more efficient inference, which in practice means balancing relevance against
+            diversity. Validated on math, web shopping and software engineering agents, with Maohao Shen, Kaiwen Zha,
+            Zexue He and Gregory Wornell among others.
+          </p>
         </div>
-        <p class="fine">
-          Validated on math reasoning, web shopping and software engineering agents. With Maohao Shen, Kaiwen Zha, Zexue
-          He, Zhang-Wei Hong, Siru Ouyang, J. Jon Ryu, Suhas Diggavi and Gregory Wornell.
-        </p>
+        <Axes />
       </article>
 
+      <h3 class="sub-h">The papers</h3>
       <ResearchThreads only={['agents', 'uncertainty', 'attribution']} />
     </div>
   </section>
@@ -540,24 +358,21 @@ the criteria, return 'yes'; otherwise, return 'no'.
         <p class="eyebrow">Generative modeling</p>
         <h2>A decade of generative models</h2>
         <p class="lede">
-          From learning disentangled latent factors, to generating fair and high-resolution data, to generating the
-          training data for today’s judge models.
+          Before LLMs I worked on what a generative model learns and how to control it. The same questions now show up
+          as synthetic data: what to generate so that a judge learns the right thing.
         </p>
       </div>
-      <ResearchThreads only={['generative']} />
-      <h3 class="sub-h">Implemented in other libraries</h3>
-      <ul class="oss">
-        {
-          adoptedElsewhere.map((o) => (
-            <li>
-              <p class="oss-name">
-                <a href={o.url}>{o.name}</a>
-              </p>
-              <p class="oss-what wide">{o.detail}</p>
-            </li>
-          ))
-        }
-      </ul>
+      <Strip />
+      <p class="fine">
+        DIP-VAE is one of the six methods in the ICML 2019 best paper by Locatello et al., which trained more than 12,000
+        disentanglement models. It is implemented in{' '}
+        {adoptedElsewhere.map((o, i) => (
+          <>
+            <a href={o.url}>{o.name}</a>
+            {i < adoptedElsewhere.length - 1 ? ' and ' : '.'}
+          </>
+        ))}
+      </p>
     </div>
   </section>
 
@@ -565,10 +380,9 @@ the criteria, return 'yes'; otherwise, return 'no'.
     <div class="wrap">
       <div class="section-head">
         <p class="eyebrow">Research</p>
-        <h2>Other research</h2>
+        <h2>Other threads</h2>
         <p class="lede">
-          The full list of papers is on <a href={links.scholar}>Google Scholar</a> and in the{' '}
-          <a href={`${base}/cv/`}>CV</a>.
+          Full list on <a href={links.scholar}>Google Scholar</a> and in the <a href={`${base}/cv/`}>CV</a>.
         </p>
       </div>
       <ResearchThreads only={['human-ai', 'foundations']} />
@@ -580,7 +394,6 @@ the criteria, return 'yes'; otherwise, return 'no'.
       <div class="section-head">
         <p class="eyebrow">Adoption</p>
         <h2>Independent evaluation and adoption</h2>
-        <p class="lede">Independent benchmarks, public testimonials and third-party use of this work.</p>
       </div>
       <div class="quotes">
         {
@@ -595,16 +408,19 @@ the criteria, return 'yes'; otherwise, return 'no'.
           ))
         }
       </div>
-      <dl class="usage">
-        {
-          usage.map((u) => (
-            <div>
-              <dt>{u.label}</dt>
-              <dd>{u.value}</dd>
-            </div>
-          ))
-        }
-      </dl>
+      <div class="use-grid">
+        <dl class="usage">
+          {
+            usage.map((u) => (
+              <div>
+                <dt>{u.label}</dt>
+                <dd>{u.value}</dd>
+              </div>
+            ))
+          }
+        </dl>
+        <Bars />
+      </div>
       <div class="adoption">
         {
           adoption.map((g) => (
@@ -613,13 +429,7 @@ the criteria, return 'yes'; otherwise, return 'no'.
               <ul class="plain">
                 {g.items.map((i) => (
                   <li>
-                    {i.text}
-                    {i.url && (
-                      <>
-                        {' '}
-                        <a href={i.url}>Source</a>
-                      </>
-                    )}
+                    {i.url ? <a href={i.url}>{i.text}</a> : i.text}
                   </li>
                 ))}
               </ul>
@@ -635,7 +445,7 @@ the criteria, return 'yes'; otherwise, return 'no'.
     <div class="wrap">
       <div class="section-head">
         <p class="eyebrow">Open source</p>
-        <h2>Models and toolkits in public use</h2>
+        <h2>Models and toolkits</h2>
       </div>
       <ul class="oss">
         {
@@ -675,16 +485,13 @@ the criteria, return 'yes'; otherwise, return 'no'.
           ))
         }
       </ul>
-      <p class="fine">Affiliations as listed on the joint papers.</p>
-
-      <h3 class="sub-h">Community</h3>
+      <p class="fine">Affiliations as on the joint papers.</p>
+      <h3 class="sub-h">Service</h3>
       <ul class="plain two-col">
         <li>Associate Editor, Pattern Recognition</li>
-        <li>Area chair and senior program committee: NeurIPS, ICML, ICLR, AAAI</li>
+        <li>Area chair and senior PC: NeurIPS, ICML, ICLR, AAAI</li>
         <li>IEEE Senior Member</li>
-        <li>
-          Invited talks at the National Academy of Sciences, the MIT AI Conference and the NAACL TrustNLP workshop (2024)
-        </li>
+        <li>Invited talks at the National Academy of Sciences, the MIT AI Conference and NAACL TrustNLP (2024)</li>
       </ul>
     </div>
   </section>
@@ -705,12 +512,8 @@ the criteria, return 'yes'; otherwise, return 'no'.
     margin-bottom: 24px;
   }
   .hero .lede {
-    max-width: 66ch;
+    max-width: 64ch;
     color: var(--ink);
-  }
-  .pitch {
-    max-width: 70ch;
-    color: var(--ink-2);
   }
   .hero :global(.photo) {
     width: 100%;
@@ -786,196 +589,6 @@ the criteria, return 'yes'; otherwise, return 'no'.
     color: var(--ink-2);
     line-height: 1.4;
   }
-
-  h3 {
-    margin-bottom: 10px;
-  }
-  code {
-    font-family: var(--mono);
-    font-size: 0.88em;
-  }
-
-  .how {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    gap: clamp(20px, 4vw, 56px);
-    margin-bottom: clamp(32px, 5vw, 56px);
-  }
-  .how p {
-    color: var(--ink-2);
-  }
-  .tech {
-    margin: 0;
-    padding-left: 1.1em;
-    display: grid;
-    gap: 8px;
-    font-size: 0.93rem;
-    color: var(--ink-2);
-  }
-  .tech strong {
-    color: var(--ink);
-    font-weight: 600;
-  }
-  .code {
-    margin: 0;
-    padding: 18px 20px;
-    background: var(--surface);
-    border: 1px solid var(--rule);
-    border-radius: 10px;
-    overflow-x: auto;
-    font-family: var(--mono);
-    font-size: 0.78rem;
-    line-height: 1.6;
-    color: var(--ink-2);
-    align-self: start;
-  }
-
-  .shot {
-    margin: 18px 0 0;
-  }
-  .shot > a {
-    display: block;
-    padding: clamp(12px, 2.4vw, 24px);
-    background: #ffffff;
-    border: 1px solid var(--rule);
-    border-radius: 10px;
-  }
-  .shot figcaption {
-    margin-top: 10px;
-    font-size: 0.8rem;
-    color: var(--ink-3);
-  }
-  .bench-lede {
-    max-width: 78ch;
-    margin-bottom: 18px;
-    color: var(--ink-2);
-  }
-
-  .sub-h {
-    margin: clamp(36px, 5vw, 56px) 0 18px;
-  }
-  .beyond {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 14px;
-  }
-  .fact {
-    padding: 18px;
-  }
-  .fact p {
-    margin: 0;
-  }
-  .fact-head {
-    font-family: var(--mono);
-    font-size: 0.72rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--ink-3);
-  }
-  .fact-value {
-    font-size: 1.9rem;
-    font-weight: 600;
-    letter-spacing: -0.02em;
-    line-height: 1.2;
-    margin: 6px 0 !important;
-  }
-  .fact-body {
-    font-size: 0.88rem;
-    color: var(--ink-2);
-  }
-  .more {
-    margin: 22px 0 0;
-    font-size: 0.95rem;
-  }
-
-  .mech {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: clamp(20px, 3vw, 40px);
-  }
-  .mech h3 {
-    font-family: var(--sans);
-    font-size: 1rem;
-    font-weight: 600;
-    letter-spacing: 0;
-  }
-  .mech p {
-    margin: 0;
-    font-size: 0.93rem;
-    color: var(--ink-2);
-  }
-
-  .charts {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 14px;
-    align-items: start;
-  }
-
-  .feature {
-    padding: clamp(20px, 3vw, 32px);
-    margin-bottom: clamp(20px, 3vw, 32px);
-    border-left: 3px solid var(--accent);
-  }
-  .feature h3 {
-    font-size: clamp(1.4rem, 2.4vw, 1.8rem);
-    max-width: 30ch;
-  }
-  .feature h3 a {
-    color: var(--ink);
-    text-decoration-color: var(--rule-strong);
-  }
-  .feature-lede {
-    margin: 12px 0 0;
-    max-width: 72ch;
-    color: var(--ink-2);
-  }
-  .feature-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: clamp(18px, 3vw, 36px);
-    margin-top: 22px;
-    padding-top: 20px;
-    border-top: 1px solid var(--rule);
-  }
-  .feature h4 {
-    margin: 0 0 6px;
-    font-size: 1rem;
-    font-weight: 600;
-  }
-  .feature-grid p {
-    margin: 0;
-    font-size: 0.92rem;
-    color: var(--ink-2);
-  }
-  .caps td {
-    font-size: 0.9rem;
-    color: var(--ink-2);
-    padding-block: 12px;
-  }
-  .caps td:first-child {
-    width: 24%;
-    min-width: 170px;
-  }
-  .caps td:nth-child(2) {
-    width: 32%;
-    min-width: 200px;
-  }
-  .caps td:nth-child(3) {
-    min-width: 260px;
-  }
-  .caps strong {
-    display: block;
-    color: var(--ink);
-    font-weight: 600;
-  }
-  .caps span {
-    font-family: var(--mono);
-    font-size: 0.7rem;
-    letter-spacing: 0.04em;
-    color: var(--ink-3);
-  }
-
   .band {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -994,7 +607,6 @@ the criteria, return 'yes'; otherwise, return 'no'.
     margin: 0;
     font-size: 1.15rem;
     font-weight: 600;
-    letter-spacing: -0.01em;
   }
   .band dt {
     font-size: 0.82rem;
@@ -1002,122 +614,17 @@ the criteria, return 'yes'; otherwise, return 'no'.
     line-height: 1.4;
   }
 
+  h3 {
+    margin-bottom: 10px;
+  }
+  .sub-h {
+    margin: clamp(36px, 5vw, 56px) 0 18px;
+  }
   .fine {
     margin: 16px 0 0;
     font-size: 0.84rem;
     color: var(--ink-3);
-  }
-
-  .quotes {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 14px;
-  }
-  .quote {
-    margin: 0;
-    padding: 22px;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-  }
-  .quote blockquote {
-    margin: 0;
-    font-family: var(--serif);
-    font-size: 1.14rem;
-    line-height: 1.35;
-  }
-  .quote figcaption {
-    margin-top: auto;
-    display: grid;
-    gap: 6px;
-    font-size: 0.84rem;
-    color: var(--ink-2);
-  }
-  .usage {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    margin: clamp(28px, 4vw, 44px) 0 0;
-    border-top: 1px solid var(--rule-strong);
-  }
-  .usage div {
-    display: flex;
-    flex-direction: column-reverse;
-    justify-content: flex-end;
-    gap: 6px;
-    padding: 18px 20px 0 0;
-  }
-  .usage div + div {
-    padding-left: 20px;
-    border-left: 1px solid var(--rule);
-  }
-  .usage dd {
-    margin: 0;
-    font-size: clamp(1.5rem, 2.6vw, 2rem);
-    font-weight: 600;
-    letter-spacing: -0.02em;
-    line-height: 1.1;
-  }
-  .usage dt {
-    font-size: 0.84rem;
-    color: var(--ink-2);
-    line-height: 1.45;
-  }
-  .adoption {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: clamp(20px, 3vw, 40px);
-    margin-top: clamp(28px, 4vw, 44px);
-  }
-  .adoption h3 {
-    font-family: var(--sans);
-    font-size: 1rem;
-    font-weight: 600;
-    letter-spacing: 0;
-  }
-  .adoption .plain {
-    font-size: 0.92rem;
-  }
-
-  .oss {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-  .oss li {
-    display: grid;
-    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.6fr) minmax(0, 1.3fr);
-    gap: 6px 28px;
-    padding-block: 14px;
-    border-top: 1px solid var(--rule);
-  }
-  .oss p {
-    margin: 0;
-  }
-  .oss-name {
-    font-family: var(--serif);
-    font-size: 1.12rem;
-    line-height: 1.3;
-    overflow-wrap: anywhere;
-  }
-  .oss-name a {
-    color: var(--ink);
-    text-decoration-color: var(--rule-strong);
-  }
-  .oss-what {
-    font-size: 0.92rem;
-    color: var(--ink-2);
-  }
-  .oss-what.wide {
-    grid-column: 2 / -1;
-  }
-  .oss-role {
-    color: var(--ink);
-    font-weight: 500;
-  }
-  .oss-adoption {
-    font-size: 0.88rem;
-    color: var(--ink-2);
-    font-variant-numeric: tabular-nums;
+    max-width: 90ch;
   }
 
   .yr-list {
@@ -1148,9 +655,203 @@ the criteria, return 'yes'; otherwise, return 'no'.
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: clamp(28px, 4vw, 56px) clamp(28px, 5vw, 72px);
+    margin-top: clamp(28px, 4vw, 44px);
   }
   .lead-grid p {
     color: var(--ink-2);
+  }
+  .lead-grid h3 + p + h3 {
+    margin-top: 22px;
+  }
+
+  .how {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(20px, 4vw, 56px);
+    margin-top: clamp(24px, 4vw, 40px);
+    align-items: start;
+  }
+  .how p {
+    color: var(--ink-2);
+  }
+  .code {
+    margin: 0;
+    padding: 18px 20px;
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    overflow-x: auto;
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    line-height: 1.6;
+    color: var(--ink-2);
+  }
+  .beyond {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-top: clamp(24px, 4vw, 40px);
+  }
+  .fact {
+    padding: 18px;
+  }
+  .fact p {
+    margin: 0;
+  }
+  .fact-head {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+  .fact-value {
+    font-size: 1.9rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    margin: 6px 0 !important;
+  }
+  .fact-body {
+    font-size: 0.88rem;
+    color: var(--ink-2);
+  }
+  .shot {
+    margin: 18px 0 0;
+  }
+  .shot > a {
+    display: block;
+    padding: clamp(12px, 2.4vw, 24px);
+    background: #ffffff;
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+  }
+  .shot figcaption {
+    margin-top: 10px;
+    font-size: 0.8rem;
+    color: var(--ink-3);
+  }
+
+  .charts {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    align-items: start;
+  }
+  .caps td {
+    font-size: 0.9rem;
+    color: var(--ink-2);
+    padding-block: 10px;
+  }
+  .caps td:first-child {
+    color: var(--ink);
+    font-weight: 600;
+    min-width: 170px;
+  }
+  .caps td:nth-child(2) {
+    min-width: 200px;
+  }
+  .caps td:nth-child(3) {
+    min-width: 240px;
+  }
+
+  .feature {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+    gap: clamp(20px, 4vw, 48px);
+    padding: clamp(20px, 3vw, 32px);
+    border-left: 3px solid var(--accent);
+    align-items: center;
+  }
+  .feature h3 {
+    font-size: clamp(1.3rem, 2.2vw, 1.6rem);
+  }
+  .feature h3 a {
+    color: var(--ink);
+    text-decoration-color: var(--rule-strong);
+  }
+  .feature-text p {
+    color: var(--ink-2);
+    font-size: 0.95rem;
+  }
+
+  .quotes {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+  .quote {
+    margin: 0;
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .quote blockquote {
+    margin: 0;
+    font-family: var(--serif);
+    font-size: 1.14rem;
+    line-height: 1.35;
+  }
+  .quote figcaption {
+    margin-top: auto;
+    display: grid;
+    gap: 6px;
+    font-size: 0.84rem;
+    color: var(--ink-2);
+  }
+  .use-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+    gap: clamp(20px, 3vw, 40px);
+    margin-top: clamp(28px, 4vw, 44px);
+    align-items: start;
+  }
+  .usage {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px 24px;
+    margin: 0;
+  }
+  .usage div {
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: flex-end;
+    gap: 6px;
+  }
+  .usage dd {
+    margin: 0;
+    font-size: clamp(1.5rem, 2.6vw, 2rem);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }
+  .usage dt {
+    font-size: 0.84rem;
+    color: var(--ink-2);
+    line-height: 1.45;
+  }
+  .adoption {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: clamp(20px, 3vw, 40px);
+    margin-top: clamp(28px, 4vw, 44px);
+  }
+  .adoption h3 {
+    font-family: var(--sans);
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0;
+  }
+  .adoption .plain {
+    font-size: 0.9rem;
+  }
+  .adoption a {
+    color: inherit;
+    text-decoration-color: var(--rule-strong);
+  }
+  .adoption a:hover {
+    color: var(--link);
   }
   .plain {
     margin: 0;
@@ -1159,13 +860,47 @@ the criteria, return 'yes'; otherwise, return 'no'.
     gap: 8px;
     color: var(--ink-2);
   }
-  .plain strong {
-    color: var(--ink);
-    font-weight: 600;
-  }
   .two-col {
     grid-template-columns: 1fr 1fr;
     column-gap: clamp(28px, 5vw, 72px);
+  }
+
+  .oss {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .oss li {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.6fr) minmax(0, 1.1fr);
+    gap: 6px 28px;
+    padding-block: 12px;
+    border-top: 1px solid var(--rule);
+  }
+  .oss p {
+    margin: 0;
+  }
+  .oss-name {
+    font-family: var(--serif);
+    font-size: 1.1rem;
+    line-height: 1.3;
+  }
+  .oss-name a {
+    color: var(--ink);
+    text-decoration-color: var(--rule-strong);
+  }
+  .oss-what {
+    font-size: 0.9rem;
+    color: var(--ink-2);
+  }
+  .oss-role {
+    color: var(--ink);
+    font-weight: 500;
+  }
+  .oss-adoption {
+    font-size: 0.86rem;
+    color: var(--ink-2);
+    font-variant-numeric: tabular-nums;
   }
 
   .collab {
@@ -1215,42 +950,27 @@ the criteria, return 'yes'; otherwise, return 'no'.
     .pillar + .pillar {
       border-top: 1px solid var(--rule);
     }
-    .feature-grid {
-      grid-template-columns: 1fr;
-    }
-    .usage,
-    .band {
+    .band,
+    .usage {
       grid-template-columns: 1fr 1fr;
     }
     .band {
       row-gap: 16px;
     }
-    .usage div {
-      padding: 16px 16px 16px 0;
-    }
-    .usage div:nth-child(odd) {
-      padding-left: 0;
-      border-left: 0;
-    }
-    .usage div:nth-child(n + 3) {
-      border-top: 1px solid var(--rule);
-    }
-    .how,
-    .quotes,
-    .adoption,
-    .beyond,
-    .mech,
-    .charts,
     .lead-grid,
+    .how,
+    .beyond,
+    .charts,
+    .feature,
+    .quotes,
+    .use-grid,
+    .adoption,
     .collab,
     .two-col {
       grid-template-columns: 1fr;
     }
     .oss li {
       grid-template-columns: 1fr;
-    }
-    .oss-what.wide {
-      grid-column: auto;
     }
   }
   @media (max-width: 640px) {

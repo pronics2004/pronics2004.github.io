@@ -1,0 +1,101 @@
+---
+// All-time Hugging Face downloads by Granite Guardian version. One hue; bars no thicker than 24px.
+import { downloadsByVersion } from '../data/research.js';
+const max = Math.max(...downloadsByVersion.map((d) => d.downloads));
+const k = (n) => (n >= 1e6 ? (n / 1e6).toFixed(2) + 'M' : Math.round(n / 1e3) + 'K');
+---
+
+<figure class="bars">
+  <p class="ttl">Hugging Face downloads by Guardian version</p>
+  <p class="sub">All time, summed over the model sizes in each release. Read October 13, 2026.</p>
+  <ol>
+    {
+      downloadsByVersion.map((d) => (
+        <li>
+          <span class="lbl">
+            <strong>{d.version}</strong> <em>{d.when}</em>
+          </span>
+          <span class="track">
+            <span class="bar" style={`width:${(d.downloads / max) * 100}%`} />
+          </span>
+          <span class="val">{k(d.downloads)}</span>
+        </li>
+      ))
+    }
+  </ol>
+  <figcaption>4.1 has been out six months and accounts for most of the past month’s downloads.</figcaption>
+</figure>
+
+<style>
+  .bars {
+    margin: 0;
+    padding: clamp(16px, 2.4vw, 24px);
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+  }
+  .ttl {
+    margin: 0;
+    font-weight: 600;
+  }
+  .sub {
+    margin: 4px 0 12px;
+    font-size: 0.84rem;
+    color: var(--ink-2);
+  }
+  ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 8px;
+  }
+  li {
+    display: grid;
+    grid-template-columns: 96px 1fr 52px;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.86rem;
+    color: var(--ink-2);
+  }
+  .lbl strong {
+    color: var(--ink);
+  }
+  .lbl em {
+    font-style: normal;
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    color: var(--ink-3);
+    margin-left: 4px;
+  }
+  .track {
+    height: 22px;
+    position: relative;
+  }
+  .bar {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    background: var(--accent);
+    border-radius: 0 4px 4px 0;
+  }
+  .val {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    color: var(--ink);
+  }
+  figcaption {
+    margin-top: 12px;
+    font-size: 0.8rem;
+    color: var(--ink-3);
+  }
+  @media (max-width: 480px) {
+    li {
+      grid-template-columns: 80px 1fr 44px;
+    }
+    .lbl em {
+      display: none;
+    }
+  }
+</style>

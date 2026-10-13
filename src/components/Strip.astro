@@ -1,0 +1,86 @@
+---
+// Generative modeling, 2017 to now, as a strip.
+const items = [
+  ['2017', 'Semi-supervised GANs', 'NeurIPS. Tangent space from the generator, invariance into the classifier.', 'https://arxiv.org/abs/1705.08850'],
+  ['2018', 'DIP-VAE', 'ICLR. Disentangled latents without labels; the SAP score.', 'https://arxiv.org/abs/1711.00848'],
+  ['2019', 'Fairness GAN', 'Data that meets demographic parity or equal opportunity.', 'https://arxiv.org/abs/1805.09910'],
+  ['2020', 'not-so-BigGAN', 'Wavelet-domain sampling. FID 10.59 on ImageNet 512 at half the compute.', 'https://arxiv.org/abs/2009.04433'],
+  ['2025–26', 'Data engines', 'Synthetic trajectories and 300K contrastive samples that train judges. Next: diffusion.', 'https://arxiv.org/abs/2510.09781'],
+];
+---
+
+<ol class="strip">
+  {
+    items.map(([year, name, note, url]) => (
+      <li>
+        <span class="year">{year}</span>
+        <strong>
+          <a href={url}>{name}</a>
+        </strong>
+        <p>{note}</p>
+      </li>
+    ))
+  }
+</ol>
+
+<style>
+  .strip {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    border-top: 2px solid var(--rule-strong);
+  }
+  .strip li {
+    position: relative;
+    padding: 16px 18px 0 0;
+  }
+  .strip li::before {
+    content: '';
+    position: absolute;
+    top: -7px;
+    left: 0;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--mark-muted);
+  }
+  .strip li:last-child::before {
+    background: var(--accent);
+  }
+  .year {
+    font-family: var(--mono);
+    font-size: 0.74rem;
+    color: var(--ink-3);
+  }
+  .strip strong {
+    display: block;
+    margin: 4px 0 6px;
+    font-size: 1.05rem;
+  }
+  .strip strong a {
+    color: var(--ink);
+    text-decoration-color: var(--rule-strong);
+  }
+  .strip p {
+    margin: 0;
+    font-size: 0.86rem;
+    line-height: 1.4;
+    color: var(--ink-2);
+  }
+  @media (max-width: 760px) {
+    .strip {
+      grid-template-columns: 1fr;
+      border-top: 0;
+      border-left: 2px solid var(--rule-strong);
+    }
+    .strip li {
+      padding: 0 0 18px 18px;
+    }
+    .strip li::before {
+      top: 4px;
+      left: -7px;
+    }
+  }
+</style>

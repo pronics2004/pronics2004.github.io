@@ -1,0 +1,81 @@
+---
+// How a Granite Guardian call works, in one picture.
+---
+
+<figure class="verdict" aria-label="A conversation plus a guardian block goes in; a yes or no verdict with a probability comes out">
+  <div class="box">
+    <span class="k">Input</span>
+    <strong>The conversation</strong>
+    <p>User turns, model turns, documents, tool calls.</p>
+  </div>
+  <span class="plus" aria-hidden="true">+</span>
+  <div class="box guard">
+    <span class="k">Guardian block</span>
+    <strong>One criterion</strong>
+    <p>Built in (harm, jailbreak, groundedness, tool-call validity) or written at runtime. Think or no-think.</p>
+  </div>
+  <span class="arrow" aria-hidden="true">→</span>
+  <div class="box out">
+    <span class="k">Output</span>
+    <strong><code>&lt;score&gt;yes&lt;/score&gt;</code></strong>
+    <p>And the token probability behind it, as a continuous risk score.</p>
+  </div>
+</figure>
+
+<style>
+  .verdict {
+    margin: 0;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr auto 1fr;
+    gap: 12px;
+    align-items: stretch;
+  }
+  .box {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    padding: 14px 16px;
+  }
+  .box.guard {
+    border-color: var(--accent);
+  }
+  .box.out {
+    background: var(--accent-wash);
+  }
+  .k {
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+  .box strong {
+    display: block;
+    margin: 4px 0 6px;
+  }
+  .box p {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--ink-2);
+  }
+  code {
+    font-family: var(--mono);
+    font-size: 0.9em;
+  }
+  .plus,
+  .arrow {
+    align-self: center;
+    font-size: 1.4rem;
+    color: var(--ink-3);
+  }
+  @media (max-width: 700px) {
+    .verdict {
+      grid-template-columns: 1fr;
+    }
+    .plus,
+    .arrow {
+      justify-self: center;
+      transform: rotate(90deg);
+    }
+  }
+</style>

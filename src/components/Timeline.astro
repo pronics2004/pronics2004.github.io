@@ -1,0 +1,129 @@
+---
+// Horizontal release timeline. Positions come from month offsets; the list below it serves phones.
+import { releases } from '../data/site.js';
+const months = { 'Oct 2024': 0, 'Dec 2024': 2, 'Feb 2025': 4, '2025': 10, 'Apr 2026': 18 };
+const span = 18;
+const pos = (when) => (months[when] / span) * 100;
+---
+
+<figure class="tl">
+  <div class="tl-track" aria-hidden="true">
+    <span class="tl-line"></span>
+    {
+      releases.map((r, i) => (
+        <span class="tl-dot" style={`left:${pos(r.when)}%`}>
+          <span class={`tl-label ${i % 2 ? 'below' : 'above'}`}>
+            <strong>{r.version}</strong>
+            <em>{r.when}</em>
+            <small>{r.what}</small>
+          </span>
+        </span>
+      ))
+    }
+  </div>
+  <ol class="tl-list">
+    {
+      releases.map((r) => (
+        <li>
+          <span>{r.when}</span>
+          <span>
+            <strong>{r.version}</strong> {r.what}
+          </span>
+        </li>
+      ))
+    }
+  </ol>
+</figure>
+
+<style>
+  .tl {
+    margin: 0;
+  }
+  .tl-track {
+    position: relative;
+    height: 230px;
+    margin: 0 70px 0 40px;
+  }
+  .tl-line {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    border-top: 2px solid var(--rule-strong);
+  }
+  .tl-dot {
+    position: absolute;
+    top: 50%;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 2px solid var(--surface);
+    transform: translate(-50%, -50%);
+  }
+  .tl-label {
+    position: absolute;
+    left: 50%;
+    width: 180px;
+    transform: translateX(-50%);
+    text-align: center;
+    font-size: 0.82rem;
+    line-height: 1.3;
+    color: var(--ink-2);
+  }
+  .tl-label.above {
+    bottom: 20px;
+  }
+  .tl-label.below {
+    top: 20px;
+  }
+  .tl-label strong {
+    display: block;
+    font-size: 1.1rem;
+    color: var(--ink);
+  }
+  .tl-label em {
+    display: block;
+    font-style: normal;
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    color: var(--ink-3);
+    margin-bottom: 2px;
+  }
+  .tl-label small {
+    display: block;
+    font-size: 0.8rem;
+  }
+  .tl-list {
+    display: none;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .tl-list li {
+    display: grid;
+    grid-template-columns: 76px 1fr;
+    gap: 12px;
+    padding-block: 8px;
+    border-top: 1px solid var(--rule);
+    font-size: 0.92rem;
+    color: var(--ink-2);
+  }
+  .tl-list li > span:first-child {
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    color: var(--ink-3);
+    padding-top: 2px;
+  }
+  .tl-list strong {
+    color: var(--ink);
+  }
+  @media (max-width: 760px) {
+    .tl-track {
+      display: none;
+    }
+    .tl-list {
+      display: block;
+    }
+  }
+</style>

@@ -6,44 +6,41 @@ export const threads = [
     id: 'agents',
     title: 'Agents, memory and guardrails',
     framing:
-      'Agents fail in ways single-turn models do not. A plan can be unsafe before any action runs, a risk can build over many turns, and agents can leak context to each other through shared caches. This work puts the checks where those failures happen.',
+      'Agents fail between the turns: a bad plan before any action, a risk that builds over a long session, a cache shared with another agent. These papers put the check at that point.',
     ships: 'Granite Guardian',
     papers: ['agentic-guardrail', 'blindspot', 'lcguard', 'granite-guardian', 'cascade'],
   },
   {
     id: 'uncertainty',
     title: 'Calibration, uncertainty and abstention',
-    framing:
-      'A reliable system has to know when its answer is likely wrong. These papers cover calibration that transfers to new tasks, claim-level uncertainty for long outputs, the limits of evidential methods, and abstention for reasoning models.',
-    ships: 'calibrated uncertainty in the Granite Core Library, trained to reproduce a Thermometer calibrator',
+    framing: 'A model that knows when it is likely wrong. Calibration that transfers, uncertainty for long outputs, abstention for reasoning models.',
+    ships: 'calibrated uncertainty in the Granite Core Library',
     papers: ['thermometer', 'graph-uncertainty', 'edl-mirage', 'trace-inversion'],
   },
   {
     id: 'attribution',
     title: 'Attribution and interpretability',
-    framing:
-      'Explaining a generated answer means tying it to the context that shaped it and to the model components that produced it.',
-    ships: 'context attribution in the Granite Core Library, trained on MExGen rankings, and the ICX360 toolkit',
+    framing: 'Which part of the context, and which part of the model, produced this sentence.',
+    ships: 'context attribution in the Granite Core Library, and the ICX360 toolkit',
     papers: ['mexgen', 'causal-tracing'],
   },
   {
     id: 'generative',
     title: 'Generative modeling',
     framing:
-      'Earlier work was on deep generative models: disentangled VAEs, GANs for semi-supervised learning and for fair data generation, and high-resolution synthesis on a small compute budget. DIP-VAE and its SAP metric are implemented in Google’s disentanglement_lib and in PyTorch-VAE. The same skills now go into the synthetic data engines that train judge models, and current work extends to diffusion models.',
+      'Disentangled VAEs, GANs for semi-supervised learning and fair data, and high-resolution synthesis on a small budget. DIP-VAE is in disentanglement_lib and PyTorch-VAE. Current work extends to diffusion models.',
     papers: ['dip-vae', 'ssl-gan', 'fairness-gan', 'nsb-gan'],
   },
   {
     id: 'human-ai',
     title: 'Human–AI collaboration',
-    framing:
-      'When a person and a model share a decision, the system has to decide who acts and tell the person when to rely on it.',
+    framing: 'Who should act, and when a person should trust the model.',
     papers: ['who-should-predict', 'onboarding', 'uncertainty-transparency'],
   },
   {
     id: 'foundations',
     title: 'Fairness and transfer',
-    framing: 'Methods for changing what a trained model does without training it again from scratch.',
+    framing: 'Changing what a trained model does without retraining it.',
     papers: ['fair-ij', 'equivariant', 'coreg'],
   },
 ];
@@ -54,14 +51,14 @@ export const openSource = [
     name: 'Granite Guardian',
     role: 'Project and training lead',
     what: 'Judge and guardrail models for LLM systems.',
-    adoption: '54K downloads of the 4.1 8B model on Hugging Face in the past month',
+    adoption: '1.16M Hugging Face downloads across versions',
     url: 'https://github.com/ibm-granite/granite-guardian',
   },
   {
     name: 'Granite Guardian Library and Granite Core Library',
     role: 'Lead',
-    what: 'Seven post-trained capabilities for the Granite 4.0 and 4.1 base models, shipped as adapters.',
-    adoption: 'Called through Mellea as intrinsics',
+    what: 'Seven checks trained into the Granite 4.0 and 4.1 base models.',
+    adoption: '58K Hugging Face downloads',
     url: 'https://huggingface.co/collections/ibm-granite/granite-libraries',
   },
   {
@@ -141,134 +138,71 @@ export const quotes = [
   {
     quote: 'Granite-Guardian-3.2-5B showed the best generalization with only a 6.5% gap.',
     who: 'R. J. Young, independent robustness study of ten guardrail models, 2025',
-    context:
-      'The gap is the drop in accuracy from public benchmark prompts to novel attacks, across 1,445 prompts and 21 attack categories. The largest drop in the study was 57 points.',
+    context: 'The gap is the accuracy drop from public benchmarks to novel attacks. The largest drop in the study was 57 points.',
     url: 'https://arxiv.org/abs/2511.22047',
   },
   {
     quote:
       'IBM’s open-source safety models provide harm detection, jailbreak detection, topic control, hallucination detection, and RAG quality assessment, capabilities that other guard providers don’t yet offer.',
-    who: 'Traefik Labs, announcing Granite Guardian support in Traefik Hub, March 2026',
-    context: 'Granite Guardian is one of three guard providers in the product’s safety pipeline.',
+    who: 'Traefik Labs, on adding Granite Guardian to Traefik Hub, March 2026',
+    context: 'One of three guard providers in the product’s safety pipeline.',
     url: 'https://traefik.io/press/traefik-labs-new-multi-vendor-composable-ai-safety-pipeline',
-  },
-  {
-    quote:
-      'When they compared Thermometer to several baselines on multiple tasks, it consistently produced better-calibrated uncertainty measures while requiring much less computation.',
-    who: 'MIT News, July 2024',
-    context: 'Thermometer is the calibration method behind the uncertainty capability in the Granite Core Library.',
-    url: 'https://news.mit.edu/2024/thermometer-prevents-ai-model-overconfidence-about-wrong-answers-0731',
-  },
-  {
-    quote:
-      'The researchers found that this onboarding procedure led to about a 5 percent improvement in accuracy when humans and AI collaborated on an image prediction task.',
-    who: 'MIT News, December 2023',
-    context: 'On the NeurIPS 2023 spotlight paper with David Sontag’s group.',
-    url: 'https://news.mit.edu/2023/automated-system-teaches-collaborate-ai-assistant-1208',
   },
 ];
 
-// Usage counts read on 2026-10-01 from the Hugging Face API and the Ollama model library.
+// Usage counts. Hugging Face read on 2026-10-13; Ollama on 2026-10-01.
 export const usage = [
-  {
-    value: '1.15M',
-    label: 'Hugging Face downloads, all time, across the Granite Guardian models and the two Granite libraries',
-  },
+  { value: '1.16M', label: 'Hugging Face downloads, all time, across the Granite Guardian models and the two libraries' },
   { value: '371K', label: 'Ollama pulls of granite3-guardian and granite4.1-guardian' },
-  {
-    value: '45',
-    label: 'quantized builds on Hugging Face, from community quantizers including mradermacher, DevQuasar and tensorblock',
-  },
-  { value: '54K', label: 'downloads of Granite Guardian 4.1 8B in the past 30 days' },
+  { value: '45', label: 'community quantized builds on Hugging Face' },
+  { value: '56K', label: 'downloads of Granite Guardian 4.1 8B in the past 30 days' },
+];
+
+// All-time Hugging Face downloads by Guardian version, summed over the sizes in each release.
+export const downloadsByVersion = [
+  { version: '3.0', when: 'Oct 2024', downloads: 330751 },
+  { version: '3.1', when: 'Dec 2024', downloads: 121580 },
+  { version: '3.2', when: 'Feb 2025', downloads: 150346 },
+  { version: '3.3', when: '2025', downloads: 289773 },
+  { version: '4.1', when: 'Apr 2026', downloads: 213412 },
 ];
 
 export const adoption = [
   {
     head: 'Independent benchmarks',
     items: [
-      {
-        text: 'LLM-AggreFact fact-checking leaderboard: Granite Guardian 3.3 (8B) ranks third of 39 models, behind Bespoke-MiniCheck and Claude 3.5 Sonnet and ahead of GPT-4o, Mistral Large 2 and Llama 3.1 405B.',
-        url: 'https://llm-aggrefact.github.io/',
-      },
-      {
-        text: 'GuardBench, built at the European Commission’s Joint Research Centre: six of the top ten places across 40 datasets (April 2025).',
-        url: 'https://research.ibm.com/blog/granite-guardian-tops-guardbench',
-      },
-      {
-        text: 'Artificial Analysis guardrail benchmark, run with NVIDIA: fifth of 20, first among policy-at-runtime models (June 2026).',
-        url: 'https://artificialanalysis.ai/articles/guardrail-safety-benchmark',
-      },
+      { text: 'LLM-AggreFact: Granite Guardian 3.3 (8B) is third of 39, ahead of GPT-4o, Mistral Large 2 and Llama 3.1 405B.', url: 'https://llm-aggrefact.github.io/' },
+      { text: 'GuardBench (EC Joint Research Centre): six of the top ten places across 40 datasets, April 2025.', url: 'https://research.ibm.com/blog/granite-guardian-tops-guardbench' },
+      { text: 'Artificial Analysis, with NVIDIA: fifth of 20, first among policy-at-runtime models, June 2026.', url: 'https://artificialanalysis.ai/articles/guardrail-safety-benchmark' },
     ],
   },
   {
     head: 'In products',
     items: [
-      {
-        text: 'watsonx.governance: “The AI guardrails now use a Granite Guardian model as a filter” (IBM documentation, watsonx 2.2.1).',
-        url: 'https://www.ibm.com/docs/SSLSRPV_2.2.x/fixlist/watsonxgov-fixlist.html',
-      },
-      {
-        text: 'watsonx.ai: Granite Guardian is the AI guardrails filter for prompts, and a hosted foundation model.',
-        url: 'https://www.ibm.com/docs/en/watsonx/w-and-w/2.2.0?topic=prompts-ai-guardrails-filter-content',
-      },
-      {
-        text: 'Ask Red Hat, the AI assistant on the Red Hat Customer Portal: “Guardrails consists of IBM granite-guardian-3.3-8b” (Red Hat AI system card, April 2026).',
-        url: 'https://access.redhat.com/ai/system-card/ask-red-hat',
-      },
-      {
-        text: 'Traefik Hub ships an LLM Guard built on Granite Guardian, alongside guards from Microsoft and NVIDIA.',
-        url: 'https://traefik.io/press/traefik-labs-new-multi-vendor-composable-ai-safety-pipeline',
-      },
+      { text: 'watsonx.governance: “The AI guardrails now use a Granite Guardian model as a filter.”', url: 'https://www.ibm.com/docs/SSLSRPV_2.2.x/fixlist/watsonxgov-fixlist.html' },
+      { text: 'watsonx.ai: the AI guardrails filter for prompts, and a hosted foundation model.', url: 'https://www.ibm.com/docs/en/watsonx/w-and-w/2.2.0?topic=prompts-ai-guardrails-filter-content' },
+      { text: 'Ask Red Hat, on the Red Hat Customer Portal: “Guardrails consists of IBM granite-guardian-3.3-8b.”', url: 'https://access.redhat.com/ai/system-card/ask-red-hat' },
+      { text: 'Traefik Hub: an LLM Guard built on Granite Guardian, next to guards from Microsoft and NVIDIA.', url: 'https://traefik.io/press/traefik-labs-new-multi-vendor-composable-ai-safety-pipeline' },
     ],
   },
   {
     head: 'In open-source projects and tutorials',
     items: [
-      {
-        text: 'Google Cloud’s community blog builds guardrails for the Agent Development Kit with Granite Guardian 3.3, Llama Guard 3 and ShieldGemma (November 2025).',
-        url: 'https://medium.com/google-cloud/guardrails-with-agent-development-kit-featuring-safeguard-llm-models-6d696198a063',
-      },
-      {
-        text: 'Turing Post’s explainer on guardian models covers Granite Guardian with Llama Guard and ShieldGemma (September 2025).',
-        url: 'https://www.turingpost.com/p/guardianmodels',
-      },
-      {
-        text: 'deepset’s Haystack safety cookbook covers Granite Guardian with Llama Guard, ShieldGemma and NemoGuard.',
-        url: 'https://haystack.deepset.ai/cookbook/safety_moderation_open_lms',
-      },
-      {
-        text: 'Mozilla.ai’s any-guardrail library includes a Granite Guardian guardrail.',
-        url: 'https://github.com/mozilla-ai/any-guardrail',
-      },
-      {
-        text: 'Red Hat AI Services packages the 3.x and 4.1 models in its model catalog and publishes a LangChain notebook for OpenShift.',
-        url: 'https://github.com/rh-aiservices-bu/llm-on-openshift',
-      },
+      { text: 'Google Cloud’s community guide to guardrails for the Agent Development Kit, with Granite Guardian 3.3.', url: 'https://medium.com/google-cloud/guardrails-with-agent-development-kit-featuring-safeguard-llm-models-6d696198a063' },
+      { text: 'Turing Post’s explainer on guardian models.', url: 'https://www.turingpost.com/p/guardianmodels' },
+      { text: 'deepset’s Haystack safety cookbook.', url: 'https://haystack.deepset.ai/cookbook/safety_moderation_open_lms' },
+      { text: 'Mozilla.ai’s any-guardrail library.', url: 'https://github.com/mozilla-ai/any-guardrail' },
+      { text: 'Red Hat AI Services’ model catalog and OpenShift notebook.', url: 'https://github.com/rh-aiservices-bu/llm-on-openshift' },
     ],
   },
   {
     head: 'Research others have built on',
     items: [
-      {
-        text: 'DIP-VAE (ICLR 2018, 753 citations) is one of the methods in the ICML 2019 best paper by Locatello et al., which trained more than 12,000 disentanglement models. It is implemented in disentanglement_lib and PyTorch-VAE.',
-        url: 'https://arxiv.org/abs/1811.12359',
-      },
-      {
-        text: 'AI Fairness 360: the toolkit paper has 2,937 citations, and the project is hosted by LF AI & Data at the Linux Foundation.',
-        url: 'https://lfaidata.foundation/projects/ai-fairness-360/',
-      },
-      {
-        text: 'AI Explainability 360: the taxonomy paper has 732 citations.',
-        url: 'https://arxiv.org/abs/1909.03012',
-      },
-      {
-        text: '“Uncertainty as a Form of Transparency” (AIES 2021) has 494 citations.',
-        url: 'https://arxiv.org/abs/2011.07586',
-      },
-      {
-        text: '“Who Should Predict?” (AISTATS 2023), on exact algorithms for learning to defer, has 151 citations.',
-        url: 'https://arxiv.org/abs/2301.06197',
-      },
+      { text: 'DIP-VAE (ICLR 2018, 753 citations): one of the methods in the ICML 2019 best paper, which trained 12,000 disentanglement models. In disentanglement_lib and PyTorch-VAE.', url: 'https://arxiv.org/abs/1811.12359' },
+      { text: 'AI Fairness 360: 2,937 citations; an LF AI & Data project at the Linux Foundation.', url: 'https://lfaidata.foundation/projects/ai-fairness-360/' },
+      { text: 'AI Explainability 360 taxonomy paper: 732 citations.', url: 'https://arxiv.org/abs/1909.03012' },
+      { text: '“Uncertainty as a Form of Transparency” (AIES 2021): 494 citations.', url: 'https://arxiv.org/abs/2011.07586' },
+      { text: '“Who Should Predict?” (AISTATS 2023): 151 citations.', url: 'https://arxiv.org/abs/2301.06197' },
     ],
   },
 ];

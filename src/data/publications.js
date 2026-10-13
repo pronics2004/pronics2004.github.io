@@ -20,7 +20,7 @@ export const publications = [
     themes: ['agents'], selected: true,
     id: 'decocted',
     summary:
-      'Treats context as a scaling axis alongside test-time compute. Agents improve when experience is distilled, organized and retrieved rather than appended, across math reasoning, web browsing and software engineering.',
+      'Scales an agent’s context instead of its compute. Experience distilled into lessons, consolidated and retrieved beats raw experience on math, web and software tasks.',
   },
   {
     title: 'Building a Foundational Guardrail for General Agentic Systems via Synthetic Data',
@@ -29,7 +29,7 @@ export const publications = [
     themes: ['agents', 'guardrails'], selected: true,
     id: 'agentic-guardrail',
     summary:
-      'Moves the guardrail to the planning stage, before any action runs. AuraGen synthesizes agent trajectories with injected, labeled risks; Safiron, a compact guardian with a cross-planner adapter, flags the risk, names its type and explains it; Pre-Exec Bench measures detection, categorization and cross-planner transfer.',
+      'A guardrail that runs before an agent acts. AuraGen synthesizes risky plans, Safiron flags and explains them, Pre-Exec Bench measures both.',
     note: 'Co-corresponding author',
   },
   {
@@ -39,7 +39,7 @@ export const publications = [
     themes: ['uncertainty'], selected: true,
     id: 'trace-inversion',
     summary:
-      'Reframes failed abstention as answering the wrong question. Reconstructs the query from the reasoning trace alone and abstains when it diverges from the original. Best in 33 of 36 settings across four frontier LLMs and nine datasets.',
+      'Reconstructs the question from a model’s reasoning trace; if it drifts from the question asked, abstain. Best in 33 of 36 settings.',
     note: 'Senior author',
   },
   {
@@ -49,7 +49,7 @@ export const publications = [
     themes: ['attribution'], selected: true,
     id: 'causal-tracing',
     summary:
-      'Finds the subsets of attention heads and MLP neurons that jointly drive a target metric. Soft interventions and a metric transformation turn the combinatorial search into a continuous optimization.',
+      'Finds the set of attention heads and MLP neurons that jointly drive a metric, by relaxing the combinatorial search to a continuous one.',
   },
   {
     title: 'TrustGen: A Platform of Dynamic Benchmarking on the Trustworthiness of Generative Foundation Models',
@@ -64,7 +64,7 @@ export const publications = [
     themes: ['agents', 'guardrails'], selected: true,
     id: 'blindspot',
     summary:
-      'Evaluates whole trajectories, not single responses: 22 attack families, 35 scenarios and seven domains yield over 2,500 trajectories averaging 14.7 turns, each judged as safe completion, correct refusal, unsafe completion, over-refusal or indeterminate.',
+      'Judges whole agent trajectories, not turns: 2,500+ runs averaging 14.7 turns, each labeled safe, correctly refused, unsafe, over-refused or unclear.',
     note: 'Senior author',
   },
   {
@@ -74,7 +74,7 @@ export const publications = [
     themes: ['agents'], selected: true,
     id: 'lcguard',
     summary:
-      'Agents that share KV caches can leak private context through that latent channel. LCGuard learns a transformation of the cache that keeps task information while limiting what an adversarial decoder can reconstruct.',
+      'Agents that share KV caches leak private context. A learned transform of the cache keeps the task signal and blocks reconstruction.',
   },
 
   // 2025
@@ -85,7 +85,7 @@ export const publications = [
     themes: ['guardrails'], selected: true,
     id: 'granite-guardian',
     summary:
-      'One model for harm, jailbreak and RAG-hallucination detection, trained on human annotations plus synthetic data. AUC 0.871 on harmful-content benchmarks and 0.854 on RAG-hallucination benchmarks.',
+      'One model for harm, jailbreaks and RAG hallucination, trained on human labels plus synthetic data. AUC 0.871 and 0.854 on the two benchmark families.',
     note: 'Senior author',
   },
   {
@@ -95,7 +95,7 @@ export const publications = [
     themes: ['attribution'], selected: true,
     id: 'mexgen',
     summary:
-      'MExGen extends LIME- and SHAP-style attribution to context-grounded generation, where inference is costly, inputs are long and the output is text. More faithful than alternatives, including LLM self-explanations, in automated and human evaluation.',
+      'LIME- and SHAP-style attribution for long-context generation, at a cost that scales. More faithful than LLM self-explanations in human and automated tests.',
     note: 'Oral',
   },
   {
@@ -111,7 +111,7 @@ export const publications = [
     themes: ['guardrails'], selected: true,
     id: 'cascade',
     summary:
-      'Traces a bias detector’s errors to the use–mention distinction, then builds a taxonomy-driven synthetic data pipeline (over 300K contrastive samples) that yields competitive detectors at a fraction of the compute.',
+      'Traced a bias detector’s errors to the use–mention distinction, then generated 300K contrastive examples to fix it at a fraction of the compute.',
     note: 'Senior author',
   },
   {
@@ -139,7 +139,7 @@ export const publications = [
     themes: ['uncertainty'], selected: true,
     id: 'thermometer',
     summary:
-      'Learns an auxiliary model across many tasks that calibrates an LLM on new tasks. Cheap at inference, and it leaves the model’s accuracy unchanged.',
+      'An auxiliary model, trained across tasks, that calibrates an LLM on tasks it has not seen. Accuracy unchanged, inference cost negligible.',
   },
   {
     title: 'Graph-based Uncertainty Metrics for Long-form Language Model Generations',
@@ -148,7 +148,7 @@ export const publications = [
     themes: ['uncertainty'], selected: true,
     id: 'graph-uncertainty',
     summary:
-      'Represents sampled generations and their claims as a bipartite graph and scores each claim by centrality. Self-consistency is the degree-centrality special case; closeness centrality does better, and uncertainty-aware decoding keeps only the reliable claims.',
+      'Treats samples and their claims as a bipartite graph; claim uncertainty is graph centrality. Self-consistency is the degree-centrality special case.',
   },
   {
     title: 'Are Uncertainty Quantification Capabilities of Evidential Deep Learning a Mirage?',
@@ -156,7 +156,7 @@ export const publications = [
     venue: 'NeurIPS', year: 2024, themes: ['uncertainty'], selected: true,
     id: 'edl-mirage',
     summary:
-      'Unifies the objectives of evidential deep learning, shows its epistemic uncertainty does not behave as claimed, and reinterprets the methods as energy-based out-of-distribution detectors.',
+      'Shows evidential deep learning’s epistemic uncertainty does not behave as claimed, and that the methods are better read as energy-based OOD detectors.',
   },
   {
     title: 'WikiContradict: A Benchmark for Evaluating LLMs on Real-World Knowledge Conflicts from Wikipedia',
@@ -224,7 +224,7 @@ export const publications = [
     venue: 'NeurIPS', year: 2023, themes: ['human-ai'], selected: true,
     id: 'onboarding',
     summary:
-      'Finds regions where people over- or under-rely on a model, describes each in natural language with an LLM, and teaches the rules in an onboarding stage. User studies show more accurate human–AI teams.',
+      'Finds where people over- or under-trust a model, describes each region in plain language, and teaches it. About 5% more accurate human–AI teams.',
     note: 'Spotlight',
   },
   {
@@ -233,7 +233,7 @@ export const publications = [
     venue: 'AISTATS', year: 2023, themes: ['human-ai'], selected: true,
     id: 'who-should-predict',
     summary:
-      'Proves that learning a linear classifier–rejector pair is NP-hard even when a perfect pair exists, gives an exact MILP for the linear case, and proposes a realizable-consistent surrogate loss that scales.',
+      'Learning a linear classifier–rejector pair is NP-hard even when a perfect one exists. An exact MILP for small cases, a consistent surrogate for the rest.',
   },
   {
     title: 'Efficient Equivariant Transfer Learning from Pretrained Models',
@@ -241,7 +241,7 @@ export const publications = [
     venue: 'NeurIPS', year: 2023, themes: ['foundations'], selected: true,
     id: 'equivariant',
     summary:
-      'Makes a pretrained model equivariant by a weighted average over group-transformed features, with the weights learned from data.',
+      'Makes a pretrained model equivariant by averaging over group-transformed features, with the weights learned rather than fixed.',
   },
   {
     title: 'Post-hoc Uncertainty Learning Using a Dirichlet Meta-Model',
@@ -286,7 +286,7 @@ export const publications = [
     venue: 'NeurIPS', year: 2022, themes: ['foundations'], selected: true,
     id: 'fair-ij',
     summary:
-      'Uses infinitesimal-jackknife influence to find the training points that most hurt a fairness metric, and removes their effect without refitting the model.',
+      'Uses infinitesimal-jackknife influence to find the training points that hurt a fairness metric, and removes their effect without refitting.',
     note: 'First author',
   },
   {
@@ -317,7 +317,7 @@ export const publications = [
     venue: 'AIES', year: 2021, themes: ['uncertainty', 'human-ai'], selected: true,
     id: 'uncertainty-transparency',
     summary:
-      'Argues that communicating uncertainty is a form of model transparency, and sets out how to measure it, communicate it and use it with stakeholders.',
+      'Treats communicated uncertainty as a form of transparency: how to measure it, show it, and act on it with stakeholders.',
   },
   {
     title: 'Fair Selective Classification via Sufficiency',
@@ -353,7 +353,7 @@ export const publications = [
     themes: ['generative'], selected: true,
     id: 'nsb-gan',
     summary:
-      'Samples in the wavelet domain and super-resolves to pixels. FID 10.59 on ImageNet 512×512, better than the BigGAN baseline at half the compute.',
+      'Samples in the wavelet domain and super-resolves to pixels. FID 10.59 on ImageNet 512 at half BigGAN’s compute.',
   },
   {
     title: 'Optimizing Mode Connectivity via Neuron Alignment',
@@ -398,7 +398,7 @@ export const publications = [
     venue: 'IBM Journal of Research and Development', year: 2019, themes: ['generative'], selected: true, url: 'https://arxiv.org/abs/1805.09910',
     id: 'fairness-gan',
     summary:
-      'An auxiliary-classifier GAN that generates a dataset close to the original but satisfying demographic parity or equality of opportunity.',
+      'An auxiliary-classifier GAN that generates data close to the original but satisfying demographic parity or equal opportunity.',
     note: 'First author',
   },
   {
@@ -415,7 +415,7 @@ export const publications = [
     venue: 'ICLR', year: 2018, themes: ['generative'], selected: true, url: 'https://arxiv.org/abs/1711.00848',
     id: 'dip-vae',
     summary:
-      'DIP-VAE: a regularizer on the aggregate approximate posterior that encourages disentangled latents without supervision, plus the SAP score for measuring disentanglement.',
+      'A regularizer on the aggregate posterior that yields disentangled latents without labels, plus the SAP score to measure it.',
   },
   {
     title: 'Co-regularized Alignment for Unsupervised Domain Adaptation',
@@ -423,7 +423,7 @@ export const publications = [
     venue: 'NeurIPS', year: 2018, themes: ['foundations'], selected: true, url: 'https://arxiv.org/abs/1811.05443',
     id: 'coreg',
     summary:
-      'Aligns source and target distributions in several diverse feature spaces and regularizes the resulting target predictions to agree.',
+      'Aligns source and target in several diverse feature spaces at once and makes their target predictions agree.',
   },
   {
     title: 'Semi-supervised Learning with GANs: Manifold Invariance with Improved Inference',
@@ -431,6 +431,6 @@ export const publications = [
     venue: 'NeurIPS', year: 2017, themes: ['generative'], selected: true, url: 'https://arxiv.org/abs/1705.08850',
     id: 'ssl-gan',
     summary:
-      'Estimates the tangent space of the data manifold from a GAN generator and makes the classifier invariant along it, with an improved encoder for inference. The gains are largest when labels are scarce.',
+      'Uses the GAN generator to estimate the data manifold’s tangent space, then makes the classifier invariant along it.',
   },
 ];

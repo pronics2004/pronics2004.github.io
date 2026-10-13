@@ -1,0 +1,64 @@
+---
+// A sketch of the idea in the COLM paper: context is a second axis for test-time scaling.
+---
+
+<figure class="axes">
+  <svg viewBox="0 0 420 260" role="img" aria-label="Two axes. Horizontal: test-time compute, longer reasoning, more samples, more search. Vertical: context built from experience, which the paper scales instead.">
+    <defs>
+      <marker id="ah" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+        <path d="M0,0 L8,4 L0,8 z" fill="currentColor" />
+      </marker>
+    </defs>
+    <g class="ink3" fill="none" stroke="currentColor" stroke-width="1.5" marker-end="url(#ah)">
+      <path d="M50,210 H390" />
+      <path d="M50,210 V30" />
+    </g>
+    <g class="ink2" font-size="12">
+      <text x="220" y="240" text-anchor="middle">Test-time compute: longer reasoning, more samples, more search</text>
+      <text transform="translate(22,120) rotate(-90)" text-anchor="middle">Context: distilled experience</text>
+    </g>
+    <g class="muted" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="4 4">
+      <path d="M60,200 C150,185 250,180 360,178" />
+    </g>
+    <g class="accent" fill="none" stroke="currentColor" stroke-width="2.5">
+      <path d="M60,200 C70,120 100,70 150,55" marker-end="url(#ah)" />
+    </g>
+    <g font-size="12">
+      <text class="muted" x="270" y="170" text-anchor="middle">more compute: cost up, much of it wasted</text>
+      <text class="accent" x="160" y="48">this paper: better context, same compute</text>
+    </g>
+  </svg>
+  <figcaption>Experience is distilled into lessons, consolidated so memory stays small, and organized as a concept tree for retrieval.</figcaption>
+</figure>
+
+<style>
+  .axes {
+    margin: 0;
+  }
+  svg {
+    width: 100%;
+    height: auto;
+    display: block;
+    font-family: var(--sans);
+  }
+  .ink2 {
+    color: var(--ink-2);
+    fill: var(--ink-2);
+  }
+  .ink3 {
+    color: var(--rule-strong);
+  }
+  .muted {
+    color: var(--mark-muted);
+    fill: var(--mark-muted);
+  }
+  .accent {
+    color: var(--accent);
+    fill: var(--accent);
+  }
+  figcaption {
+    margin-top: 6px;
+    font-size: 0.8rem;
+    color: var(--ink-3);
+  }
+</style>

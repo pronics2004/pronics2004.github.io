@@ -54,11 +54,9 @@ export const guardbench = {
   date: 'April 2025',
 };
 
-// The summary pitch. Used on the home page; the CV carries a shorter version.
+// The summary pitch on the home page. The CV carries a shorter version.
 export const pitch = [
-  'I lead post-training for agent reliability at IBM Research: judge models, reward models and base-model capabilities that check tool calls, groundedness and requirements at each step of an LLM agent’s workflow. The team, spread across IBM Research sites in the United States, India, Japan and Ireland, trains Granite Guardian, an open-source judge model, and the Granite Guardian and Core libraries, which add calibrated uncertainty, context attribution, policy compliance, and factuality detection and correction to a base model.',
-  'Granite Guardian 4.1 ranks in the top five of 20 guardrail models on the Artificial Analysis benchmark at 59 ms per check, and as a reward model it selects better answers than judges up to 70B parameters. These models are used in IBM watsonx.ai and watsonx.governance, deployed as the guardrails in Red Hat’s Ask Red Hat assistant, and integrated in external products and projects such as Traefik Hub, deepset Haystack and Mozilla.ai any-guardrail. Together they have 1.15M downloads on Hugging Face and 371K pulls on Ollama.',
-  'The research spans post-training and generative modeling. On the post-training side, recent papers cover agent memory (COLM 2026), guardrails that check an agent’s plan before it executes (ICLR 2026), abstention for reasoning models (ACL 2026) and calibration for LLMs (ICML 2024). On the generative side, the work runs from disentangled representation learning with DIP-VAE (ICLR 2018) to GANs for semi-supervised learning (NeurIPS 2017). I am a principal investigator on two MIT-IBM Watson AI Lab projects and a core contributor to the open-source toolkits AI Fairness 360, AI Explainability 360, UQ360 and ICX360.',
+  'I lead post-training for agent reliability at IBM Research. The team trains Granite Guardian, an open judge model, and two libraries that teach a Granite base model to check its own work: tool calls, groundedness, requirements, factuality, confidence. The models run in watsonx.ai, watsonx.governance and Red Hat’s Ask Red Hat assistant. Before LLMs I worked on generative models, mostly VAEs and GANs, and on uncertainty and fairness.',
 ];
 
 // Where the Granite Guardian team is based.
