@@ -105,7 +105,7 @@ const recognition = [
         models through <a href={`${base}/research/#post-training`}>modular post-training</a> for reasoning, safety and
         agentic workloads: tool-call checks, groundedness, requirements, factuality, confidence. Granite Guardian 4.1
         ranks fifth of 20 on the <a href={benchmark.url}>Artificial Analysis guardrail benchmark</a> at 59 ms per check.
-        Three design calls were mine: a judge that answers with a yes/no token and its probability rather than a classifier head; criteria written at runtime instead of a fixed taxonomy; and a reasoning mode from the same weights, used to refine criteria and debug verdicts.
+        I designed it as a judge rather than a classifier: it answers with a yes/no token and its probability, takes criteria written at runtime instead of a fixed taxonomy, and can reason before it answers, a trace people also use to refine their criteria and debug verdicts.
         The models run in <a href={ext.watsonxAi}>watsonx.ai</a>, <a href={ext.watsonxGov}>watsonx.governance</a> and
         Red Hat’s <a href={ext.askRedHat}>Ask Red Hat</a> assistant, with 1.16M downloads on{' '}
         <a href={models.guardian.hf}>Hugging Face</a> and 371K on <a href={ext.ollama}>Ollama</a>.
