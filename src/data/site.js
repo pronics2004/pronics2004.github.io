@@ -40,11 +40,6 @@ export const models = {
     hf: 'https://huggingface.co/ibm-granite/granitelib-core-r1.0',
   },
   mellea: 'https://mellea.ai',
-  switch: {
-    name: 'Granite Switch',
-    github: 'https://github.com/generative-computing/granite-switch',
-    hf: 'https://huggingface.co/ibm-granite/granite-switch-4.1-8b-preview',
-  },
 };
 
 export const benchmark = {
@@ -61,7 +56,7 @@ export const guardbench = {
 
 // The summary pitch on the home page. The CV carries a shorter version.
 export const pitch = [
-  'I lead post-training for agent reliability at IBM Research: Granite Guardian, an open judge model, and Granite Switch, a Granite model composed from adapter functions that check its own work: tool calls, groundedness, requirements, factuality, confidence. The models run in watsonx.ai, watsonx.governance and Red Hat’s Ask Red Hat assistant. I have deep expertise in generative modeling, starting with VAEs and GANs and now diffusion models, LLMs and agentic systems, with calibration and uncertainty running through all of it. I am a principal investigator on joint projects with MIT and RPI in these areas.',
+  'I lead post-training for agent reliability at IBM Research: Granite Guardian, an open judge model, and modular post-training that adds capabilities to Granite models for reasoning, safety and agentic workloads: tool-call checks, groundedness, requirements, factuality, confidence. The models run in watsonx.ai, watsonx.governance and Red Hat’s Ask Red Hat assistant. I have deep expertise in generative modeling, starting with VAEs and GANs and now diffusion models, LLMs and agentic systems, with calibration and uncertainty running through all of it. I am a principal investigator on joint projects with MIT and RPI in these areas.',
 ];
 
 // Where the Granite Guardian team is based.

@@ -33,7 +33,8 @@ const venue = (p) => [p.venue, p.year].join(' ') + (p.note ? `, ${p.note.toLower
       <h2>Summary</h2>
       <p>
         I lead post-training for agent reliability at IBM Research. The team trains Granite Guardian, an open judge
-        model, and Granite Switch, a Granite model composed from adapter functions that check its own work. Deep expertise in
+        model, and modular post-training that adds capabilities to Granite models for reasoning, safety and agentic
+        workloads. Deep expertise in
         generative modeling, from VAEs and GANs to diffusion models, LLMs and agentic systems. Principal investigator
         on joint projects with MIT and RPI. {scholar.citations.toLocaleString('en-US')} citations, h-index {scholar.hIndex}{' '}
         (Google Scholar, {scholar.asOf}).
@@ -58,7 +59,7 @@ const venue = (p) => [p.venue, p.year].join(' ') + (p.note ? `, ${p.note.toLower
             best-of-N selection, ahead of reward models up to 70B. Six of the top ten places on GuardBench (April 2025). Third of 39 on the LLM-AggreFact leaderboard.
           </li>
           <li>
-            Lead post-training for Granite Switch: adapter functions for policy compliance, factuality
+            Lead modular post-training for Granite models: capabilities for policy compliance, factuality
             detection and correction, requirement checking, calibrated uncertainty and context attribution. Requirement
             checking raises IFEval balanced accuracy from 0.569 (prompted base model) to 0.855.
           </li>

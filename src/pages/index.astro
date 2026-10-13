@@ -30,9 +30,9 @@ const pillars = [
   },
   {
     kicker: 'Post-training · capabilities and agents',
-    name: 'Granite Switch, agent memory, guardrails',
+    name: 'Modular post-training, agent memory, guardrails',
     href: '#post-training',
-    body: 'Adapter functions that check a Granite model’s own work, composed into one checkpoint. Plus research on agent memory, pre-execution guardrails and abstention.',
+    body: 'Capabilities added to Granite models for reasoning, safety and agentic workloads, each trained and measured on its own. Plus research on agent memory, pre-execution guardrails and abstention.',
     facts: [
       ['0.569 → 0.855', 'IFEval balanced accuracy, prompted base model vs post-trained'],
       ['5 papers in 2026', 'COLM, two at ICLR and two at ACL'],
@@ -89,7 +89,7 @@ const halfTicks = [0.5, 0.6, 0.7, 0.8, 0.9];
 
 <Base
   title="Prasanna Sattigeri · Post-training and generative modeling"
-  description="Prasanna Sattigeri leads post-training for agent reliability at IBM Research: Granite Guardian, Granite Switch, and research in agents, calibration and generative modeling."
+  description="Prasanna Sattigeri leads post-training for agent reliability at IBM Research: Granite Guardian, modular post-training for Granite models, and research in agents, calibration and generative modeling."
 >
   <section class="hero">
     <div class="wrap hero-grid">
@@ -260,8 +260,8 @@ the criteria, return 'yes'; otherwise, return 'no'.
         <h2>Teaching a base model to check its own work</h2>
         <p class="lede">
           Post-training, as I use the word, is everything that happens to a pretrained model before it can be trusted:
-          judges, calibration, adapter functions trained into the base model, and the memory and guardrails an agent
-          runs with. The recipe is the same each time.
+          judges, calibration, capabilities trained into the base model one at a time, and the memory and guardrails an
+          agent runs with. The recipe is the same each time.
         </p>
       </div>
 
@@ -320,9 +320,9 @@ the criteria, return 'yes'; otherwise, return 'no'.
         </table>
       </div>
       <p class="fine">
-        Released through <a href={models.switch.github}>Granite Switch</a>, which composes adapter functions for
-        safety, factuality and RAG into one Granite checkpoint, for granite-4.0-micro and granite-4.1 at 3B, 8B and
-        30B. Two of the seven are papers from this page, distilled into one forward pass: Thermometer became calibrated
+        Released as the <a href={models.guardianLib.hf}>Guardian</a> and <a href={models.coreLib.hf}>Core</a> capability
+        libraries for granite-4.0-micro and granite-4.1 at 3B, 8B and 30B, so each capability can be added, swapped or
+        upgraded on its own. Two of the seven are papers from this page, distilled into one forward pass: Thermometer became calibrated
         uncertainty, MExGen became context attribution.
       </p>
 
