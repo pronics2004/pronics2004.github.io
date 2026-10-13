@@ -100,14 +100,16 @@ const recognition = [
       </div>
 
       <p>
-        I lead post-training for agent reliability at <a href={links.ibm}>IBM Research</a>. The team trains{' '}
-        <a href={`${base}/granite-guardian/`}>Granite Guardian</a>, an open judge model, and adds capabilities to Granite
-        models through <a href={`${base}/research/#post-training`}>modular post-training</a> for reasoning, safety and
-        agentic workloads: tool-call checks, groundedness, requirements, factuality, confidence. Granite Guardian 4.1
-        ranks fifth of 20 on the <a href={benchmark.url}>Artificial Analysis guardrail benchmark</a> at 59 ms per check.
-        I designed it as a judge rather than a classifier: it answers with a yes/no token and its probability, takes criteria written at runtime instead of a fixed taxonomy, and can reason before it answers, a trace people also use to refine their criteria and debug verdicts.
-        The models run in <a href={ext.watsonxAi}>watsonx.ai</a>, <a href={ext.watsonxGov}>watsonx.governance</a> and
-        Red Hat’s <a href={ext.askRedHat}>Ask Red Hat</a> assistant, with 1.16M downloads on{' '}
+        I lead post-training for agent reliability at <a href={links.ibm}>IBM Research</a> and designed{' '}
+        <a href={`${base}/granite-guardian/`}>Granite Guardian</a>, an open judge model. It is a judge rather than a
+        classifier: it answers with a yes/no token and its probability, takes criteria written at runtime instead of a
+        fixed taxonomy, and can reason before it answers, a trace people also use to refine their criteria and debug
+        verdicts. The team also adds capabilities to Granite models through{' '}
+        <a href={`${base}/research/#post-training`}>modular post-training</a> for reasoning, safety and agentic
+        workloads: tool-call checks, groundedness, requirements, factuality, confidence. Granite Guardian 4.1 ranks
+        fifth of 20 on the <a href={benchmark.url}>Artificial Analysis guardrail benchmark</a> at 59 ms per check. The
+        models run in <a href={ext.watsonxAi}>watsonx.ai</a>, <a href={ext.watsonxGov}>watsonx.governance</a> and Red
+        Hat’s <a href={ext.askRedHat}>Ask Red Hat</a> assistant, with 1.16M downloads on{' '}
         <a href={models.guardian.hf}>Hugging Face</a> and 371K on <a href={ext.ollama}>Ollama</a>.
       </p>
       <p>
