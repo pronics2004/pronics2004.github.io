@@ -24,8 +24,8 @@ const pillars = [
     href: '#guardian',
     body: 'A judge model. Give it a conversation and a criterion; it answers yes or no, with a probability.',
     facts: [
-      ['Fifth of 20', 'on the Artificial Analysis guardrail benchmark, F1 0.859 at 59 ms'],
-      ['1.1M', 'Hugging Face downloads across Guardian versions, plus 371K Ollama pulls'],
+      ['Third of 39', 'on the LLM-AggreFact fact-checking leaderboard, ahead of GPT-4o'],
+      ['70.29', 'JETTS best-of-N selection, ahead of reward models up to 70B'],
     ],
   },
   {
@@ -45,7 +45,7 @@ const pillars = [
     body: 'Disentangled VAEs, GANs for semi-supervised and fair data, and now the synthetic data that trains judges.',
     facts: [
       ['DIP-VAE', 'ICLR 2018, cited 753 times, in disentanglement_lib and PyTorch-VAE'],
-      [scholar.citations.toLocaleString('en-US'), `citations overall, h-index ${scholar.hIndex} (Google Scholar, ${scholar.asOf})`],
+      ['12,000 models', 'in the ICML 2019 best-paper study, with DIP-VAE as one of its six methods'],
     ],
   },
 ];
@@ -97,7 +97,7 @@ const halfTicks = [0.5, 0.6, 0.7, 0.8, 0.9];
         <p class="eyebrow">{profile.title} · {profile.org} · {profile.lab}</p>
         <h1>Post-trained models that make agent workflows reliable.</h1>
         <p class="lede">{pitch[0]}</p>
-        <p class="pitch">
+        <p class="lede">
           {pitch[1]} {scholar.citations.toLocaleString('en-US')} citations, h-index {scholar.hIndex} (Google Scholar,{' '}
           {scholar.asOf}).
         </p>
@@ -517,12 +517,9 @@ the criteria, return 'yes'; otherwise, return 'no'.
     margin-bottom: 24px;
   }
   .hero .lede {
-    max-width: 64ch;
+    max-width: 68ch;
+    font-size: 1.05rem;
     color: var(--ink);
-  }
-  .pitch {
-    max-width: 70ch;
-    color: var(--ink-2);
   }
   .hero :global(.photo) {
     width: 100%;
