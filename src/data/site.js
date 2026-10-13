@@ -54,9 +54,10 @@ export const guardbench = {
   date: 'April 2025',
 };
 
-// The summary pitch on the home page. The CV carries a shorter version.
+// The summary, used on the home page and the CV.
 export const pitch = [
-  'I lead post-training for agent reliability at IBM Research: Granite Guardian, an open judge model, and modular post-training that adds capabilities to Granite models for reasoning, safety and agentic workloads: tool-call checks, groundedness, requirements, factuality, confidence. The models run in watsonx.ai, watsonx.governance and Red Hat’s Ask Red Hat assistant. I have deep expertise in generative modeling, starting with VAEs and GANs and now diffusion models, LLMs and agentic systems, with calibration and uncertainty running through all of it. I am a principal investigator on joint projects with MIT and RPI in these areas.',
+  'I lead post-training for agent reliability at IBM Research. The team trains Granite Guardian, an open judge model, and adds capabilities to Granite models through modular post-training for reasoning, safety and agentic workloads: tool-call checks, groundedness, requirements, factuality, confidence. Granite Guardian 4.1 ranks fifth of 20 on the Artificial Analysis guardrail benchmark at 59 ms per check. The models run in watsonx.ai, watsonx.governance and Red Hat’s Ask Red Hat assistant, with 1.16M downloads on Hugging Face and 371K on Ollama.',
+  'Deep expertise in generative modeling, starting with VAEs and GANs (ICLR 2018, NeurIPS 2017) and now diffusion models, LLMs and agentic systems (COLM 2026, ICLR 2026, ACL 2026), with calibration and uncertainty running through all of it (ICML 2024, NeurIPS 2024). Principal investigator on joint projects with MIT and RPI. Core contributor to AI Fairness 360, AI Explainability 360 and UQ360.',
 ];
 
 // Where the Granite Guardian team is based.

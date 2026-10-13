@@ -97,6 +97,10 @@ const halfTicks = [0.5, 0.6, 0.7, 0.8, 0.9];
         <p class="eyebrow">{profile.title} · {profile.org} · {profile.lab}</p>
         <h1>Post-trained models that make agent workflows reliable.</h1>
         <p class="lede">{pitch[0]}</p>
+        <p class="pitch">
+          {pitch[1]} {scholar.citations.toLocaleString('en-US')} citations, h-index {scholar.hIndex} (Google Scholar,{' '}
+          {scholar.asOf}).
+        </p>
         <div class="actions">
           <a class="btn primary" href={`${base}/granite-guardian/`}>Granite Guardian case study</a>
           <a class="btn" href="#post-training">Post-training</a>
@@ -515,6 +519,10 @@ the criteria, return 'yes'; otherwise, return 'no'.
   .hero .lede {
     max-width: 64ch;
     color: var(--ink);
+  }
+  .pitch {
+    max-width: 70ch;
+    color: var(--ink-2);
   }
   .hero :global(.photo) {
     width: 100%;
