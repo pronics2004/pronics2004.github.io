@@ -60,11 +60,6 @@ export const pitch = [
   'Deep expertise in generative modeling, starting with VAEs and GANs (ICLR 2018, NeurIPS 2017) and now diffusion models, LLMs and agentic systems (COLM 2026, ICLR 2026, ACL 2026), with calibration and uncertainty running through all of it (ICML 2024, NeurIPS 2024). Principal investigator on joint projects with MIT and RPI. Core contributor to AI Fairness 360, AI Explainability 360 and UQ360.',
 ];
 
-// Where the Granite Guardian team is based.
-export const team = {
-  sites: 'the United States, India, Japan and Ireland',
-};
-
 // Granite Guardian releases. Dates from the Hugging Face repositories and IBM Research blog posts.
 export const releases = [
   { when: 'Oct 2024', version: '3.0', what: 'Harm and RAG-hallucination detection, at 2B and 8B' },

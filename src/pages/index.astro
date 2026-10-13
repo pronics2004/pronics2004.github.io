@@ -12,7 +12,7 @@ import Bars from '../components/Bars.astro';
 import Strip from '../components/Strip.astro';
 import photo from '../assets/profile.png';
 import aaChart from '../assets/aa-average-f1.png';
-import { profile, links, scholar, models, benchmark, pitch, team, awards } from '../data/site.js';
+import { profile, links, scholar, models, benchmark, pitch, awards } from '../data/site.js';
 import { openSource, adoptedElsewhere, collaborators, quotes, usage, adoption } from '../data/research.js';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
@@ -51,7 +51,6 @@ const pillars = [
 ];
 
 const leading = [
-  ['4 countries', 'where the Granite Guardian team I lead is based'],
   ['5 releases', 'of Granite Guardian since October 2024'],
   ['2 awards', 'IBM Research Outstanding Accomplishments, 2024 and 2025'],
   ['MIT and RPI', 'joint research projects as principal investigator'],
@@ -152,8 +151,8 @@ const halfTicks = [0.5, 0.6, 0.7, 0.8, 0.9];
         <p class="eyebrow">Impact</p>
         <h2>Team, releases and recognition</h2>
         <p class="lede">
-          The team sits in {team.sites}. I set its direction and own its releases, from data to open weights. Five
-          versions of Granite Guardian in eighteen months, each adding something the last one could not do.
+          I lead the Granite Guardian team, set its direction and own its releases, from data to open weights. Five
+          versions in eighteen months, each adding something the last one could not do.
         </p>
       </div>
       <Timeline />
