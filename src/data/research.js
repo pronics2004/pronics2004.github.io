@@ -68,21 +68,21 @@ export const openSource = [
     name: 'AI Fairness 360',
     role: 'Core contributor',
     what: 'Fairness metrics and bias mitigation algorithms for datasets and models.',
-    adoption: '2,872 GitHub stars; the paper has 2,907 citations; an LF AI & Data (Linux Foundation) project',
+    adoption: '2,878 GitHub stars; the paper has 2,937 citations; an LF AI & Data (Linux Foundation) project',
     url: 'https://github.com/Trusted-AI/AIF360',
   },
   {
     name: 'AI Explainability 360',
     role: 'Core contributor',
     what: 'Interpretability and explanation methods for data and models.',
-    adoption: '1,806 GitHub stars; the taxonomy paper has 800 citations',
+    adoption: '1,809 GitHub stars; the taxonomy paper has 732 citations',
     url: 'https://github.com/Trusted-AI/AIX360',
   },
   {
     name: 'Uncertainty Quantification 360',
     role: 'Core contributor',
     what: 'Estimating, communicating and using uncertainty in model predictions.',
-    adoption: '269 GitHub stars',
+    adoption: '270 GitHub stars',
     url: 'https://github.com/IBM/UQ360',
   },
   {
@@ -250,23 +250,23 @@ export const adoption = [
     head: 'Research others have built on',
     items: [
       {
-        text: 'DIP-VAE (ICLR 2018, 749 citations) is one of the methods in the ICML 2019 best paper by Locatello et al., which trained more than 12,000 disentanglement models. It is implemented in disentanglement_lib and PyTorch-VAE.',
+        text: 'DIP-VAE (ICLR 2018, 753 citations) is one of the methods in the ICML 2019 best paper by Locatello et al., which trained more than 12,000 disentanglement models. It is implemented in disentanglement_lib and PyTorch-VAE.',
         url: 'https://arxiv.org/abs/1811.12359',
       },
       {
-        text: 'AI Fairness 360: the toolkit paper has 2,907 citations, and the project is hosted by LF AI & Data at the Linux Foundation.',
+        text: 'AI Fairness 360: the toolkit paper has 2,937 citations, and the project is hosted by LF AI & Data at the Linux Foundation.',
         url: 'https://lfaidata.foundation/projects/ai-fairness-360/',
       },
       {
-        text: 'AI Explainability 360: the taxonomy paper has 800 citations.',
+        text: 'AI Explainability 360: the taxonomy paper has 732 citations.',
         url: 'https://arxiv.org/abs/1909.03012',
       },
       {
-        text: '“Uncertainty as a Form of Transparency” (AIES 2021) has 487 citations.',
+        text: '“Uncertainty as a Form of Transparency” (AIES 2021) has 494 citations.',
         url: 'https://arxiv.org/abs/2011.07586',
       },
       {
-        text: '“Who Should Predict?” (AISTATS 2023), on exact algorithms for learning to defer, has 145 citations.',
+        text: '“Who Should Predict?” (AISTATS 2023), on exact algorithms for learning to defer, has 151 citations.',
         url: 'https://arxiv.org/abs/2301.06197',
       },
     ],

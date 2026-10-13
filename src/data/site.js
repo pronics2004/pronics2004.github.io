@@ -18,9 +18,9 @@ export const links = {
 };
 
 export const scholar = {
-  citations: 9893,
-  hIndex: 42,
-  i10: 93,
+  citations: 10043,
+  hIndex: 44,
+  i10: 97,
   asOf: 'October 2026',
 };
 
