@@ -18,7 +18,9 @@ npm run preview  # serves dist/
 | Name, title, links, Scholar numbers | `src/data/site.js` |
 | Publications (home page uses `selected: true`; the CV lists all) | `src/data/publications.js` |
 | Research threads, open source, collaborators, quotes and usage numbers | `src/data/research.js` |
-| Home page | `src/pages/index.astro` |
+| Home page (short, linked bio and selected work) | `src/pages/index.astro` |
+| Research page (post-training, generative modeling, threads, adoption) | `src/pages/research.astro` |
+| Publications by year | `src/pages/publications.astro` |
 | Granite Guardian case study | `src/pages/granite-guardian.astro` |
 | CV page | `src/pages/cv.astro` |
 | Two-page CV | `src/pages/cv/short.astro` |
