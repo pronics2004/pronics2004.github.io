@@ -1,0 +1,844 @@
+---
+import Base from '../layouts/Base.astro';
+import Dumbbell from '../components/Dumbbell.astro';
+import AgentLoop from '../components/AgentLoop.astro';
+import ResearchThreads from '../components/ResearchThreads.astro';
+import Timeline from '../components/Timeline.astro';
+import Pipeline from '../components/Pipeline.astro';
+import Axes from '../components/Axes.astro';
+import Bars from '../components/Bars.astro';
+import Strip from '../components/Strip.astro';
+import { profile, links, scholar, models, benchmark, pitch, awards } from '../data/site.js';
+import { openSource, adoptedElsewhere, collaborators, quotes, usage, adoption } from '../data/research.js';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const capabilities = [
+  ['Judging against a criterion', 'yes or no, with a risk score', 'human-labeled and synthetic data for safety, RAG and tool calls'],
+  ['Policy compliance', 'compliant, non-compliant or ambiguous', 'human-written policies across about 40 domains'],
+  ['Factuality detection', 'yes if any claim is unsupported by the context', '17,522 ELI5 instances, half with injected errors'],
+  ['Factuality correction', 'a corrected response, or none', 'the same corpus, supervised by FactCorrector (ACL 2026)'],
+  ['Requirement checking', 'yes or no, with P(yes)', 'multi-constraint prompts with programmatic labels'],
+  ['Calibrated uncertainty', 'a confidence that is right about X% of the time at X%', '240K answers per base model, labeled by a Thermometer calibrator'],
+  ['Context attribution', 'the context sentences behind each response sentence, ranked', '4,101 conversation rounds labeled with leave-one-out MExGen'],
+];
+
+const requirementRows = [
+  { label: 'Granite 4.1 3B', before: 0.5118, after: 0.8425 },
+  { label: 'Granite 4.1 8B', before: 0.5689, after: 0.8554 },
+  { label: 'Granite 4.1 30B', before: 0.6237, after: 0.8492 },
+];
+const uncertaintyRows = [
+  { label: 'Granite 4.0 micro', before: 0.6748, after: 0.6903 },
+  { label: 'Granite 4.1 3B', before: 0.6291, after: 0.7713 },
+  { label: 'Granite 4.1 8B', before: 0.6439, after: 0.7778 },
+  { label: 'Granite 4.1 30B', before: 0.6507, after: 0.8017 },
+];
+const halfTicks = [0.5, 0.6, 0.7, 0.8, 0.9];
+---
+
+<Base
+  title="Research · Prasanna Sattigeri"
+  description="Post-training for agent reliability, generative modeling, and the research threads behind Granite Guardian and the Granite capability libraries."
+  current="research"
+>
+  <section class="top">
+    <div class="wrap">
+      <p class="eyebrow"><a href={`${base}/`}>Home</a> / Research</p>
+      <h1>Research</h1>
+      <p class="lede">
+        Post-training that teaches a base model to check its own work, the generative modeling before it, and the
+        papers behind both. Granite Guardian has its own <a href={`${base}/granite-guardian/`}>page</a>; the full paper
+        list is under <a href={`${base}/publications/`}>Publications</a>.
+      </p>
+    </div>
+  </section>
+
+  <section class="section" id="impact">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Impact</p>
+        <h2>Team, releases and recognition</h2>
+        <p class="lede">
+          I lead the Granite Guardian team, set its direction and own its releases, from data to open weights. Five
+          versions in eighteen months, each adding something the last one could not do.
+        </p>
+      </div>
+      <Timeline />
+      <div class="lead-grid">
+        <div>
+          <h3>Recognition</h3>
+          <ol class="yr-list">
+            {
+              awards.map(([year, award, forWhat]) => (
+                <li>
+                  <span>{year}</span>
+                  <span>
+                    <strong>{award}.</strong> {forWhat}
+                  </span>
+                </li>
+              ))
+            }
+          </ol>
+        </div>
+        <div>
+          <h3>Joint projects</h3>
+          <p>
+            Principal investigator on two MIT-IBM Watson AI Lab projects, trustworthy learning with limited data with
+            Gregory Wornell and human-centric AI for shared decisions with David Sontag, and on joint work with RPI on
+            causal inference and agent safety with Ali Tajer and Mohammad Mohammadi Amiri. The MIT projects produced
+            Thermometer, the EDL paper, the COLM paper, and the learning-to-defer and onboarding papers.
+          </p>
+          <h3>Mentoring</h3>
+          <p>
+            Thesis committees for Joshua Lee and Maohao Shen at MIT and Burak Varıcı at RPI. Interns most years for a
+            decade; two of the 2026 papers below started as internships.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="post-training">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Post-training</p>
+        <h2>Teaching a base model to check its own work</h2>
+        <p class="lede">
+          Post-training, as I use the word, is everything that happens to a pretrained model before it can be trusted:
+          judges, calibration, capabilities trained into the base model one at a time, and the memory and guardrails an
+          agent runs with. The recipe is the same each time.
+        </p>
+      </div>
+
+      <Pipeline />
+
+      <h3 class="sub-h">The gain over the same model, prompted</h3>
+      <div class="charts">
+        <Dumbbell
+          title="Requirement checking"
+          sub="IFEval multi-constraint, balanced accuracy. Chance is 0.5."
+          rows={requirementRows}
+          min={0.5}
+          max={0.9}
+          ticks={halfTicks}
+          beforeLabel="Base model, prompted"
+          afterLabel="Post-trained"
+          source="Held-out IFEval set. Source: Requirement Check model card."
+        />
+        <Dumbbell
+          title="Calibrated uncertainty"
+          sub="MMLU, AUROC for telling right answers from wrong. Chance is 0.5."
+          rows={uncertaintyRows}
+          min={0.5}
+          max={0.9}
+          ticks={halfTicks}
+          beforeLabel="Base model, sequence probability"
+          afterLabel="Post-trained"
+          source="14,042 MMLU questions, not used in training. Calibration error: 0.161 → 0.057 (micro), 0.288 → 0.099 (3B), 0.112 → 0.038 (8B), 0.092 → 0.100 (30B). Source: Uncertainty model card."
+        />
+      </div>
+
+      <h3 class="sub-h">Where each check runs</h3>
+      <AgentLoop />
+
+      <h3 class="sub-h">The seven capabilities</h3>
+      <div class="table-scroll">
+        <table class="caps">
+          <thead>
+            <tr>
+              <th>Capability</th>
+              <th>Returns</th>
+              <th>Trained on</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              capabilities.map(([name, returns, trained]) => (
+                <tr>
+                  <td>{name}</td>
+                  <td>{returns}</td>
+                  <td>{trained}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+      <p class="fine">
+        Released as the <a href={models.guardianLib.hf}>Guardian</a> and <a href={models.coreLib.hf}>Core</a> capability
+        libraries for granite-4.0-micro and granite-4.1 at 3B, 8B and 30B, so each capability can be added, swapped or
+        upgraded on its own. Two of the seven are papers from this page, distilled into one forward pass: Thermometer became calibrated
+        uncertainty, MExGen became context attribution.
+      </p>
+
+      <h3 class="sub-h">Featured · COLM 2026</h3>
+      <article class="card feature">
+        <div class="feature-text">
+          <h3>
+            <a href="https://arxiv.org/abs/2604.04373">Decocted Experience: context as a second axis for scaling agents</a>
+          </h3>
+          <p>
+            Test-time scaling means more compute: longer reasoning, more samples, more search. For agents much of that
+            is spent exploring paths that go nowhere. This paper asks what happens if you scale the input instead and
+            build the agent’s context from its own past runs.
+          </p>
+          <p>
+            Three results. Lessons distilled from experience beat raw experience and keep scaling as context grows.
+            Memory has a sweet spot; an intermediate size beats keeping everything. And context with higher information
+            gain about the output gives more efficient inference, which in practice means balancing relevance against
+            diversity. Validated on math, web shopping and software engineering agents, with Maohao Shen, Kaiwen Zha,
+            Zexue He and Gregory Wornell among others.
+          </p>
+        </div>
+        <Axes />
+      </article>
+
+      <h3 class="sub-h">The papers</h3>
+      <ResearchThreads only={['agents', 'uncertainty', 'attribution']} />
+    </div>
+  </section>
+
+  <section class="section" id="generative">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Generative modeling</p>
+        <h2>A decade of generative models</h2>
+        <p class="lede">
+          Before LLMs I worked on what a generative model learns and how to control it. The same questions now show up
+          as synthetic data: what to generate so that a judge learns the right thing.
+        </p>
+      </div>
+      <Strip />
+      <p class="fine">
+        DIP-VAE is one of the six methods in the ICML 2019 best paper by Locatello et al., which trained more than 12,000
+        disentanglement models. It is implemented in{' '}
+        {adoptedElsewhere.map((o, i) => (
+          <>
+            <a href={o.url}>{o.name}</a>
+            {i < adoptedElsewhere.length - 1 ? ' and ' : '.'}
+          </>
+        ))}
+      </p>
+    </div>
+  </section>
+
+  <section class="section" id="research">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Research</p>
+        <h2>Other threads</h2>
+        <p class="lede">
+          Full list under <a href={`${base}/publications/`}>Publications</a> and on <a href={links.scholar}>Google Scholar</a>.
+        </p>
+      </div>
+      <ResearchThreads only={['human-ai', 'foundations']} />
+    </div>
+  </section>
+
+  <section class="section" id="adoption">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Adoption</p>
+        <h2>Independent evaluation and adoption</h2>
+      </div>
+      <div class="quotes">
+        {
+          quotes.map((q) => (
+            <figure class="card quote">
+              <blockquote>“{q.quote}”</blockquote>
+              <figcaption>
+                <a href={q.url}>{q.who}</a>
+                <span>{q.context}</span>
+              </figcaption>
+            </figure>
+          ))
+        }
+      </div>
+      <div class="use-grid">
+        <dl class="usage">
+          {
+            usage.map((u) => (
+              <div>
+                <dt>{u.label}</dt>
+                <dd>{u.value}</dd>
+              </div>
+            ))
+          }
+        </dl>
+        <Bars />
+      </div>
+      <div class="adoption">
+        {
+          adoption.map((g) => (
+            <div>
+              <h3>{g.head}</h3>
+              <ul class="plain">
+                {g.items.map((i) => (
+                  <li>
+                    {i.url ? <a href={i.url}>{i.text}</a> : i.text}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))
+        }
+      </div>
+      <p class="fine">Citation counts from Google Scholar, {scholar.asOf}.</p>
+    </div>
+  </section>
+
+  <section class="section" id="open-source">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Open source</p>
+        <h2>Models and toolkits</h2>
+      </div>
+      <ul class="oss">
+        {
+          openSource.map((o) => (
+            <li>
+              <p class="oss-name">
+                <a href={o.url}>{o.name}</a>
+              </p>
+              <p class="oss-what">
+                {o.what} <span class="oss-role">{o.role}.</span>
+              </p>
+              <p class="oss-adoption">{o.adoption}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="section" id="collaborations">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Collaborations</p>
+        <h2>Academic collaborations and service</h2>
+      </div>
+      <ul class="collab">
+        {
+          collaborators.map((c) => (
+            <li>
+              <p class="place">{c.place}</p>
+              <p class="people">
+                {c.people}
+                {c.with && <span class="with">; with {c.with}</span>}
+              </p>
+              <p class="topics">{c.topics}</p>
+            </li>
+          ))
+        }
+      </ul>
+      <p class="fine">Affiliations as on the joint papers.</p>
+      <h3 class="sub-h">Service</h3>
+      <ul class="plain two-col">
+        <li>Associate Editor, Pattern Recognition</li>
+        <li>Area chair and senior PC: NeurIPS, ICML, ICLR, AAAI</li>
+        <li>IEEE Senior Member</li>
+        <li>Invited talks at the National Academy of Sciences, the MIT AI Conference and NAACL TrustNLP (2024)</li>
+      </ul>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .top {
+    padding-block: clamp(40px, 6vw, 72px) clamp(32px, 5vw, 56px);
+  }
+  .top .eyebrow a {
+    color: inherit;
+  }
+  .top h1 {
+    margin-bottom: 18px;
+  }
+  .hero {
+    padding-block: clamp(48px, 7vw, 96px) clamp(40px, 6vw, 72px);
+  }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(180px, 240px);
+    gap: clamp(24px, 5vw, 72px);
+    align-items: start;
+  }
+  .hero :global(.photo) {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border-radius: 14px;
+    border: 1px solid var(--rule);
+    margin-top: 34px;
+  }
+  .hero h1 {
+    max-width: 17ch;
+    margin-bottom: 24px;
+  }
+  .hero .lede {
+    max-width: 72ch;
+    font-size: 1.05rem;
+    color: var(--ink);
+  }
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 24px;
+  }
+
+  .pillars {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    margin: clamp(40px, 6vw, 72px) 0 0;
+    padding: 0;
+    border-top: 1px solid var(--rule-strong);
+  }
+  .pillar {
+    display: flex;
+    flex-direction: column;
+    padding: 22px 24px 0 0;
+  }
+  .pillar + .pillar {
+    padding-left: 24px;
+    border-left: 1px solid var(--rule);
+  }
+  .kicker {
+    margin: 0 0 8px;
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+  .pillar h2 {
+    font-size: 1.5rem;
+  }
+  .pillar h2 a {
+    color: var(--ink);
+    text-decoration-color: var(--rule-strong);
+  }
+  .pillar-body {
+    margin: 10px 0 16px;
+    font-size: 0.92rem;
+    color: var(--ink-2);
+  }
+  .pillar dl {
+    margin: auto 0 0;
+    display: grid;
+    gap: 12px;
+  }
+  .pillar dl div {
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 2px;
+  }
+  .pillar dd {
+    margin: 0;
+    font-size: 1.3rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+  .pillar dt {
+    font-size: 0.82rem;
+    color: var(--ink-2);
+    line-height: 1.4;
+  }
+  .band {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    margin: clamp(28px, 4vw, 44px) 0 0;
+    padding: 18px 0 0;
+    border-top: 1px solid var(--rule);
+  }
+  .band div {
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: flex-end;
+    gap: 4px;
+    padding-right: 20px;
+  }
+  .band dd {
+    margin: 0;
+    font-size: 1.15rem;
+    font-weight: 600;
+  }
+  .band dt {
+    font-size: 0.82rem;
+    color: var(--ink-2);
+    line-height: 1.4;
+  }
+
+  h3 {
+    margin-bottom: 10px;
+  }
+  .sub-h {
+    margin: clamp(36px, 5vw, 56px) 0 18px;
+  }
+  .fine {
+    margin: 16px 0 0;
+    font-size: 0.84rem;
+    color: var(--ink-3);
+    max-width: 90ch;
+  }
+
+  .yr-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .yr-list li {
+    display: grid;
+    grid-template-columns: 76px 1fr;
+    gap: 12px;
+    padding-block: 8px;
+    border-top: 1px solid var(--rule);
+    font-size: 0.92rem;
+    color: var(--ink-2);
+  }
+  .yr-list li > span:first-child {
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    color: var(--ink-3);
+    padding-top: 2px;
+  }
+  .yr-list strong {
+    color: var(--ink);
+    font-weight: 600;
+  }
+  .lead-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(28px, 4vw, 56px) clamp(28px, 5vw, 72px);
+    margin-top: clamp(28px, 4vw, 44px);
+  }
+  .lead-grid p {
+    color: var(--ink-2);
+  }
+  .lead-grid h3 + p + h3 {
+    margin-top: 22px;
+  }
+
+  .how {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(20px, 4vw, 56px);
+    margin-top: clamp(24px, 4vw, 40px);
+    align-items: start;
+  }
+  .how p {
+    color: var(--ink-2);
+  }
+  .code {
+    margin: 0;
+    padding: 18px 20px;
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    overflow-x: auto;
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    line-height: 1.6;
+    color: var(--ink-2);
+  }
+  .beyond {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-top: clamp(24px, 4vw, 40px);
+  }
+  .fact {
+    padding: 18px;
+  }
+  .fact p {
+    margin: 0;
+  }
+  .fact-head {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+  .fact-value {
+    font-size: 1.9rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    margin: 6px 0 !important;
+  }
+  .fact-body {
+    font-size: 0.88rem;
+    color: var(--ink-2);
+  }
+  .shot {
+    margin: 18px 0 0;
+  }
+  .shot > a {
+    display: block;
+    padding: clamp(12px, 2.4vw, 24px);
+    background: #ffffff;
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+  }
+  .shot figcaption {
+    margin-top: 10px;
+    font-size: 0.8rem;
+    color: var(--ink-3);
+  }
+
+  .charts {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    align-items: start;
+  }
+  .caps td {
+    font-size: 0.9rem;
+    color: var(--ink-2);
+    padding-block: 10px;
+  }
+  .caps td:first-child {
+    color: var(--ink);
+    font-weight: 600;
+    min-width: 170px;
+  }
+  .caps td:nth-child(2) {
+    min-width: 200px;
+  }
+  .caps td:nth-child(3) {
+    min-width: 240px;
+  }
+
+  .feature {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+    gap: clamp(20px, 4vw, 48px);
+    padding: clamp(20px, 3vw, 32px);
+    border-left: 3px solid var(--accent);
+    align-items: center;
+  }
+  .feature h3 {
+    font-size: clamp(1.3rem, 2.2vw, 1.6rem);
+  }
+  .feature h3 a {
+    color: var(--ink);
+    text-decoration-color: var(--rule-strong);
+  }
+  .feature-text p {
+    color: var(--ink-2);
+    font-size: 0.95rem;
+  }
+
+  .quotes {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+  .quote {
+    margin: 0;
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .quote blockquote {
+    margin: 0;
+    font-family: var(--serif);
+    font-size: 1.14rem;
+    line-height: 1.35;
+  }
+  .quote figcaption {
+    margin-top: auto;
+    display: grid;
+    gap: 6px;
+    font-size: 0.84rem;
+    color: var(--ink-2);
+  }
+  .use-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+    gap: clamp(20px, 3vw, 40px);
+    margin-top: clamp(28px, 4vw, 44px);
+    align-items: start;
+  }
+  .usage {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px 24px;
+    margin: 0;
+  }
+  .usage div {
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: flex-end;
+    gap: 6px;
+  }
+  .usage dd {
+    margin: 0;
+    font-size: clamp(1.5rem, 2.6vw, 2rem);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }
+  .usage dt {
+    font-size: 0.84rem;
+    color: var(--ink-2);
+    line-height: 1.45;
+  }
+  .adoption {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: clamp(20px, 3vw, 40px);
+    margin-top: clamp(28px, 4vw, 44px);
+  }
+  .adoption h3 {
+    font-family: var(--sans);
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0;
+  }
+  .adoption .plain {
+    font-size: 0.9rem;
+  }
+  .adoption a {
+    color: inherit;
+    text-decoration-color: var(--rule-strong);
+  }
+  .adoption a:hover {
+    color: var(--link);
+  }
+  .plain {
+    margin: 0;
+    padding-left: 1.1em;
+    display: grid;
+    gap: 8px;
+    color: var(--ink-2);
+  }
+  .two-col {
+    grid-template-columns: 1fr 1fr;
+    column-gap: clamp(28px, 5vw, 72px);
+  }
+
+  .oss {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .oss li {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.6fr) minmax(0, 1.1fr);
+    gap: 6px 28px;
+    padding-block: 12px;
+    border-top: 1px solid var(--rule);
+  }
+  .oss p {
+    margin: 0;
+  }
+  .oss-name {
+    font-family: var(--serif);
+    font-size: 1.1rem;
+    line-height: 1.3;
+  }
+  .oss-name a {
+    color: var(--ink);
+    text-decoration-color: var(--rule-strong);
+  }
+  .oss-what {
+    font-size: 0.9rem;
+    color: var(--ink-2);
+  }
+  .oss-role {
+    color: var(--ink);
+    font-weight: 500;
+  }
+  .oss-adoption {
+    font-size: 0.86rem;
+    color: var(--ink-2);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .collab {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: clamp(28px, 5vw, 72px);
+  }
+  .collab li {
+    padding-block: 12px;
+    border-top: 1px solid var(--rule);
+  }
+  .collab p {
+    margin: 0;
+  }
+  .place {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+  .people {
+    margin-top: 2px !important;
+    font-weight: 500;
+  }
+  .with {
+    font-weight: 400;
+    color: var(--ink-2);
+  }
+  .topics {
+    font-size: 0.86rem;
+    color: var(--ink-2);
+  }
+
+  @media (max-width: 860px) {
+    .pillars {
+      grid-template-columns: 1fr;
+    }
+    .pillar,
+    .pillar + .pillar {
+      padding: 20px 0;
+      border-left: 0;
+    }
+    .pillar + .pillar {
+      border-top: 1px solid var(--rule);
+    }
+    .band,
+    .usage {
+      grid-template-columns: 1fr 1fr;
+    }
+    .band {
+      row-gap: 16px;
+    }
+    .lead-grid,
+    .how,
+    .beyond,
+    .charts,
+    .feature,
+    .quotes,
+    .use-grid,
+    .adoption,
+    .collab,
+    .two-col {
+      grid-template-columns: 1fr;
+    }
+    .oss li {
+      grid-template-columns: 1fr;
+    }
+  }
+  @media (max-width: 640px) {
+    .hero-grid {
+      grid-template-columns: 1fr;
+    }
+    .hero :global(.photo) {
+      width: 104px;
+      order: -1;
+      border-radius: 12px;
+      margin-top: 0;
+    }
+  }
+</style>

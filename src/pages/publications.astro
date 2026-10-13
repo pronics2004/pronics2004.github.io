@@ -1,0 +1,129 @@
+---
+import Base from '../layouts/Base.astro';
+import { publications } from '../data/publications.js';
+import { links, scholar } from '../data/site.js';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const years = [...new Set(publications.map((p) => p.year))].sort((a, b) => b - a);
+const byYear = Object.fromEntries(years.map((y) => [y, publications.filter((p) => p.year === y)]));
+const me = (authors) => authors.replace('P. Sattigeri', '<strong>P. Sattigeri</strong>');
+const venueOf = (p) => (p.preprint ? 'arXiv' : p.venue) + (p.track ? `, ${p.track}` : '');
+---
+
+<Base title="Publications · Prasanna Sattigeri" description="Selected publications of Prasanna Sattigeri, by year." current="publications" width="narrow">
+  <section class="top">
+    <div class="wrap">
+      <p class="eyebrow"><a href={`${base}/`}>Home</a> / Publications</p>
+      <h1>Publications</h1>
+      <p class="lede">
+        {publications.length} selected papers. The complete list is on <a href={links.scholar}>Google Scholar</a>{' '}
+        ({scholar.citations.toLocaleString('en-US')} citations, h-index {scholar.hIndex}, {scholar.asOf}).
+      </p>
+    </div>
+  </section>
+
+  <section class="list">
+    <div class="wrap">
+      {
+        years.map((y) => (
+          <div class="year" id={`y${y}`}>
+            <h2>{y}</h2>
+            <ol>
+              {byYear[y].map((p) => (
+                <li>
+                  <p class="title">{p.url ? <a href={p.url}>{p.title}</a> : p.title}</p>
+                  <p class="authors" set:html={me(p.authors)} />
+                  <p class="meta">
+                    <span class="venue">{venueOf(p)}</span>
+                    {p.note && <span class="note">{p.note}</span>}
+                  </p>
+                  {p.summary && <p class="summary">{p.summary}</p>}
+                </li>
+              ))}
+            </ol>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+</Base>
+
+<style>
+  .top {
+    padding-block: clamp(40px, 6vw, 72px) 8px;
+  }
+  .top .eyebrow a {
+    color: inherit;
+  }
+  .top h1 {
+    margin-bottom: 18px;
+  }
+  .list {
+    padding-block: 24px clamp(56px, 8vw, 96px);
+  }
+  .year {
+    display: grid;
+    grid-template-columns: 72px 1fr;
+    gap: 24px;
+    padding-block: 28px;
+    border-top: 1px solid var(--rule);
+  }
+  .year h2 {
+    font-size: 1.2rem;
+    color: var(--ink-3);
+    font-family: var(--sans);
+    font-weight: 500;
+    padding-top: 2px;
+  }
+  ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 22px;
+  }
+  li p {
+    margin: 0;
+  }
+  .title {
+    font-size: 1.02rem;
+    font-weight: 500;
+    line-height: 1.4;
+  }
+  .title a {
+    color: var(--ink);
+    text-decoration-color: var(--rule-strong);
+  }
+  .title a:hover {
+    color: var(--link);
+  }
+  .authors {
+    margin-top: 3px;
+    font-size: 0.86rem;
+    color: var(--ink-2);
+  }
+  .authors :global(strong) {
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .meta {
+    margin-top: 3px;
+    font-size: 0.82rem;
+    color: var(--ink-3);
+  }
+  .note::before {
+    content: ' · ';
+  }
+  .summary {
+    margin-top: 6px;
+    font-size: 0.9rem;
+    color: var(--ink-2);
+    max-width: 66ch;
+  }
+  @media (max-width: 560px) {
+    .year {
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+  }
+</style>

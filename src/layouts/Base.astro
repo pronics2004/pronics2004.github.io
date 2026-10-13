@@ -2,14 +2,13 @@
 import '../styles/global.css';
 import { profile, links } from '../data/site.js';
 
-const { title, description, current = '' } = Astro.props;
+const { title, description, current = '', width = 'wide' } = Astro.props;
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const nav = [
-  { href: `${base}/#impact`, label: 'Impact' },
-  { href: `${base}/#guardian`, label: 'Granite Guardian', short: 'Guardian' },
-  { href: `${base}/#post-training`, label: 'Post-training' },
-  { href: `${base}/#generative`, label: 'Generative modeling', short: 'Generative' },
-  { href: `${base}/#adoption`, label: 'Adoption' },
+  { href: `${base}/`, label: 'About', id: 'home' },
+  { href: `${base}/research/`, label: 'Research', id: 'research' },
+  { href: `${base}/granite-guardian/`, label: 'Granite Guardian', short: 'Guardian', id: 'guardian' },
+  { href: `${base}/publications/`, label: 'Publications', short: 'Papers', id: 'publications' },
   { href: `${base}/cv/`, label: 'CV', id: 'cv' },
 ];
 ---
@@ -52,7 +51,7 @@ const nav = [
       </div>
     </header>
 
-    <main id="main">
+    <main id="main" class={width}>
       <slot />
     </main>
 

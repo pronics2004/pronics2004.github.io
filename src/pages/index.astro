@@ -1,466 +1,162 @@
 ---
 import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
-import Dumbbell from '../components/Dumbbell.astro';
-import AgentLoop from '../components/AgentLoop.astro';
-import ResearchThreads from '../components/ResearchThreads.astro';
-import Timeline from '../components/Timeline.astro';
-import Pipeline from '../components/Pipeline.astro';
-import Verdict from '../components/Verdict.astro';
-import Axes from '../components/Axes.astro';
-import Bars from '../components/Bars.astro';
-import Strip from '../components/Strip.astro';
 import photo from '../assets/profile.png';
-import aaChart from '../assets/aa-average-f1.png';
-import { profile, links, scholar, models, benchmark, pitch, awards } from '../data/site.js';
-import { openSource, adoptedElsewhere, collaborators, quotes, usage, adoption } from '../data/research.js';
+import { profile, links, scholar, models, benchmark, guardbench, awards } from '../data/site.js';
+import { publications } from '../data/publications.js';
+import { collaborators } from '../data/research.js';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const pub = Object.fromEntries(publications.filter((p) => p.id).map((p) => [p.id, p]));
 
-const pillars = [
+const ext = {
+  watsonxAi: 'https://www.ibm.com/docs/en/watsonx/w-and-w/2.2.0?topic=prompts-ai-guardrails-filter-content',
+  watsonxGov: 'https://www.ibm.com/docs/SSLSRPV_2.2.x/fixlist/watsonxgov-fixlist.html',
+  askRedHat: 'https://access.redhat.com/ai/system-card/ask-red-hat',
+  ollama: 'https://ollama.com/library/granite3-guardian',
+  aggrefact: 'https://llm-aggrefact.github.io/',
+  aif360: 'https://github.com/Trusted-AI/AIF360',
+  aix360: 'https://github.com/Trusted-AI/AIX360',
+  uq360: 'https://github.com/IBM/UQ360',
+  rpi: 'https://www.rpi.edu/',
+};
+
+// What to show under "Selected work": released models first, then papers, then toolkits.
+const selected = [
   {
-    kicker: 'Post-training · judge model',
-    name: 'Granite Guardian',
-    href: '#guardian',
-    body: 'A judge model. Give it a conversation and a criterion; it answers yes or no, with a probability.',
-    facts: [
-      ['Third of 39', 'on the LLM-AggreFact fact-checking leaderboard, ahead of GPT-4o'],
-      ['70.29', 'JETTS best-of-N selection, ahead of reward models up to 70B'],
+    title: 'Granite Guardian',
+    what: 'An open judge model. Give it a conversation and a criterion, built in or written by you; it answers yes or no, with a probability, in 59 ms.',
+    meta: 'Model, five releases since 2024 · project and training lead',
+    links: [
+      [`${base}/granite-guardian/`, 'case study'],
+      [models.guardian.hf, 'model card'],
+      [models.guardian.paper, 'NAACL 2025'],
+      [models.guardian.github, 'code'],
     ],
   },
   {
-    kicker: 'Post-training · capabilities and agents',
-    name: 'Modular post-training, agent memory, guardrails',
-    href: '#post-training',
-    body: 'Capabilities added to Granite models for reasoning, safety and agentic workloads, each trained and measured on its own. Plus research on agent memory, pre-execution guardrails and abstention.',
-    facts: [
-      ['0.569 → 0.855', 'IFEval balanced accuracy, prompted base model vs post-trained'],
-      ['5 papers in 2026', 'COLM, two at ICLR and two at ACL'],
+    title: 'Modular post-training for Granite',
+    what: 'Seven capabilities trained into Granite 4.1 one at a time: requirement checks, calibrated uncertainty, context attribution, policy compliance, factuality detection and correction. IFEval balanced accuracy 0.569 to 0.855 on 8B.',
+    meta: 'Guardian and Core capability libraries, 2026 · lead',
+    links: [
+      [`${base}/research/#post-training`, 'how it works'],
+      [models.guardianLib.hf, 'Guardian library'],
+      [models.coreLib.hf, 'Core library'],
     ],
   },
+  { ...pub['decocted'], links: [[pub['decocted'].url, 'paper']] },
+  { ...pub['agentic-guardrail'], links: [[pub['agentic-guardrail'].url, 'paper']] },
+  { ...pub['trace-inversion'], links: [[pub['trace-inversion'].url, 'paper']] },
+  { ...pub['thermometer'], links: [[pub['thermometer'].url, 'paper']] },
+  { ...pub['dip-vae'], links: [[pub['dip-vae'].url, 'paper'], ['https://github.com/google-research/disentanglement_lib', 'in disentanglement_lib']] },
   {
-    kicker: 'Generative modeling',
-    name: 'From disentangled VAEs to data engines',
-    href: '#generative',
-    body: 'Disentangled VAEs, GANs for semi-supervised and fair data, and now the synthetic data that trains judges.',
-    facts: [
-      ['DIP-VAE', 'ICLR 2018, cited 753 times, in disentanglement_lib and PyTorch-VAE'],
+    title: 'AI Fairness 360, AI Explainability 360, UQ360',
+    what: 'Open-source toolkits for fairness, explanation and uncertainty. AIF360 is a Linux Foundation project; its paper has 2,937 citations.',
+    meta: 'Toolkits, 2018 to 2021 · core contributor',
+    links: [
+      [ext.aif360, 'AIF360'],
+      [ext.aix360, 'AIX360'],
+      [ext.uq360, 'UQ360'],
     ],
   },
-];
+].map((s) => ({
+  title: s.title,
+  what: s.what ?? s.summary,
+  meta: s.meta ?? `${s.venue} ${s.year}${s.note ? ' · ' + s.note.toLowerCase() : ''}`,
+  links: s.links,
+}));
 
-const leading = [
-  ['5 releases', 'of Granite Guardian since October 2024'],
-  ['2 awards', 'IBM Research Outstanding Accomplishments, 2024 and 2025'],
-  ['MIT and RPI', 'joint research projects as principal investigator'],
+const recognition = [
+  [benchmark.url, 'Artificial Analysis guardrail benchmark, June 2026', 'Granite Guardian 4.1 8B fifth of 20 by F1, first among models that take their policy at runtime.'],
+  [ext.aggrefact, 'LLM-AggreFact leaderboard', 'Granite Guardian 3.3 8B third of 39, ahead of GPT-4o, Mistral Large 2 and Llama 3.1 405B.'],
+  [guardbench.url, 'GuardBench, EC Joint Research Centre, April 2025', 'Six of the top ten places across 40 datasets.'],
+  [`${base}/research/#impact`, 'IBM Research awards', 'Outstanding Accomplishment in 2024 and 2025; Technical Achievement Awards from 2019 to 2025.'],
 ];
-
-const guardianFacts = [
-  { head: 'Harm, out of distribution', value: 'Fifth of 20', body: 'Artificial Analysis, June 2026. F1 0.859, 59 ms per check, first among models that take their policy at runtime.' },
-  { head: 'Fact-checking', value: 'Third of 39', body: 'LLM-AggreFact leaderboard, Guardian 3.3 at 8B. Ahead of GPT-4o, Mistral Large 2 and Llama 3.1 405B.' },
-  { head: 'Reward model', value: '70.29', body: 'JETTS best-of-N selection. Ahead of every reward model tested, up to 70B.' },
-];
-
-const capabilities = [
-  ['Judging against a criterion', 'yes or no, with a risk score', 'human-labeled and synthetic data for safety, RAG and tool calls'],
-  ['Policy compliance', 'compliant, non-compliant or ambiguous', 'human-written policies across about 40 domains'],
-  ['Factuality detection', 'yes if any claim is unsupported by the context', '17,522 ELI5 instances, half with injected errors'],
-  ['Factuality correction', 'a corrected response, or none', 'the same corpus, supervised by FactCorrector (ACL 2026)'],
-  ['Requirement checking', 'yes or no, with P(yes)', 'multi-constraint prompts with programmatic labels'],
-  ['Calibrated uncertainty', 'a confidence that is right about X% of the time at X%', '240K answers per base model, labeled by a Thermometer calibrator'],
-  ['Context attribution', 'the context sentences behind each response sentence, ranked', '4,101 conversation rounds labeled with leave-one-out MExGen'],
-];
-
-const requirementRows = [
-  { label: 'Granite 4.1 3B', before: 0.5118, after: 0.8425 },
-  { label: 'Granite 4.1 8B', before: 0.5689, after: 0.8554 },
-  { label: 'Granite 4.1 30B', before: 0.6237, after: 0.8492 },
-];
-const uncertaintyRows = [
-  { label: 'Granite 4.0 micro', before: 0.6748, after: 0.6903 },
-  { label: 'Granite 4.1 3B', before: 0.6291, after: 0.7713 },
-  { label: 'Granite 4.1 8B', before: 0.6439, after: 0.7778 },
-  { label: 'Granite 4.1 30B', before: 0.6507, after: 0.8017 },
-];
-const halfTicks = [0.5, 0.6, 0.7, 0.8, 0.9];
 ---
 
 <Base
-  title="Prasanna Sattigeri · Post-training and generative modeling"
+  title="Prasanna Sattigeri"
   description="Prasanna Sattigeri leads post-training for agent reliability at IBM Research: Granite Guardian, modular post-training for Granite models, and research in agents, calibration and generative modeling."
+  current="home"
+  width="narrow"
 >
-  <section class="hero">
-    <div class="wrap hero-grid">
-      <div>
-        <p class="eyebrow">{profile.title} · {profile.org} · {profile.lab}</p>
-        <h1>Post-trained models that make agent workflows reliable.</h1>
-        <p class="lede">{pitch[0]}</p>
-        <p class="lede">
-          {pitch[1]} {scholar.citations.toLocaleString('en-US')} citations, h-index {scholar.hIndex} (Google Scholar,{' '}
-          {scholar.asOf}).
-        </p>
-        <div class="actions">
-          <a class="btn primary" href={`${base}/granite-guardian/`}>Granite Guardian case study</a>
-          <a class="btn" href="#post-training">Post-training</a>
-          <a class="btn" href="#generative">Generative modeling</a>
-          <a class="btn" href={`${base}/cv/`}>CV</a>
-        </div>
-      </div>
-      <Image class="photo" src={photo} alt="Portrait of Prasanna Sattigeri" width={440} height={440} loading="eager" />
-    </div>
-
+  <section class="intro">
     <div class="wrap">
-      <ul class="pillars">
-        {
-          pillars.map((p) => (
-            <li class="pillar">
-              <p class="kicker">{p.kicker}</p>
-              <h2>
-                <a href={p.href}>{p.name}</a>
-              </h2>
-              <p class="pillar-body">{p.body}</p>
-              <dl>
-                {p.facts.map(([value, label]) => (
-                  <div>
-                    <dt>{label}</dt>
-                    <dd>{value}</dd>
-                  </div>
-                ))}
-              </dl>
-            </li>
-          ))
-        }
-      </ul>
-      <dl class="band" aria-label="At a glance">
-        {
-          leading.map(([value, label]) => (
-            <div>
-              <dt>{label}</dt>
-              <dd>{value}</dd>
-            </div>
-          ))
-        }
-      </dl>
-    </div>
-  </section>
-
-  <section class="section" id="impact">
-    <div class="wrap">
-      <div class="section-head">
-        <p class="eyebrow">Impact</p>
-        <h2>Team, releases and recognition</h2>
-        <p class="lede">
-          I lead the Granite Guardian team, set its direction and own its releases, from data to open weights. Five
-          versions in eighteen months, each adding something the last one could not do.
-        </p>
-      </div>
-      <Timeline />
-      <div class="lead-grid">
+      <div class="who">
+        <Image class="photo" src={photo} alt="Portrait of Prasanna Sattigeri" width={320} height={320} loading="eager" />
         <div>
-          <h3>Recognition</h3>
-          <ol class="yr-list">
-            {
-              awards.map(([year, award, forWhat]) => (
-                <li>
-                  <span>{year}</span>
-                  <span>
-                    <strong>{award}.</strong> {forWhat}
-                  </span>
-                </li>
-              ))
-            }
-          </ol>
-        </div>
-        <div>
-          <h3>Joint projects</h3>
-          <p>
-            Principal investigator on two MIT-IBM Watson AI Lab projects, trustworthy learning with limited data with
-            Gregory Wornell and human-centric AI for shared decisions with David Sontag, and on joint work with RPI on
-            causal inference and agent safety with Ali Tajer and Mohammad Mohammadi Amiri. The MIT projects produced
-            Thermometer, the EDL paper, the COLM paper, and the learning-to-defer and onboarding papers.
+          <h1>{profile.name}</h1>
+          <p class="role">
+            {profile.title}, <a href={links.ibm}>{profile.org}</a> · <a href={links.mitibm}>{profile.lab}</a>
           </p>
-          <h3>Mentoring</h3>
-          <p>
-            Thesis committees for Joshua Lee and Maohao Shen at MIT and Burak Varıcı at RPI. Interns most years for a
-            decade; two of the 2026 papers below started as internships.
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="section" id="guardian">
-    <div class="wrap">
-      <div class="section-head">
-        <p class="eyebrow">Judge model</p>
-        <h2>Granite Guardian</h2>
-        <p class="lede">
-          One model, one call, one answer. The conversation goes in with a criterion appended; a verdict comes out. The
-          criterion can be a built-in risk or a sentence you wrote a minute ago. I lead the project and its training.
-        </p>
-      </div>
-
-      <Verdict />
-
-      <div class="how">
-        <pre class="code" aria-label="Guardian block format"><code>{`<guardian><no-think>As a judge agent, assess whether the
-provided text meets the given judging criteria ...
-
-### Criteria: The response contains no more than
-3 sentences.
-
-### Scoring Schema: If the last assistant's text meets
-the criteria, return 'yes'; otherwise, return 'no'.
-
-→ <score>no</score>`}</code></pre>
-        <div>
-          <h3>What the training is</h3>
-          <p>
-            A fine-tune of Granite 4.1 8B on human-annotated conversations and synthetic data from internal red-teaming.
-            Prompting the base model as a judge gets 0.569 balanced accuracy on IFEval multi-constraint checks; the
-            trained model gets 0.844. The 4.1 release added arbitrary criteria and a thinking mode. Safety and
-            groundedness held level while it learned that; out-of-distribution F1 slipped from 0.81 to 0.79.
+          <p class="links">
+            <a href={links.scholar}>Google Scholar</a>
+            <a href={links.github}>GitHub</a>
+            <a href={links.linkedin}>LinkedIn</a>
+            <a href={links.x}>X</a>
+            <a href={`${base}/cv/`}>CV</a>
           </p>
         </div>
       </div>
 
-      <div class="beyond">
-        {
-          guardianFacts.map((b) => (
-            <div class="card fact">
-              <p class="fact-head">{b.head}</p>
-              <p class="fact-value">{b.value}</p>
-              <p class="fact-body">{b.body}</p>
-            </div>
-          ))
-        }
-      </div>
-
-      <figure class="shot">
-        <a href={benchmark.url}>
-          <Image
-            src={aaChart}
-            alt="Bar chart from Artificial Analysis of average F1 for 19 guardrail models. Granite Guardian 4.1 8B is the fifth bar at 85.9%."
-            widths={[720, 1200, 1990]}
-            sizes="(max-width: 1160px) 100vw, 1080px"
-          />
-        </a>
-        <figcaption>
-          Artificial Analysis, “Benchmarking guardrail models for safety, refusal, and latency”, June 2026. Screenshot
-          taken October 1, 2026; Granite Guardian 4.1 8B is the fifth bar.{' '}
-          <a href={`${base}/granite-guardian/`}>Case study</a> · <a href={models.guardian.hf}>Model card</a> ·{' '}
-          <a href={models.guardian.paper}>NAACL 2025 paper</a>
-        </figcaption>
-      </figure>
-    </div>
-  </section>
-
-  <section class="section" id="post-training">
-    <div class="wrap">
-      <div class="section-head">
-        <p class="eyebrow">Post-training</p>
-        <h2>Teaching a base model to check its own work</h2>
-        <p class="lede">
-          Post-training, as I use the word, is everything that happens to a pretrained model before it can be trusted:
-          judges, calibration, capabilities trained into the base model one at a time, and the memory and guardrails an
-          agent runs with. The recipe is the same each time.
-        </p>
-      </div>
-
-      <Pipeline />
-
-      <h3 class="sub-h">The gain over the same model, prompted</h3>
-      <div class="charts">
-        <Dumbbell
-          title="Requirement checking"
-          sub="IFEval multi-constraint, balanced accuracy. Chance is 0.5."
-          rows={requirementRows}
-          min={0.5}
-          max={0.9}
-          ticks={halfTicks}
-          beforeLabel="Base model, prompted"
-          afterLabel="Post-trained"
-          source="Held-out IFEval set. Source: Requirement Check model card."
-        />
-        <Dumbbell
-          title="Calibrated uncertainty"
-          sub="MMLU, AUROC for telling right answers from wrong. Chance is 0.5."
-          rows={uncertaintyRows}
-          min={0.5}
-          max={0.9}
-          ticks={halfTicks}
-          beforeLabel="Base model, sequence probability"
-          afterLabel="Post-trained"
-          source="14,042 MMLU questions, not used in training. Calibration error: 0.161 → 0.057 (micro), 0.288 → 0.099 (3B), 0.112 → 0.038 (8B), 0.092 → 0.100 (30B). Source: Uncertainty model card."
-        />
-      </div>
-
-      <h3 class="sub-h">Where each check runs</h3>
-      <AgentLoop />
-
-      <h3 class="sub-h">The seven capabilities</h3>
-      <div class="table-scroll">
-        <table class="caps">
-          <thead>
-            <tr>
-              <th>Capability</th>
-              <th>Returns</th>
-              <th>Trained on</th>
-            </tr>
-          </thead>
-          <tbody>
-            {
-              capabilities.map(([name, returns, trained]) => (
-                <tr>
-                  <td>{name}</td>
-                  <td>{returns}</td>
-                  <td>{trained}</td>
-                </tr>
-              ))
-            }
-          </tbody>
-        </table>
-      </div>
-      <p class="fine">
-        Released as the <a href={models.guardianLib.hf}>Guardian</a> and <a href={models.coreLib.hf}>Core</a> capability
-        libraries for granite-4.0-micro and granite-4.1 at 3B, 8B and 30B, so each capability can be added, swapped or
-        upgraded on its own. Two of the seven are papers from this page, distilled into one forward pass: Thermometer became calibrated
-        uncertainty, MExGen became context attribution.
+      <p>
+        I lead post-training for agent reliability at <a href={links.ibm}>IBM Research</a>. The team trains{' '}
+        <a href={`${base}/granite-guardian/`}>Granite Guardian</a>, an open judge model, and adds capabilities to Granite
+        models through <a href={`${base}/research/#post-training`}>modular post-training</a> for reasoning, safety and
+        agentic workloads: tool-call checks, groundedness, requirements, factuality, confidence. Granite Guardian 4.1
+        ranks fifth of 20 on the <a href={benchmark.url}>Artificial Analysis guardrail benchmark</a> at 59 ms per check.
+        The models run in <a href={ext.watsonxAi}>watsonx.ai</a>, <a href={ext.watsonxGov}>watsonx.governance</a> and
+        Red Hat’s <a href={ext.askRedHat}>Ask Red Hat</a> assistant, with 1.16M downloads on{' '}
+        <a href={models.guardian.hf}>Hugging Face</a> and 371K on <a href={ext.ollama}>Ollama</a>.
       </p>
-
-      <h3 class="sub-h">Featured · COLM 2026</h3>
-      <article class="card feature">
-        <div class="feature-text">
-          <h3>
-            <a href="https://arxiv.org/abs/2604.04373">Decocted Experience: context as a second axis for scaling agents</a>
-          </h3>
-          <p>
-            Test-time scaling means more compute: longer reasoning, more samples, more search. For agents much of that
-            is spent exploring paths that go nowhere. This paper asks what happens if you scale the input instead and
-            build the agent’s context from its own past runs.
-          </p>
-          <p>
-            Three results. Lessons distilled from experience beat raw experience and keep scaling as context grows.
-            Memory has a sweet spot; an intermediate size beats keeping everything. And context with higher information
-            gain about the output gives more efficient inference, which in practice means balancing relevance against
-            diversity. Validated on math, web shopping and software engineering agents, with Maohao Shen, Kaiwen Zha,
-            Zexue He and Gregory Wornell among others.
-          </p>
-        </div>
-        <Axes />
-      </article>
-
-      <h3 class="sub-h">The papers</h3>
-      <ResearchThreads only={['agents', 'uncertainty', 'attribution']} />
-    </div>
-  </section>
-
-  <section class="section" id="generative">
-    <div class="wrap">
-      <div class="section-head">
-        <p class="eyebrow">Generative modeling</p>
-        <h2>A decade of generative models</h2>
-        <p class="lede">
-          Before LLMs I worked on what a generative model learns and how to control it. The same questions now show up
-          as synthetic data: what to generate so that a judge learns the right thing.
-        </p>
-      </div>
-      <Strip />
-      <p class="fine">
-        DIP-VAE is one of the six methods in the ICML 2019 best paper by Locatello et al., which trained more than 12,000
-        disentanglement models. It is implemented in{' '}
-        {adoptedElsewhere.map((o, i) => (
-          <>
-            <a href={o.url}>{o.name}</a>
-            {i < adoptedElsewhere.length - 1 ? ' and ' : '.'}
-          </>
-        ))}
+      <p>
+        Deep expertise in generative modeling, starting with <a href={pub['dip-vae'].url}>VAEs</a> and{' '}
+        <a href={pub['ssl-gan'].url}>GANs</a> (ICLR 2018, NeurIPS 2017) and now diffusion models, LLMs and agentic
+        systems (<a href={pub['decocted'].url}>COLM 2026</a>, <a href={pub['agentic-guardrail'].url}>ICLR 2026</a>,{' '}
+        <a href={pub['trace-inversion'].url}>ACL 2026</a>), with calibration and uncertainty running through all of it
+        (<a href={pub['thermometer'].url}>ICML 2024</a>, <a href={pub['edl-mirage'].url}>NeurIPS 2024</a>). Principal
+        investigator on joint projects with <a href={links.mitibm}>MIT</a> and <a href={ext.rpi}>RPI</a>. Core
+        contributor to <a href={ext.aif360}>AI Fairness 360</a>, <a href={ext.aix360}>AI Explainability 360</a> and{' '}
+        <a href={ext.uq360}>UQ360</a>. <a href={links.scholar}>{scholar.citations.toLocaleString('en-US')} citations,
+        h-index {scholar.hIndex}</a> (Google Scholar, {scholar.asOf}).
       </p>
     </div>
   </section>
 
-  <section class="section" id="research">
+  <section class="block">
     <div class="wrap">
-      <div class="section-head">
-        <p class="eyebrow">Research</p>
-        <h2>Other threads</h2>
-        <p class="lede">
-          Full list on <a href={links.scholar}>Google Scholar</a> and in the <a href={`${base}/cv/`}>CV</a>.
-        </p>
-      </div>
-      <ResearchThreads only={['human-ai', 'foundations']} />
-    </div>
-  </section>
-
-  <section class="section" id="adoption">
-    <div class="wrap">
-      <div class="section-head">
-        <p class="eyebrow">Adoption</p>
-        <h2>Independent evaluation and adoption</h2>
-      </div>
-      <div class="quotes">
+      <h2>Selected work</h2>
+      <ol class="work">
         {
-          quotes.map((q) => (
-            <figure class="card quote">
-              <blockquote>“{q.quote}”</blockquote>
-              <figcaption>
-                <a href={q.url}>{q.who}</a>
-                <span>{q.context}</span>
-              </figcaption>
-            </figure>
-          ))
-        }
-      </div>
-      <div class="use-grid">
-        <dl class="usage">
-          {
-            usage.map((u) => (
-              <div>
-                <dt>{u.label}</dt>
-                <dd>{u.value}</dd>
-              </div>
-            ))
-          }
-        </dl>
-        <Bars />
-      </div>
-      <div class="adoption">
-        {
-          adoption.map((g) => (
-            <div>
-              <h3>{g.head}</h3>
-              <ul class="plain">
-                {g.items.map((i) => (
-                  <li>
-                    {i.url ? <a href={i.url}>{i.text}</a> : i.text}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))
-        }
-      </div>
-      <p class="fine">Citation counts from Google Scholar, {scholar.asOf}.</p>
-    </div>
-  </section>
-
-  <section class="section" id="open-source">
-    <div class="wrap">
-      <div class="section-head">
-        <p class="eyebrow">Open source</p>
-        <h2>Models and toolkits</h2>
-      </div>
-      <ul class="oss">
-        {
-          openSource.map((o) => (
+          selected.map((s) => (
             <li>
-              <p class="oss-name">
-                <a href={o.url}>{o.name}</a>
+              <p class="w-title">{s.title}</p>
+              <p class="w-what">{s.what}</p>
+              <p class="w-meta">
+                <span>{s.meta}</span>
+                {s.links.map(([href, label]) => (
+                  <a href={href}>{label}</a>
+                ))}
               </p>
-              <p class="oss-what">
-                {o.what} <span class="oss-role">{o.role}.</span>
-              </p>
-              <p class="oss-adoption">{o.adoption}</p>
+            </li>
+          ))
+        }
+      </ol>
+      <p class="more">
+        More on the <a href={`${base}/research/`}>research</a> page: post-training recipe and results, agent workflow
+        map, generative modeling, open source, adoption. All papers under <a href={`${base}/publications/`}>publications</a>.
+      </p>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="wrap">
+      <h2>Recognition</h2>
+      <ul class="plain">
+        {
+          recognition.map(([href, head, body]) => (
+            <li>
+              <a href={href}>{head}</a>. {body}
             </li>
           ))
         }
@@ -468,524 +164,133 @@ the criteria, return 'yes'; otherwise, return 'no'.
     </div>
   </section>
 
-  <section class="section" id="collaborations">
+  <section class="block">
     <div class="wrap">
-      <div class="section-head">
-        <p class="eyebrow">Collaborations</p>
-        <h2>Academic collaborations and service</h2>
-      </div>
-      <ul class="collab">
+      <h2>Academic collaborations</h2>
+      <ul class="plain">
         {
           collaborators.map((c) => (
             <li>
-              <p class="place">{c.place}</p>
-              <p class="people">
-                {c.people}
-                {c.with && <span class="with">; with {c.with}</span>}
-              </p>
-              <p class="topics">{c.topics}</p>
+              <strong>{c.place}</strong>: {c.people}; with {c.with}. {c.topics}.
             </li>
           ))
         }
       </ul>
-      <p class="fine">Affiliations as on the joint papers.</p>
-      <h3 class="sub-h">Service</h3>
-      <ul class="plain two-col">
-        <li>Associate Editor, Pattern Recognition</li>
-        <li>Area chair and senior PC: NeurIPS, ICML, ICLR, AAAI</li>
-        <li>IEEE Senior Member</li>
-        <li>Invited talks at the National Academy of Sciences, the MIT AI Conference and NAACL TrustNLP (2024)</li>
-      </ul>
+      <p class="fine">
+        Thesis committees for Joshua Lee and Maohao Shen at MIT and Burak Varıcı at RPI. Associate Editor, Pattern
+        Recognition; area chair at NeurIPS, ICML, ICLR and AAAI; IEEE Senior Member.
+      </p>
     </div>
   </section>
 </Base>
 
 <style>
-  .hero {
-    padding-block: clamp(48px, 7vw, 96px) clamp(40px, 6vw, 72px);
+  .intro {
+    padding-block: clamp(40px, 6vw, 72px) clamp(16px, 3vw, 28px);
   }
-  .hero-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(180px, 240px);
-    gap: clamp(24px, 5vw, 72px);
-    align-items: start;
+  .intro p {
+    font-size: 1.04rem;
+    line-height: 1.65;
   }
-  .hero :global(.photo) {
-    width: 100%;
+  .who {
+    display: flex;
+    align-items: center;
+    gap: clamp(20px, 3vw, 32px);
+    margin-bottom: clamp(24px, 4vw, 36px);
+  }
+  .intro :global(.photo) {
+    width: clamp(96px, 14vw, 132px);
     aspect-ratio: 1;
     object-fit: cover;
-    border-radius: 14px;
+    border-radius: 50%;
     border: 1px solid var(--rule);
-    margin-top: 34px;
+    flex-shrink: 0;
   }
-  .hero h1 {
-    max-width: 17ch;
-    margin-bottom: 24px;
+  .intro h1 {
+    font-size: clamp(2rem, 4.4vw, 2.7rem);
+    letter-spacing: -0.015em;
   }
-  .hero .lede {
-    max-width: 72ch;
-    font-size: 1.05rem;
-    color: var(--ink);
-  }
-  .actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-top: 24px;
-  }
-
-  .pillars {
-    list-style: none;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    margin: clamp(40px, 6vw, 72px) 0 0;
-    padding: 0;
-    border-top: 1px solid var(--rule-strong);
-  }
-  .pillar {
-    display: flex;
-    flex-direction: column;
-    padding: 22px 24px 0 0;
-  }
-  .pillar + .pillar {
-    padding-left: 24px;
-    border-left: 1px solid var(--rule);
-  }
-  .kicker {
-    margin: 0 0 8px;
-    font-family: var(--mono);
-    font-size: 0.72rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--ink-3);
-  }
-  .pillar h2 {
-    font-size: 1.5rem;
-  }
-  .pillar h2 a {
-    color: var(--ink);
-    text-decoration-color: var(--rule-strong);
-  }
-  .pillar-body {
-    margin: 10px 0 16px;
-    font-size: 0.92rem;
+  .role {
+    margin: 6px 0 0;
+    font-size: 0.95rem !important;
     color: var(--ink-2);
   }
-  .pillar dl {
-    margin: auto 0 0;
-    display: grid;
-    gap: 12px;
-  }
-  .pillar dl div {
-    display: flex;
-    flex-direction: column-reverse;
-    gap: 2px;
-  }
-  .pillar dd {
-    margin: 0;
-    font-size: 1.3rem;
-    font-weight: 600;
-    letter-spacing: -0.02em;
-    line-height: 1.2;
-  }
-  .pillar dt {
-    font-size: 0.82rem;
-    color: var(--ink-2);
-    line-height: 1.4;
-  }
-  .band {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    margin: clamp(28px, 4vw, 44px) 0 0;
-    padding: 18px 0 0;
-    border-top: 1px solid var(--rule);
-  }
-  .band div {
-    display: flex;
-    flex-direction: column-reverse;
-    justify-content: flex-end;
-    gap: 4px;
-    padding-right: 20px;
-  }
-  .band dd {
-    margin: 0;
-    font-size: 1.15rem;
-    font-weight: 600;
-  }
-  .band dt {
-    font-size: 0.82rem;
-    color: var(--ink-2);
-    line-height: 1.4;
-  }
-
-  h3 {
-    margin-bottom: 10px;
-  }
-  .sub-h {
-    margin: clamp(36px, 5vw, 56px) 0 18px;
-  }
-  .fine {
-    margin: 16px 0 0;
-    font-size: 0.84rem;
-    color: var(--ink-3);
-    max-width: 90ch;
-  }
-
-  .yr-list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-  .yr-list li {
-    display: grid;
-    grid-template-columns: 76px 1fr;
-    gap: 12px;
-    padding-block: 8px;
-    border-top: 1px solid var(--rule);
-    font-size: 0.92rem;
-    color: var(--ink-2);
-  }
-  .yr-list li > span:first-child {
-    font-family: var(--mono);
-    font-size: 0.78rem;
-    color: var(--ink-3);
-    padding-top: 2px;
-  }
-  .yr-list strong {
-    color: var(--ink);
-    font-weight: 600;
-  }
-  .lead-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: clamp(28px, 4vw, 56px) clamp(28px, 5vw, 72px);
-    margin-top: clamp(28px, 4vw, 44px);
-  }
-  .lead-grid p {
-    color: var(--ink-2);
-  }
-  .lead-grid h3 + p + h3 {
-    margin-top: 22px;
-  }
-
-  .how {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    gap: clamp(20px, 4vw, 56px);
-    margin-top: clamp(24px, 4vw, 40px);
-    align-items: start;
-  }
-  .how p {
-    color: var(--ink-2);
-  }
-  .code {
-    margin: 0;
-    padding: 18px 20px;
-    background: var(--surface);
-    border: 1px solid var(--rule);
-    border-radius: 10px;
-    overflow-x: auto;
-    font-family: var(--mono);
-    font-size: 0.78rem;
-    line-height: 1.6;
-    color: var(--ink-2);
-  }
-  .beyond {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 14px;
-    margin-top: clamp(24px, 4vw, 40px);
-  }
-  .fact {
-    padding: 18px;
-  }
-  .fact p {
-    margin: 0;
-  }
-  .fact-head {
-    font-family: var(--mono);
-    font-size: 0.72rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--ink-3);
-  }
-  .fact-value {
-    font-size: 1.9rem;
-    font-weight: 600;
-    letter-spacing: -0.02em;
-    line-height: 1.2;
-    margin: 6px 0 !important;
-  }
-  .fact-body {
-    font-size: 0.88rem;
-    color: var(--ink-2);
-  }
-  .shot {
-    margin: 18px 0 0;
-  }
-  .shot > a {
-    display: block;
-    padding: clamp(12px, 2.4vw, 24px);
-    background: #ffffff;
-    border: 1px solid var(--rule);
-    border-radius: 10px;
-  }
-  .shot figcaption {
-    margin-top: 10px;
-    font-size: 0.8rem;
-    color: var(--ink-3);
-  }
-
-  .charts {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 14px;
-    align-items: start;
-  }
-  .caps td {
-    font-size: 0.9rem;
-    color: var(--ink-2);
-    padding-block: 10px;
-  }
-  .caps td:first-child {
-    color: var(--ink);
-    font-weight: 600;
-    min-width: 170px;
-  }
-  .caps td:nth-child(2) {
-    min-width: 200px;
-  }
-  .caps td:nth-child(3) {
-    min-width: 240px;
-  }
-
-  .feature {
-    display: grid;
-    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
-    gap: clamp(20px, 4vw, 48px);
-    padding: clamp(20px, 3vw, 32px);
-    border-left: 3px solid var(--accent);
-    align-items: center;
-  }
-  .feature h3 {
-    font-size: clamp(1.3rem, 2.2vw, 1.6rem);
-  }
-  .feature h3 a {
-    color: var(--ink);
-    text-decoration-color: var(--rule-strong);
-  }
-  .feature-text p {
-    color: var(--ink-2);
-    font-size: 0.95rem;
-  }
-
-  .quotes {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 14px;
-  }
-  .quote {
-    margin: 0;
-    padding: 22px;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-  }
-  .quote blockquote {
-    margin: 0;
-    font-family: var(--serif);
-    font-size: 1.14rem;
-    line-height: 1.35;
-  }
-  .quote figcaption {
-    margin-top: auto;
-    display: grid;
-    gap: 6px;
-    font-size: 0.84rem;
-    color: var(--ink-2);
-  }
-  .use-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
-    gap: clamp(20px, 3vw, 40px);
-    margin-top: clamp(28px, 4vw, 44px);
-    align-items: start;
-  }
-  .usage {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px 24px;
-    margin: 0;
-  }
-  .usage div {
-    display: flex;
-    flex-direction: column-reverse;
-    justify-content: flex-end;
-    gap: 6px;
-  }
-  .usage dd {
-    margin: 0;
-    font-size: clamp(1.5rem, 2.6vw, 2rem);
-    font-weight: 600;
-    letter-spacing: -0.02em;
-    line-height: 1.1;
-  }
-  .usage dt {
-    font-size: 0.84rem;
-    color: var(--ink-2);
-    line-height: 1.45;
-  }
-  .adoption {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: clamp(20px, 3vw, 40px);
-    margin-top: clamp(28px, 4vw, 44px);
-  }
-  .adoption h3 {
-    font-family: var(--sans);
-    font-size: 1rem;
-    font-weight: 600;
-    letter-spacing: 0;
-  }
-  .adoption .plain {
-    font-size: 0.9rem;
-  }
-  .adoption a {
+  .role a {
     color: inherit;
     text-decoration-color: var(--rule-strong);
   }
-  .adoption a:hover {
+  .links {
+    margin: 8px 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 16px;
+    font-size: 0.9rem !important;
+  }
+
+  .block {
+    padding-block: clamp(20px, 3vw, 32px) clamp(24px, 3vw, 36px);
+  }
+  .block h2 {
+    font-size: 1.35rem;
+    padding-bottom: 10px;
+    margin-bottom: 18px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .work {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 20px;
+  }
+  .work p {
+    margin: 0;
+  }
+  .w-title {
+    font-weight: 600;
+    line-height: 1.4;
+  }
+  .w-what {
+    margin-top: 2px !important;
+    color: var(--ink-2);
+    font-size: 0.95rem;
+  }
+  .w-meta {
+    margin-top: 4px !important;
+    font-size: 0.84rem;
+    color: var(--ink-3);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px 12px;
+  }
+  .w-meta a {
     color: var(--link);
+  }
+  .more {
+    margin: 24px 0 0;
+    font-size: 0.92rem;
+    color: var(--ink-2);
   }
   .plain {
     margin: 0;
     padding-left: 1.1em;
     display: grid;
-    gap: 8px;
+    gap: 10px;
     color: var(--ink-2);
+    font-size: 0.95rem;
   }
-  .two-col {
-    grid-template-columns: 1fr 1fr;
-    column-gap: clamp(28px, 5vw, 72px);
-  }
-
-  .oss {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-  .oss li {
-    display: grid;
-    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.6fr) minmax(0, 1.1fr);
-    gap: 6px 28px;
-    padding-block: 12px;
-    border-top: 1px solid var(--rule);
-  }
-  .oss p {
-    margin: 0;
-  }
-  .oss-name {
-    font-family: var(--serif);
-    font-size: 1.1rem;
-    line-height: 1.3;
-  }
-  .oss-name a {
+  .plain strong {
     color: var(--ink);
-    text-decoration-color: var(--rule-strong);
+    font-weight: 600;
   }
-  .oss-what {
-    font-size: 0.9rem;
-    color: var(--ink-2);
-  }
-  .oss-role {
-    color: var(--ink);
-    font-weight: 500;
-  }
-  .oss-adoption {
-    font-size: 0.86rem;
-    color: var(--ink-2);
-    font-variant-numeric: tabular-nums;
-  }
-
-  .collab {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    column-gap: clamp(28px, 5vw, 72px);
-  }
-  .collab li {
-    padding-block: 12px;
-    border-top: 1px solid var(--rule);
-  }
-  .collab p {
-    margin: 0;
-  }
-  .place {
-    font-family: var(--mono);
-    font-size: 0.72rem;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
+  .fine {
+    margin: 16px 0 0;
+    font-size: 0.88rem;
     color: var(--ink-3);
   }
-  .people {
-    margin-top: 2px !important;
-    font-weight: 500;
-  }
-  .with {
-    font-weight: 400;
-    color: var(--ink-2);
-  }
-  .topics {
-    font-size: 0.86rem;
-    color: var(--ink-2);
-  }
-
-  @media (max-width: 860px) {
-    .pillars {
-      grid-template-columns: 1fr;
-    }
-    .pillar,
-    .pillar + .pillar {
-      padding: 20px 0;
-      border-left: 0;
-    }
-    .pillar + .pillar {
-      border-top: 1px solid var(--rule);
-    }
-    .band,
-    .usage {
-      grid-template-columns: 1fr 1fr;
-    }
-    .band {
-      row-gap: 16px;
-    }
-    .lead-grid,
-    .how,
-    .beyond,
-    .charts,
-    .feature,
-    .quotes,
-    .use-grid,
-    .adoption,
-    .collab,
-    .two-col {
-      grid-template-columns: 1fr;
-    }
-    .oss li {
-      grid-template-columns: 1fr;
-    }
-  }
-  @media (max-width: 640px) {
-    .hero-grid {
-      grid-template-columns: 1fr;
-    }
-    .hero :global(.photo) {
-      width: 104px;
-      order: -1;
-      border-radius: 12px;
-      margin-top: 0;
+  @media (max-width: 520px) {
+    .who {
+      align-items: flex-start;
     }
   }
 </style>
