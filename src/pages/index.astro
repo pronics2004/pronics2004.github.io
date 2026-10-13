@@ -100,11 +100,10 @@ const recognition = [
       </div>
 
       <p>
-        I lead post-training for agent reliability at <a href={links.ibm}>IBM Research</a> and designed{' '}
-        <a href={`${base}/granite-guardian/`}>Granite Guardian</a>, an open judge model. It is a judge rather than a
-        classifier: it answers with a yes/no token and its probability, takes criteria written at runtime instead of a
-        fixed taxonomy, and can reason before it answers, a trace people also use to refine their criteria and debug
-        verdicts. The team also adds capabilities to Granite models through{' '}
+        I lead post-training for agent reliability at <a href={links.ibm}>IBM Research</a> and the team behind{' '}
+        <a href={`${base}/granite-guardian/`}>Granite Guardian</a>, an open judge model. I set its direction and own its
+        releases, from data to open weights: five versions in eighteen months, each with new capabilities and
+        improvements. The team also adds capabilities to Granite models through{' '}
         <a href={`${base}/research/#post-training`}>modular post-training</a> for reasoning, safety and agentic
         workloads: tool-call checks, groundedness, requirements, factuality, confidence. Granite Guardian 4.1 ranks
         fifth of 20 on the <a href={benchmark.url}>Artificial Analysis guardrail benchmark</a> at 59 ms per check. The
