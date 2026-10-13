@@ -61,7 +61,7 @@ export const guardbench = {
 
 // The summary pitch on the home page. The CV carries a shorter version.
 export const pitch = [
-  'I lead post-training for agent reliability at IBM Research: Granite Guardian, an open judge model, and Granite Switch, a Granite model composed from adapter functions that check its own work: tool calls, groundedness, requirements, factuality, confidence. The models run in watsonx.ai, watsonx.governance and Red Hat’s Ask Red Hat assistant. My research is in generative modeling and trustworthy machine learning: disentangled representation learning and GANs, now synthetic data for training judges; calibration and uncertainty; causality and fairness; and agents that learn from experience and stay within policy. I am a principal investigator on joint projects with MIT and RPI in these areas.',
+  'I lead post-training for agent reliability at IBM Research: Granite Guardian, an open judge model, and Granite Switch, a Granite model composed from adapter functions that check its own work: tool calls, groundedness, requirements, factuality, confidence. The models run in watsonx.ai, watsonx.governance and Red Hat’s Ask Red Hat assistant. I have deep expertise in generative modeling, starting with VAEs and GANs and now diffusion models, LLMs and agentic systems, with calibration and uncertainty running through all of it. I am a principal investigator on joint projects with MIT and RPI in these areas.',
 ];
 
 // Where the Granite Guardian team is based.
