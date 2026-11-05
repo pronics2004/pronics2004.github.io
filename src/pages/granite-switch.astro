@@ -5,12 +5,12 @@ import Dumbbell from '../components/Dumbbell.astro';
 import AgentLoop from '../components/AgentLoop.astro';
 import evalsShot from '../assets/space-granitelib-evals.png';
 import speechShot from '../assets/space-speech-to-decisions.png';
-import { models } from '../data/site.js';
+import { models, switchUrls } from '../data/site.js';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const evals = 'https://huggingface.co/spaces/ibm-granite/granitelib-evals';
 const speech = 'https://huggingface.co/spaces/ibm-granite/speech-to-decisions';
-const blog = 'https://huggingface.co/blog/ibm-granite/granite-switch-4-1';
+const blog = switchUrls.blog;
 const collection = 'https://huggingface.co/collections/ibm-granite/granite-libraries';
 
 const stats = [
@@ -45,23 +45,23 @@ const halfTicks = [0.5, 0.6, 0.7, 0.8, 0.9];
 ---
 
 <Base
-  title="Granite libraries · Prasanna Sattigeri"
-  description="Modular post-training for Granite models: capabilities for reasoning, safety and agentic workloads, released as open adapters, with results against generalist decision models."
-  current="libraries"
+  title="Granite Switch · Prasanna Sattigeri"
+  description="Granite Switch and the Granite libraries: modular post-training that adds capabilities for reasoning, safety and agentic workloads to Granite models, composed into one model."
+  current="switch"
 >
   <section class="top">
     <div class="wrap">
-      <p class="eyebrow"><a href={`${base}/`}>Home</a> / Granite libraries</p>
-      <h1>Granite libraries</h1>
+      <p class="eyebrow"><a href={`${base}/`}>Home</a> / Granite Switch</p>
+      <h1>Granite Switch</h1>
       <p class="lede">
-        Modular post-training for Granite 4.1: capabilities for reasoning, safety and agentic workloads, each trained on
-        its own and released as an open adapter. I lead the Guardian and Core libraries. Specialized adapters beat
-        generalist decision models on most of the benchmarks they share.
+        Modular post-training for Granite 4.1. Each capability for reasoning, safety and agentic workloads is trained on
+        its own as an adapter in the Granite libraries, and Granite Switch composes them into one model that serves
+        chat, decisions and speech from a single endpoint. I lead the Guardian and Core libraries.
       </p>
       <p class="actions">
         <a class="btn primary" href={speech}>Try the speech demo</a>
-        <a class="btn" href={models.guardianLib.hf}>Guardian library</a>
-        <a class="btn" href={models.coreLib.hf}>Core library</a>
+        <a class="btn" href={switchUrls.repo}>Granite Switch on GitHub</a>
+        <a class="btn" href={switchUrls.collection}>Switch models</a>
         <a class="btn" href={blog}>Release blog, Oct 2026</a>
       </p>
       <dl class="stats">
@@ -76,6 +76,42 @@ const halfTicks = [0.5, 0.6, 0.7, 0.8, 0.9];
           ))
         }
       </dl>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Composition</p>
+        <h2>From libraries to one model</h2>
+      </div>
+      <figure class="compose" aria-label="Adapters from three Granite libraries are composed with the base model and a speech encoder into one Granite Switch model with one endpoint.">
+        <div class="col">
+          <p class="k">Granite libraries</p>
+          <a class="lib card" href={models.guardianLib.hf}><strong>Guardian</strong><span>safety, policy, factuality, tool calls</span><em>I lead</em></a>
+          <a class="lib card" href={models.coreLib.hf}><strong>Core</strong><span>requirements, uncertainty, attribution</span><em>I lead</em></a>
+          <a class="lib card" href={collection}><strong>RAG</strong><span>answerability, hallucination, query clarification</span></a>
+        </div>
+        <span class="arrow" aria-hidden="true">→</span>
+        <div class="col">
+          <p class="k">Granite Switch 4.1, 8B or 30B</p>
+          <a class="switch card" href={switchUrls.repo}>
+            <span class="row">Granite 4.1 base model</span>
+            <span class="row acc">Activated LoRA adapters, chosen per request</span>
+            <span class="row">Speech encoder</span>
+            <small>About the same GPU memory as the base model alone. Adapters reuse the base model’s KV cache.</small>
+          </a>
+        </div>
+        <span class="arrow" aria-hidden="true">→</span>
+        <div class="col">
+          <p class="k">One endpoint</p>
+          <div class="out card"><span>Chat</span><span>Decisions</span><span>Speech to text</span></div>
+        </div>
+      </figure>
+      <p class="more">
+        The 4.1 release ships with a set of adapters built in; anyone can <a href={switchUrls.repo}>compose their own</a>{' '}
+        Switch model from the library adapters.
+      </p>
     </div>
   </section>
 
@@ -286,7 +322,86 @@ const halfTicks = [0.5, 0.6, 0.7, 0.8, 0.9];
     margin: clamp(24px, 4vw, 40px) 0 0;
     color: var(--ink-2);
   }
+  .compose {
+    margin: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1.1fr) auto minmax(0, 0.7fr);
+    gap: 16px;
+    align-items: center;
+  }
+  .col {
+    display: grid;
+    gap: 10px;
+  }
+  .k {
+    margin: 0 0 2px;
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+  .compose a.card {
+    color: inherit;
+    text-decoration: none;
+  }
+  .compose a.card:hover {
+    border-color: var(--ink-3);
+  }
+  .lib {
+    display: grid;
+    gap: 2px;
+    padding: 12px 14px;
+  }
+  .lib span {
+    font-size: 0.84rem;
+    color: var(--ink-2);
+  }
+  .lib em {
+    font-style: normal;
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    color: var(--accent);
+  }
+  .switch {
+    display: grid;
+    gap: 8px;
+    padding: 16px;
+    border-left: 3px solid var(--accent);
+  }
+  .switch .row {
+    padding: 8px 10px;
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    font-size: 0.9rem;
+  }
+  .switch .acc {
+    border-color: var(--accent);
+  }
+  .switch small {
+    font-size: 0.8rem;
+    color: var(--ink-3);
+  }
+  .out {
+    display: grid;
+    gap: 8px;
+    padding: 16px;
+  }
+  .out span {
+    font-weight: 600;
+  }
+  .arrow {
+    font-size: 1.4rem;
+    color: var(--ink-3);
+  }
   @media (max-width: 860px) {
+    .compose {
+      grid-template-columns: 1fr;
+    }
+    .arrow {
+      transform: rotate(90deg);
+      justify-self: center;
+    }
     .stats {
       grid-template-columns: 1fr 1fr;
     }

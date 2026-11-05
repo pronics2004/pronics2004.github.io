@@ -2,7 +2,7 @@
 import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import photo from '../assets/profile.png';
-import { profile, links, scholar, models, benchmark, guardbench, awards } from '../data/site.js';
+import { profile, links, scholar, models, benchmark, guardbench, awards, switchUrls } from '../data/site.js';
 import { publications } from '../data/publications.js';
 import { collaborators } from '../data/research.js';
 
@@ -35,11 +35,12 @@ const selected = [
     ],
   },
   {
-    title: 'Modular post-training for Granite',
-    what: 'Seven capabilities trained into Granite 4.1 one at a time: requirement checks, calibrated uncertainty, context attribution, policy compliance, factuality detection and correction. IFEval balanced accuracy 0.569 to 0.855 on 8B.',
-    meta: 'Guardian and Core capability libraries, 2026 · lead',
+    title: 'Granite Switch and the Granite libraries',
+    what: 'Capabilities trained into Granite 4.1 one at a time, then composed into one model that serves chat, decisions and speech from one endpoint. Requirement checking: IFEval balanced accuracy 0.569 to 0.855 on 8B.',
+    meta: 'Guardian and Core libraries, 2026 · lead',
     links: [
-      [`${base}/granite-libraries/`, 'how it works'],
+      [`${base}/granite-switch/`, 'results'],
+      [switchUrls.repo, 'Granite Switch'],
       [models.guardianLib.hf, 'Guardian library'],
       [models.coreLib.hf, 'Core library'],
     ],
@@ -66,6 +67,24 @@ const selected = [
   links: s.links,
 }));
 
+// Newest first.
+const news = [
+  {
+    when: 'Oct 2026',
+    href: switchUrls.blog,
+    title: 'Granite Switch 4.1: chat, decisions and speech from one endpoint',
+    where: 'Hugging Face blog',
+    note: 'Its Guardian adapter beats generalist decision models from Jev, Microsoft, GPT and Clef on safety decisions, on average.',
+  },
+  {
+    when: 'Jun 2026',
+    href: benchmark.url,
+    title: 'Benchmarking guardrail models for safety, refusal and latency',
+    where: 'Artificial Analysis',
+    note: 'Granite Guardian 4.1 8B places fifth of 20 by F1 and first among models that take their policy at runtime, at 59 ms per check.',
+  },
+];
+
 const recognition = [
   [benchmark.url, 'Artificial Analysis guardrail benchmark, June 2026', 'Granite Guardian 4.1 8B fifth of 20 by F1, first among models that take their policy at runtime.'],
   [ext.aggrefact, 'LLM-AggreFact leaderboard', 'Granite Guardian 3.3 8B ranked third of 39 in 2025, and is still ahead of GPT-4o and Llama 3.1 405B with 47 models listed.'],
@@ -76,7 +95,7 @@ const recognition = [
 
 <Base
   title="Prasanna Sattigeri"
-  description="Prasanna Sattigeri leads post-training for agent reliability at IBM Research: Granite Guardian, modular post-training for Granite models, and research in agents, calibration and generative modeling."
+  description="Prasanna Sattigeri leads post-training for agent reliability at IBM Research: Granite Guardian, Granite Switch, and research in agents, calibration and generative modeling."
   current="home"
   width="narrow"
 >
@@ -104,8 +123,9 @@ const recognition = [
         <a href={`${base}/granite-guardian/`}>Granite Guardian</a>, an open judge model. I set its direction and own its
         releases, from data to open weights: five versions in eighteen months, each with new capabilities and
         improvements. The team also adds capabilities to Granite models through{' '}
-        <a href={`${base}/granite-libraries/`}>modular post-training</a> for reasoning, safety and agentic
-        workloads: tool-call checks, groundedness, requirements, factuality, confidence. Granite Guardian 4.1 ranks
+        <a href={`${base}/granite-switch/`}>modular post-training</a> for reasoning, safety and agentic
+        workloads, such as tool-call checks, groundedness, requirements, factuality and confidence, which{' '}
+        <a href={switchUrls.repo}>Granite Switch</a> composes into one model. Granite Guardian 4.1 ranks
         fifth of 20 on the <a href={benchmark.url}>Artificial Analysis guardrail benchmark</a> at 59 ms per check. The
         models run in <a href={ext.watsonxAi}>watsonx.ai</a>, <a href={ext.watsonxGov}>watsonx.governance</a> and Red
         Hat’s <a href={ext.askRedHat}>Ask Red Hat</a> assistant, with 1.16M downloads on{' '}
@@ -123,6 +143,25 @@ const recognition = [
         <a href={links.scholar}>{scholar.citations.toLocaleString('en-US')} citations and an h-index of {scholar.hIndex}</a>{' '}
         (Google Scholar, {scholar.asOf}).
       </p>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="wrap">
+      <h2>News</h2>
+      <ul class="news">
+        {
+          news.map((n) => (
+            <li>
+              <span class="when">{n.when}</span>
+              <span>
+                <a href={n.href}>{n.title}</a> <span class="where">· {n.where}</span>
+                <span class="note">{n.note}</span>
+              </span>
+            </li>
+          ))
+        }
+      </ul>
     </div>
   </section>
 
@@ -146,8 +185,7 @@ const recognition = [
         }
       </ol>
       <p class="more">
-        The post-training recipe and results are on the <a href={`${base}/granite-libraries/`}>Granite libraries</a>{' '}
-        page, the papers by thread under <a href={`${base}/research/`}>research</a>, and all of them under{' '}
+        The post-training results are on the <a href={`${base}/granite-switch/`}>Granite Switch</a> page, the papers by thread under <a href={`${base}/research/`}>research</a>, and all of them under{' '}
         <a href={`${base}/publications/`}>publications</a>.
       </p>
     </div>
@@ -269,6 +307,37 @@ const recognition = [
   }
   .w-meta a {
     color: var(--link);
+  }
+  .news {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 14px;
+  }
+  .news li {
+    display: grid;
+    grid-template-columns: 76px 1fr;
+    gap: 12px;
+  }
+  .news .when {
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    color: var(--ink-3);
+    padding-top: 3px;
+  }
+  .news a {
+    font-weight: 600;
+  }
+  .news .where {
+    font-size: 0.86rem;
+    color: var(--ink-3);
+  }
+  .news .note {
+    display: block;
+    margin-top: 2px;
+    font-size: 0.92rem;
+    color: var(--ink-2);
   }
   .more {
     margin: 24px 0 0;

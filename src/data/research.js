@@ -57,7 +57,7 @@ export const openSource = [
   {
     name: 'Granite capability libraries',
     role: 'Lead',
-    what: 'Modular post-training: capabilities for reasoning, safety and agentic workloads, added to Granite models.',
+    what: 'Modular post-training: capabilities for reasoning, safety and agentic workloads, composed into Granite models by Granite Switch.',
     adoption: '58K Hugging Face downloads',
     url: 'https://huggingface.co/collections/ibm-granite/granite-libraries',
   },

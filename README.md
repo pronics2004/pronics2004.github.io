@@ -20,7 +20,7 @@ npm run preview  # serves dist/
 | Research threads, open source, collaborators, quotes and usage numbers | `src/data/research.js` |
 | Home page (short, linked bio and selected work) | `src/pages/index.astro` |
 | Research page (papers by thread, generative modeling, toolkits, collaborations) | `src/pages/research.astro` |
-| Granite libraries page (post-training recipe, results, evals Space embed, capabilities) | `src/pages/granite-libraries.astro` |
+| Granite Switch page (libraries, composition, results, demo screenshots, capabilities) | `src/pages/granite-switch.astro` |
 | Publications by year | `src/pages/publications.astro` |
 | Granite Guardian case study | `src/pages/granite-guardian.astro` |
 | CV page | `src/pages/cv.astro` |
