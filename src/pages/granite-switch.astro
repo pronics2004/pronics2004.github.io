@@ -12,7 +12,7 @@ const blog = switchUrls.blog;
 const collection = 'https://huggingface.co/collections/ibm-granite/granite-libraries';
 
 const stats = [
-  ['+17 pts', 'on IFEval over the best generalist decision model, from the requirement-check adapter', evals],
+  ['+17 pts', 'on IFEval over the best other decision model, from the requirement-check adapter', evals],
   ['0.57 → 0.86', 'IFEval balanced accuracy, Granite 4.1 8B prompted vs post-trained', models.coreLib.hf],
   ['60–100 / s', 'decisions from a 3B Switch model playing Doom, against 10 a second reported for Jev', switchUrls.blog],
   ['13 in < 0.2 s', 'decisions on live speech from one endpoint, in the speech demo', speech],
@@ -97,13 +97,13 @@ const stats = [
     <div class="wrap">
       <div class="section-head">
         <p class="eyebrow">Results</p>
-        <h2>Against generalist decision models</h2>
+        <h2>Against other decision models</h2>
       </div>
       <Shot
         src={evalsShot}
-        alt="Scoreboard comparing the best Granite adapter (blue dot) with four generalist decision models on 11 benchmarks. Granite leads on 8."
+        alt="Scoreboard comparing the best Granite adapter (blue dot) with four other decision models on 11 benchmarks. Granite leads on 8."
         href={evals}
-        caption="Best Granite adapter (blue) against four generalist decision models: Jev 1.13, Microsoft-Decision-1, GPT-Luna-Decisions and Clef-Flash. Ahead on 8 of 11 benchmarks, by up to 17 points; behind on LLM-AggreFact and InfoBench."
+        caption="Best Granite adapter (blue) against four other decision models: Jev 1.13, Microsoft-Decision-1, GPT-Luna-Decisions and Clef-Flash. Ahead on 8 of 11 benchmarks, by up to 17 points; behind on LLM-AggreFact and InfoBench."
         source="Granitelib evaluations, Hugging Face Space"
         sizes="(max-width: 1200px) 100vw, 1120px"
       />
