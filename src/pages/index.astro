@@ -39,7 +39,7 @@ const selected = [
     what: 'Seven capabilities trained into Granite 4.1 one at a time: requirement checks, calibrated uncertainty, context attribution, policy compliance, factuality detection and correction. IFEval balanced accuracy 0.569 to 0.855 on 8B.',
     meta: 'Guardian and Core capability libraries, 2026 · lead',
     links: [
-      [`${base}/research/#post-training`, 'how it works'],
+      [`${base}/granite-libraries/`, 'how it works'],
       [models.guardianLib.hf, 'Guardian library'],
       [models.coreLib.hf, 'Core library'],
     ],
@@ -70,7 +70,7 @@ const recognition = [
   [benchmark.url, 'Artificial Analysis guardrail benchmark, June 2026', 'Granite Guardian 4.1 8B fifth of 20 by F1, first among models that take their policy at runtime.'],
   [ext.aggrefact, 'LLM-AggreFact leaderboard', 'Granite Guardian 3.3 8B third of 39, ahead of GPT-4o, Mistral Large 2 and Llama 3.1 405B.'],
   [guardbench.url, 'GuardBench, EC Joint Research Centre, April 2025', 'Six of the top ten places across 40 datasets.'],
-  [`${base}/research/#impact`, 'IBM Research awards', 'Outstanding Accomplishment in 2024 and 2025; Technical Achievement Awards from 2019 to 2025.'],
+  [`${base}/cv/`, 'IBM Research awards', 'Outstanding Accomplishment in 2024 and 2025; Technical Achievement Awards from 2019 to 2025.'],
 ];
 ---
 
@@ -104,7 +104,7 @@ const recognition = [
         <a href={`${base}/granite-guardian/`}>Granite Guardian</a>, an open judge model. I set its direction and own its
         releases, from data to open weights: five versions in eighteen months, each with new capabilities and
         improvements. The team also adds capabilities to Granite models through{' '}
-        <a href={`${base}/research/#post-training`}>modular post-training</a> for reasoning, safety and agentic
+        <a href={`${base}/granite-libraries/`}>modular post-training</a> for reasoning, safety and agentic
         workloads: tool-call checks, groundedness, requirements, factuality, confidence. Granite Guardian 4.1 ranks
         fifth of 20 on the <a href={benchmark.url}>Artificial Analysis guardrail benchmark</a> at 59 ms per check. The
         models run in <a href={ext.watsonxAi}>watsonx.ai</a>, <a href={ext.watsonxGov}>watsonx.governance</a> and Red
@@ -146,8 +146,9 @@ const recognition = [
         }
       </ol>
       <p class="more">
-        More on the <a href={`${base}/research/`}>research</a> page: post-training recipe and results, agent workflow
-        map, generative modeling, open source, adoption. All papers under <a href={`${base}/publications/`}>publications</a>.
+        The post-training recipe and results are on the <a href={`${base}/granite-libraries/`}>Granite libraries</a>{' '}
+        page, the papers by thread under <a href={`${base}/research/`}>research</a>, and all of them under{' '}
+        <a href={`${base}/publications/`}>publications</a>.
       </p>
     </div>
   </section>

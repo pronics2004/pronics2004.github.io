@@ -1,0 +1,234 @@
+---
+import Base from '../layouts/Base.astro';
+import Dumbbell from '../components/Dumbbell.astro';
+import AgentLoop from '../components/AgentLoop.astro';
+import Pipeline from '../components/Pipeline.astro';
+import { models } from '../data/site.js';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const space = 'https://huggingface.co/spaces/ibm-granite/granitelib-evals';
+
+const capabilities = [
+  ['Judging against a criterion', 'yes or no, with a risk score', 'human-labeled and synthetic data for safety, RAG and tool calls'],
+  ['Policy compliance', 'compliant, non-compliant or ambiguous', 'human-written policies across about 40 domains'],
+  ['Factuality detection', 'yes if any claim is unsupported by the context', '17,522 ELI5 instances, half with injected errors'],
+  ['Factuality correction', 'a corrected response, or none', 'the same corpus, supervised by FactCorrector (ACL 2026)'],
+  ['Requirement checking', 'yes or no, with P(yes)', 'multi-constraint prompts with programmatic labels'],
+  ['Calibrated uncertainty', 'a confidence that is right about X% of the time at X%', '240K answers per base model, labeled by a Thermometer calibrator'],
+  ['Context attribution', 'the context sentences behind each response sentence, ranked', '4,101 conversation rounds labeled with leave-one-out MExGen'],
+];
+
+const requirementRows = [
+  { label: 'Granite 4.1 3B', before: 0.5118, after: 0.8425 },
+  { label: 'Granite 4.1 8B', before: 0.5689, after: 0.8554 },
+  { label: 'Granite 4.1 30B', before: 0.6237, after: 0.8492 },
+];
+const uncertaintyRows = [
+  { label: 'Granite 4.0 micro', before: 0.6748, after: 0.6903 },
+  { label: 'Granite 4.1 3B', before: 0.6291, after: 0.7713 },
+  { label: 'Granite 4.1 8B', before: 0.6439, after: 0.7778 },
+  { label: 'Granite 4.1 30B', before: 0.6507, after: 0.8017 },
+];
+const halfTicks = [0.5, 0.6, 0.7, 0.8, 0.9];
+---
+
+<Base
+  title="Granite libraries · Prasanna Sattigeri"
+  description="Modular post-training for Granite models: capabilities for reasoning, safety and agentic workloads, trained one at a time and released as the Guardian and Core libraries."
+  current="libraries"
+>
+  <section class="top">
+    <div class="wrap">
+      <p class="eyebrow"><a href={`${base}/`}>Home</a> / Granite libraries</p>
+      <h1>Granite libraries</h1>
+      <p class="lede">
+        Modular post-training for Granite models. Each capability for reasoning, safety and agentic workloads is trained
+        into the base model on its own and released in the <a href={models.guardianLib.hf}>Guardian</a> and{' '}
+        <a href={models.coreLib.hf}>Core</a> libraries, so it can be added, swapped or upgraded without touching the
+        others. The judge model behind several of them has its own <a href={`${base}/granite-guardian/`}>page</a>.
+      </p>
+    </div>
+  </section>
+
+  <section class="section" id="recipe">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Recipe</p>
+        <h2>Teaching a base model to check its own work</h2>
+        <p class="lede">
+          Post-training, as I use the word, is everything that happens to a pretrained model before it can be trusted:
+          judges, calibration, capabilities trained into the base model one at a time, and the memory and guardrails an
+          agent runs with. The recipe is the same each time.
+        </p>
+      </div>
+
+      <Pipeline />
+    </div>
+  </section>
+
+  <section class="section" id="results">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Results</p>
+        <h2>The gain over the same model, prompted</h2>
+      </div>
+      <div class="charts">
+        <Dumbbell
+          title="Requirement checking"
+          sub="IFEval multi-constraint, balanced accuracy. Chance is 0.5."
+          rows={requirementRows}
+          min={0.5}
+          max={0.9}
+          ticks={halfTicks}
+          beforeLabel="Base model, prompted"
+          afterLabel="Post-trained"
+          source="Held-out IFEval set. Source: Requirement Check model card."
+        />
+        <Dumbbell
+          title="Calibrated uncertainty"
+          sub="MMLU, AUROC for telling right answers from wrong. Chance is 0.5."
+          rows={uncertaintyRows}
+          min={0.5}
+          max={0.9}
+          ticks={halfTicks}
+          beforeLabel="Base model, sequence probability"
+          afterLabel="Post-trained"
+          source="14,042 MMLU questions, not used in training. Calibration error: 0.161 → 0.057 (micro), 0.288 → 0.099 (3B), 0.112 → 0.038 (8B), 0.092 → 0.100 (30B). Source: Uncertainty model card."
+        />
+      </div>
+
+      <h3 class="sub-h">Against dedicated judge models</h3>
+      <figure class="embed">
+        <iframe
+          src="https://ibm-granite-granitelib-evals.static.hf.space/index.html"
+          title="Granite library adapters compared with decision models, by benchmark"
+          loading="lazy"></iframe>
+        <figcaption>
+          Every evaluation from the library model cards that compares a Granite 4.1 adapter with a separate decision
+          model. Interactive; <a href="https://huggingface.co/spaces/ibm-granite/granitelib-evals">open it on Hugging Face</a>.
+        </figcaption>
+      </figure>
+
+    </div>
+  </section>
+
+  <section class="section" id="capabilities">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Capabilities</p>
+        <h2>Seven capabilities and where they run</h2>
+      </div>
+      <AgentLoop />
+      <h3 class="sub-h">What each one returns</h3>
+      <div class="table-scroll">
+        <table class="caps">
+          <thead>
+            <tr>
+              <th>Capability</th>
+              <th>Returns</th>
+              <th>Trained on</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              capabilities.map(([name, returns, trained]) => (
+                <tr>
+                  <td>{name}</td>
+                  <td>{returns}</td>
+                  <td>{trained}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+      <p class="fine">
+        Released as the <a href={models.guardianLib.hf}>Guardian</a> and <a href={models.coreLib.hf}>Core</a> capability
+        libraries for granite-4.0-micro and granite-4.1 at 3B, 8B and 30B, so each capability can be added, swapped or
+        upgraded on its own. Two of the seven are papers from the <a href={`${base}/research/`}>research</a> page, distilled into one forward pass: Thermometer became calibrated
+        uncertainty, MExGen became context attribution.
+      </p>
+
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap links">
+      <a class="btn primary" href={models.guardianLib.hf}>Guardian library</a>
+      <a class="btn" href={models.coreLib.hf}>Core library</a>
+      <a class="btn" href={space}>Evaluations on Hugging Face</a>
+      <a class="btn" href={`${base}/research/`}>The papers</a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .top {
+    padding-block: clamp(40px, 7vw, 88px) clamp(40px, 6vw, 72px);
+  }
+  .top .eyebrow a {
+    color: inherit;
+  }
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .embed {
+    margin: 0 0 8px;
+  }
+  .embed iframe {
+    display: block;
+    width: 100%;
+    height: 740px;
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    background: #121619;
+  }
+  .embed figcaption {
+    margin-top: 10px;
+    font-size: 0.88rem;
+    color: var(--ink-3);
+  }
+  .sub-h {
+    margin: clamp(36px, 5vw, 56px) 0 18px;
+  }
+  .fine {
+    margin: 16px 0 0;
+    font-size: 0.84rem;
+    color: var(--ink-3);
+    max-width: 90ch;
+  }
+  .charts {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    align-items: start;
+  }
+  .caps td {
+    font-size: 0.9rem;
+    color: var(--ink-2);
+    padding-block: 10px;
+  }
+  .caps td:first-child {
+    color: var(--ink);
+    font-weight: 600;
+    min-width: 170px;
+  }
+  .caps td:nth-child(2) {
+    min-width: 200px;
+  }
+  .caps td:nth-child(3) {
+    min-width: 240px;
+  }
+  @media (max-width: 700px) {
+    .embed iframe {
+      display: none;
+    }
+  }
+  @media (max-width: 860px) {
+    .charts {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

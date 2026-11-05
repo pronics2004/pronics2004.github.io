@@ -4,7 +4,8 @@ import Base from '../layouts/Base.astro';
 import aaChart from '../assets/aa-average-f1.png';
 import Dumbbell from '../components/Dumbbell.astro';
 import { models, guardbench, benchmark } from '../data/site.js';
-import { quotes, usage } from '../data/research.js';
+import Bars from '../components/Bars.astro';
+import { quotes, usage, adoption } from '../data/research.js';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
@@ -362,9 +363,28 @@ const timeline = [
           ))
         }
       </dl>
-      <p class="fine">
-        Counts read on October 1, 2026. More on the <a href={`${base}/research/#adoption`}>home page</a>.
-      </p>
+      <div class="bars-wrap">
+        <Bars />
+      </div>
+      <div class="adoption">
+        {
+          adoption
+            .filter((g) => g.head !== 'Research others have built on')
+            .map((g) => (
+              <div>
+                <h3>{g.head}</h3>
+                <ul>
+                  {g.items.map((i) => (
+                    <li>
+                      <a href={i.url}>{i.text}</a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))
+        }
+      </div>
+      <p class="fine">Hugging Face counts read on October 13, 2026; Ollama on October 1.</p>
     </div>
   </section>
 
@@ -392,7 +412,7 @@ const timeline = [
       <a class="btn primary" href={models.guardian.hf}>Model card on Hugging Face</a>
       <a class="btn" href={models.guardian.github}>GitHub</a>
       <a class="btn" href={models.guardian.paper}>NAACL 2025 paper</a>
-      <a class="btn" href={`${base}/research/#post-training`}>Modular post-training</a>
+      <a class="btn" href={`${base}/granite-libraries/`}>Granite libraries</a>
     </div>
   </section>
 </Base>
@@ -614,6 +634,42 @@ const timeline = [
   }
   @media (max-width: 480px) {
     .criteria {
+      grid-template-columns: 1fr;
+    }
+  }
+  .bars-wrap {
+    margin-top: clamp(28px, 4vw, 44px);
+    max-width: 720px;
+  }
+  .adoption {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: clamp(20px, 3vw, 40px);
+    margin-top: clamp(28px, 4vw, 44px);
+  }
+  .adoption h3 {
+    font-family: var(--sans);
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0;
+  }
+  .adoption ul {
+    margin: 0;
+    padding-left: 1.1em;
+    display: grid;
+    gap: 8px;
+    font-size: 0.9rem;
+    color: var(--ink-2);
+  }
+  .adoption a {
+    color: inherit;
+    text-decoration-color: var(--rule-strong);
+  }
+  .adoption a:hover {
+    color: var(--link);
+  }
+  @media (max-width: 860px) {
+    .adoption {
       grid-template-columns: 1fr;
     }
   }
