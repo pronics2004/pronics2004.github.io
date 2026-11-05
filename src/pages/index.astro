@@ -2,6 +2,8 @@
 import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import photo from '../assets/profile.png';
+import speechShot from '../assets/space-speech-to-decisions.png';
+import aaChart from '../assets/aa-average-f1.png';
 import { profile, links, scholar, models, benchmark, guardbench, awards, switchUrls } from '../data/site.js';
 import { publications } from '../data/publications.js';
 import { collaborators } from '../data/research.js';
@@ -37,7 +39,7 @@ const selected = [
   {
     title: 'Granite Switch and the Granite libraries',
     what: 'Capabilities trained into Granite 4.1 one at a time, then composed into one model that serves chat, decisions and speech from one endpoint. Requirement checking: IFEval balanced accuracy 0.569 to 0.855 on 8B.',
-    meta: 'Guardian and Core libraries, 2026 · lead',
+    meta: 'Guardian and Core libraries and the Decision adapter, 2026 · lead',
     links: [
       [`${base}/granite-switch/`, 'results'],
       [switchUrls.repo, 'Granite Switch'],
@@ -74,7 +76,9 @@ const news = [
     href: switchUrls.blog,
     title: 'Granite Switch 4.1: chat, decisions and speech from one endpoint',
     where: 'Hugging Face blog',
-    note: 'Its Guardian adapter beats generalist decision models from Jev, Microsoft, GPT and Clef on safety decisions, on average.',
+    note: 'One model serves chat, decisions and speech, and every adapter reuses the base model’s KV cache. A 3B Switch model makes 60 to 100 decisions a second, against 10 reported for Jev.',
+    img: speechShot,
+    alt: 'The Speech to Decisions demo: a live transcript with a topic label, a safety check and yes/no decisions scored as the speaker talks.',
   },
   {
     when: 'Jun 2026',
@@ -82,6 +86,8 @@ const news = [
     title: 'Benchmarking guardrail models for safety, refusal and latency',
     where: 'Artificial Analysis',
     note: 'Granite Guardian 4.1 8B places fifth of 20 by F1 and first among models that take their policy at runtime, at 59 ms per check.',
+    img: aaChart,
+    alt: 'Artificial Analysis bar chart of average F1 for guardrail models; Granite Guardian 4.1 8B is the fifth bar.',
   },
 ];
 
@@ -153,11 +159,16 @@ const recognition = [
         {
           news.map((n) => (
             <li>
-              <span class="when">{n.when}</span>
-              <span>
-                <a href={n.href}>{n.title}</a> <span class="where">· {n.where}</span>
-                <span class="note">{n.note}</span>
-              </span>
+              <a class="thumb" href={n.href}>
+                <Image src={n.img} alt={n.alt} widths={[400, 760]} sizes="(max-width: 600px) 100vw, 370px" />
+              </a>
+              <p class="meta">
+                {n.when} · {n.where}
+              </p>
+              <a class="title" href={n.href}>
+                {n.title}
+              </a>
+              <p class="note">{n.note}</p>
             </li>
           ))
         }
@@ -313,31 +324,52 @@ const recognition = [
     margin: 0;
     padding: 0;
     display: grid;
-    gap: 14px;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
   }
   .news li {
     display: grid;
-    grid-template-columns: 76px 1fr;
-    gap: 12px;
+    align-content: start;
+    gap: 6px;
   }
-  .news .when {
+  .thumb {
+    display: block;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    background: #fff;
+    margin-bottom: 6px;
+  }
+  .thumb:hover {
+    border-color: var(--ink-3);
+  }
+  .thumb :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top left;
+    display: block;
+  }
+  .news .meta {
+    margin: 0;
     font-family: var(--mono);
-    font-size: 0.78rem;
+    font-size: 0.75rem;
     color: var(--ink-3);
-    padding-top: 3px;
   }
-  .news a {
+  .news .title {
     font-weight: 600;
-  }
-  .news .where {
-    font-size: 0.86rem;
-    color: var(--ink-3);
+    line-height: 1.35;
   }
   .news .note {
-    display: block;
-    margin-top: 2px;
-    font-size: 0.92rem;
+    margin: 0;
+    font-size: 0.9rem;
     color: var(--ink-2);
+  }
+  @media (max-width: 600px) {
+    .news {
+      grid-template-columns: 1fr;
+    }
   }
   .more {
     margin: 24px 0 0;
