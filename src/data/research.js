@@ -171,7 +171,7 @@ export const adoption = [
   {
     head: 'Independent benchmarks',
     items: [
-      { text: 'LLM-AggreFact: Granite Guardian 3.3 (8B) is third of 39, ahead of GPT-4o, Mistral Large 2 and Llama 3.1 405B.', url: 'https://llm-aggrefact.github.io/' },
+      { text: 'LLM-AggreFact: Granite Guardian 3.3 (8B) ranked third of 39 in 2025; with 47 models listed today, it is still ahead of GPT-4o and Llama 3.1 405B.', url: 'https://llm-aggrefact.github.io/' },
       { text: 'GuardBench (EC Joint Research Centre): six of the top ten places across 40 datasets, April 2025.', url: 'https://research.ibm.com/blog/granite-guardian-tops-guardbench' },
       { text: 'Artificial Analysis, with NVIDIA: fifth of 20, first among policy-at-runtime models, June 2026.', url: 'https://artificialanalysis.ai/articles/guardrail-safety-benchmark' },
     ],

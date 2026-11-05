@@ -1,12 +1,24 @@
 ---
 import Base from '../layouts/Base.astro';
+import Shot from '../components/Shot.astro';
 import Dumbbell from '../components/Dumbbell.astro';
 import AgentLoop from '../components/AgentLoop.astro';
-import Pipeline from '../components/Pipeline.astro';
+import evalsShot from '../assets/space-granitelib-evals.png';
+import speechShot from '../assets/space-speech-to-decisions.png';
 import { models } from '../data/site.js';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
-const space = 'https://huggingface.co/spaces/ibm-granite/granitelib-evals';
+const evals = 'https://huggingface.co/spaces/ibm-granite/granitelib-evals';
+const speech = 'https://huggingface.co/spaces/ibm-granite/speech-to-decisions';
+const blog = 'https://huggingface.co/blog/ibm-granite/granite-switch-4-1';
+const collection = 'https://huggingface.co/collections/ibm-granite/granite-libraries';
+
+const stats = [
+  ['+17 pts', 'on IFEval over the best generalist decision model, from the requirement-check adapter', evals],
+  ['0.57 → 0.86', 'IFEval balanced accuracy, Granite 4.1 8B prompted vs post-trained', models.coreLib.hf],
+  ['0.64 → 0.78', 'AUROC for telling right answers from wrong on MMLU, 8B', models.coreLib.hf],
+  ['13 in < 0.2 s', 'decisions on live speech from one endpoint, in the speech demo', speech],
+];
 
 const capabilities = [
   ['Judging against a criterion', 'yes or no, with a risk score', 'human-labeled and synthetic data for safety, RAG and tool calls'],
@@ -34,7 +46,7 @@ const halfTicks = [0.5, 0.6, 0.7, 0.8, 0.9];
 
 <Base
   title="Granite libraries · Prasanna Sattigeri"
-  description="Modular post-training for Granite models: capabilities for reasoning, safety and agentic workloads, trained one at a time and released as the Guardian and Core libraries."
+  description="Modular post-training for Granite models: capabilities for reasoning, safety and agentic workloads, released as open adapters, with results against generalist decision models."
   current="libraries"
 >
   <section class="top">
@@ -42,34 +54,76 @@ const halfTicks = [0.5, 0.6, 0.7, 0.8, 0.9];
       <p class="eyebrow"><a href={`${base}/`}>Home</a> / Granite libraries</p>
       <h1>Granite libraries</h1>
       <p class="lede">
-        Modular post-training for Granite models. Each capability for reasoning, safety and agentic workloads is trained
-        into the base model on its own and released in the <a href={models.guardianLib.hf}>Guardian</a> and{' '}
-        <a href={models.coreLib.hf}>Core</a> libraries, so it can be added, swapped or upgraded without touching the
-        others. The judge model behind several of them has its own <a href={`${base}/granite-guardian/`}>page</a>.
+        Modular post-training for Granite 4.1: capabilities for reasoning, safety and agentic workloads, each trained on
+        its own and released as an open adapter. I lead the Guardian and Core libraries. Specialized adapters beat
+        generalist decision models on most of the benchmarks they share.
       </p>
+      <p class="actions">
+        <a class="btn primary" href={speech}>Try the speech demo</a>
+        <a class="btn" href={models.guardianLib.hf}>Guardian library</a>
+        <a class="btn" href={models.coreLib.hf}>Core library</a>
+        <a class="btn" href={blog}>Release blog, Oct 2026</a>
+      </p>
+      <dl class="stats">
+        {
+          stats.map(([value, label, href]) => (
+            <div>
+              <dt>
+                <a href={href}>{label}</a>
+              </dt>
+              <dd>{value}</dd>
+            </div>
+          ))
+        }
+      </dl>
     </div>
   </section>
 
-  <section class="section" id="recipe">
-    <div class="wrap">
-      <div class="section-head">
-        <p class="eyebrow">Recipe</p>
-        <h2>Teaching a base model to check its own work</h2>
-        <p class="lede">
-          Post-training, as I use the word, is everything that happens to a pretrained model before it can be trusted:
-          judges, calibration, capabilities trained into the base model one at a time, and the memory and guardrails an
-          agent runs with. The recipe is the same each time.
-        </p>
-      </div>
-
-      <Pipeline />
-    </div>
-  </section>
-
-  <section class="section" id="results">
+  <section class="section">
     <div class="wrap">
       <div class="section-head">
         <p class="eyebrow">Results</p>
+        <h2>Against generalist decision models</h2>
+      </div>
+      <Shot
+        src={evalsShot}
+        alt="Scoreboard comparing the best Granite adapter (blue dot) with four generalist decision models on 11 benchmarks. Granite leads on 8."
+        href={evals}
+        caption="Best Granite adapter (blue) against four generalist decision models: Jev 1.13, Microsoft-Decision-1, GPT-Luna-Decisions and Clef-Flash. Ahead on 8 of 11 benchmarks, by up to 17 points; behind on LLM-AggreFact and InfoBench."
+        source="Granitelib evaluations, Hugging Face Space"
+        sizes="(max-width: 1200px) 100vw, 1120px"
+      />
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="split">
+        <div>
+          <p class="eyebrow">Live</p>
+          <h2>Thirteen decisions from one endpoint</h2>
+          <p class="body">
+            The adapters share the base model’s KV cache, so each extra check costs almost nothing. In the demo, the
+            Guardian adapter screens live speech while a general decision adapter answers every yes/no question,
+            together in under 0.2 seconds.
+          </p>
+          <p class="body"><a href={blog}>How it works, on the Hugging Face blog</a></p>
+        </div>
+        <Shot
+          src={speechShot}
+          alt="The Speech to Decisions demo: a pizza-order transcript on the left; on the right, a safety check reading Nothing harmful and yes/no questions with scores."
+          href={speech}
+          caption="A pizza order, transcribed, labeled and screened as it is spoken."
+          source="Speech to Decisions, Hugging Face Space"
+        />
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Post-training</p>
         <h2>The gain over the same model, prompted</h2>
       </div>
       <div class="charts">
@@ -80,9 +134,9 @@ const halfTicks = [0.5, 0.6, 0.7, 0.8, 0.9];
           min={0.5}
           max={0.9}
           ticks={halfTicks}
-          beforeLabel="Base model, prompted"
+          beforeLabel="Prompted"
           afterLabel="Post-trained"
-          source="Held-out IFEval set. Source: Requirement Check model card."
+          source="Source: Requirement Check model card."
         />
         <Dumbbell
           title="Calibrated uncertainty"
@@ -91,119 +145,126 @@ const halfTicks = [0.5, 0.6, 0.7, 0.8, 0.9];
           min={0.5}
           max={0.9}
           ticks={halfTicks}
-          beforeLabel="Base model, sequence probability"
+          beforeLabel="Sequence probability"
           afterLabel="Post-trained"
-          source="14,042 MMLU questions, not used in training. Calibration error: 0.161 → 0.057 (micro), 0.288 → 0.099 (3B), 0.112 → 0.038 (8B), 0.092 → 0.100 (30B). Source: Uncertainty model card."
+          source="14,042 held-out questions. Source: Uncertainty model card."
         />
       </div>
-
-      <h3 class="sub-h">Against dedicated judge models</h3>
-      <figure class="embed">
-        <iframe
-          src="https://ibm-granite-granitelib-evals.static.hf.space/index.html"
-          title="Granite library adapters compared with decision models, by benchmark"
-          loading="lazy"></iframe>
-        <figcaption>
-          Every evaluation from the library model cards that compares a Granite 4.1 adapter with a separate decision
-          model. Interactive; <a href="https://huggingface.co/spaces/ibm-granite/granitelib-evals">open it on Hugging Face</a>.
-        </figcaption>
-      </figure>
-
-    </div>
-  </section>
-
-  <section class="section" id="capabilities">
-    <div class="wrap">
-      <div class="section-head">
-        <p class="eyebrow">Capabilities</p>
-        <h2>Seven capabilities and where they run</h2>
-      </div>
-      <AgentLoop />
-      <h3 class="sub-h">What each one returns</h3>
-      <div class="table-scroll">
-        <table class="caps">
-          <thead>
-            <tr>
-              <th>Capability</th>
-              <th>Returns</th>
-              <th>Trained on</th>
-            </tr>
-          </thead>
-          <tbody>
-            {
-              capabilities.map(([name, returns, trained]) => (
-                <tr>
-                  <td>{name}</td>
-                  <td>{returns}</td>
-                  <td>{trained}</td>
-                </tr>
-              ))
-            }
-          </tbody>
-        </table>
-      </div>
-      <p class="fine">
-        Released as the <a href={models.guardianLib.hf}>Guardian</a> and <a href={models.coreLib.hf}>Core</a> capability
-        libraries for granite-4.0-micro and granite-4.1 at 3B, 8B and 30B, so each capability can be added, swapped or
-        upgraded on its own. Two of the seven are papers from the <a href={`${base}/research/`}>research</a> page, distilled into one forward pass: Thermometer became calibrated
-        uncertainty, MExGen became context attribution.
-      </p>
-
     </div>
   </section>
 
   <section class="section">
-    <div class="wrap links">
-      <a class="btn primary" href={models.guardianLib.hf}>Guardian library</a>
-      <a class="btn" href={models.coreLib.hf}>Core library</a>
-      <a class="btn" href={space}>Evaluations on Hugging Face</a>
-      <a class="btn" href={`${base}/research/`}>The papers</a>
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Capabilities</p>
+        <h2>Seven checks, placed in the agent loop</h2>
+      </div>
+      <AgentLoop />
+      <details class="data">
+        <summary>What each capability returns and what it was trained on</summary>
+        <div class="table-scroll">
+          <table class="caps">
+            <thead>
+              <tr>
+                <th>Capability</th>
+                <th>Returns</th>
+                <th>Trained on</th>
+              </tr>
+            </thead>
+            <tbody>
+              {
+                capabilities.map(([name, returns, trained]) => (
+                  <tr>
+                    <td>{name}</td>
+                    <td>{returns}</td>
+                    <td>{trained}</td>
+                  </tr>
+                ))
+              }
+            </tbody>
+          </table>
+        </div>
+      </details>
+      <p class="more">
+        Two of the seven started as papers: Thermometer became calibrated uncertainty, MExGen became context attribution.
+        See <a href={`${base}/research/`}>research</a>, and the full <a href={collection}>collection on Hugging Face</a>.
+      </p>
     </div>
   </section>
 </Base>
 
 <style>
   .top {
-    padding-block: clamp(40px, 7vw, 88px) clamp(40px, 6vw, 72px);
+    padding-block: clamp(40px, 7vw, 88px) clamp(40px, 6vw, 64px);
   }
-  .top .eyebrow a {
+  .top h1 {
+    margin-bottom: 18px;
+  }
+  .eyebrow a {
     color: inherit;
   }
-  .links {
+  .actions {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
+    margin: 24px 0 0;
   }
-  .embed {
-    margin: 0 0 8px;
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px 28px;
+    margin: clamp(32px, 5vw, 52px) 0 0;
+    padding-top: 22px;
+    border-top: 1px solid var(--rule-strong);
   }
-  .embed iframe {
-    display: block;
-    width: 100%;
-    height: 740px;
-    border: 1px solid var(--rule);
-    border-radius: 8px;
-    background: #121619;
+  .stats div {
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: flex-end;
+    gap: 6px;
   }
-  .embed figcaption {
-    margin-top: 10px;
-    font-size: 0.88rem;
-    color: var(--ink-3);
+  .stats dd {
+    margin: 0;
+    font-size: clamp(1.6rem, 2.8vw, 2.2rem);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    white-space: nowrap;
   }
-  .sub-h {
-    margin: clamp(36px, 5vw, 56px) 0 18px;
+  .stats dt {
+    font-size: 0.86rem;
+    line-height: 1.45;
   }
-  .fine {
-    margin: 16px 0 0;
-    font-size: 0.84rem;
-    color: var(--ink-3);
-    max-width: 90ch;
+  .stats dt a {
+    color: var(--ink-2);
+    text-decoration-color: var(--rule-strong);
+  }
+  .split {
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    gap: clamp(24px, 4vw, 56px);
+    align-items: center;
+  }
+  .split h2 {
+    margin-bottom: 16px;
+  }
+  .body {
+    color: var(--ink-2);
   }
   .charts {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 14px;
     align-items: start;
+  }
+  .data {
+    margin-top: clamp(24px, 4vw, 40px);
+  }
+  .data summary {
+    cursor: pointer;
+    font-weight: 500;
+    color: var(--ink-2);
+    margin-bottom: 12px;
   }
   .caps td {
     font-size: 0.9rem;
@@ -221,12 +282,15 @@ const halfTicks = [0.5, 0.6, 0.7, 0.8, 0.9];
   .caps td:nth-child(3) {
     min-width: 240px;
   }
-  @media (max-width: 700px) {
-    .embed iframe {
-      display: none;
-    }
+  .more {
+    margin: clamp(24px, 4vw, 40px) 0 0;
+    color: var(--ink-2);
   }
   @media (max-width: 860px) {
+    .stats {
+      grid-template-columns: 1fr 1fr;
+    }
+    .split,
     .charts {
       grid-template-columns: 1fr;
     }

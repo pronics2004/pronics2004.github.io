@@ -1,0 +1,51 @@
+---
+// A screenshot of a third-party page, linked to the live page, with a one-line caption.
+import { Image } from 'astro:assets';
+const { src, alt, href, caption, source, sizes = '(max-width: 860px) 100vw, 560px' } = Astro.props;
+---
+
+<figure class="shot">
+  <a href={href} class="frame">
+    <Image src={src} alt={alt} widths={[640, 1000, 1600]} sizes={sizes} />
+  </a>
+  <figcaption>
+    <span>{caption}</span>
+    <a href={href}>{source} ↗</a>
+  </figcaption>
+</figure>
+
+<style>
+  .shot {
+    margin: 0;
+    display: grid;
+    gap: 10px;
+    align-content: start;
+  }
+  .frame {
+    display: block;
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    overflow: hidden;
+    background: #fff;
+    transition: border-color 0.15s;
+  }
+  .frame:hover {
+    border-color: var(--ink-3);
+  }
+  .frame :global(img) {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  figcaption {
+    display: grid;
+    gap: 2px;
+    font-size: 0.88rem;
+    color: var(--ink-2);
+  }
+  figcaption a {
+    font-size: 0.8rem;
+    font-family: var(--mono);
+    color: var(--ink-3);
+  }
+</style>
