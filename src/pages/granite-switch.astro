@@ -74,7 +74,7 @@ const stats = [
           <p class="k">Granite Switch 4.1, 8B or 30B</p>
           <a class="switch card" href={switchUrls.repo}>
             <span class="row">Granite 4.1 base model</span>
-            <span class="row acc">Decision adapter, for any yes/no question <em>I lead</em></span>
+            <span class="row acc">Decision adapter, for any yes/no question</span>
             <span class="row acc">Library adapters, chosen per request</span>
             <span class="row">Speech encoder</span>
             <small>About the same GPU memory as the base model alone. Adapters reuse the base model’s KV cache.</small>
@@ -247,13 +247,6 @@ const stats = [
   }
   .switch .acc {
     border-color: var(--accent);
-  }
-  .switch .row em {
-    font-style: normal;
-    font-family: var(--mono);
-    font-size: 0.7rem;
-    color: var(--accent);
-    margin-left: 6px;
   }
   .switch small {
     font-size: 0.8rem;
