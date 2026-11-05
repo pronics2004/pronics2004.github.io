@@ -23,6 +23,15 @@ export const publications = [
       'Scales an agent’s context instead of its compute. Experience distilled into lessons, consolidated and retrieved beats raw experience on math, web and software tasks.',
   },
   {
+    title: 'How Should Agents Train Online from Deployment Experience? Fast and Slow Online Learning',
+    authors: 'H. Chen, M. Shen, S. Ouyang, D. Zhang, Z. He, Y. Wang, Y. Xiao, X. Zhang, I. Padhi, S. Chaudhury, G. W. Wornell, P. Sattigeri, Z.-W. Hong, K. Youcef-Toumi',
+    venue: 'NeurIPS Workshop', year: 2026, note: 'TTCL and LCFM workshops', url: 'https://huaibochen.github.io/blog/FSOL/online-learning-from-experience.html',
+    themes: ['agents'],
+    id: 'fsol',
+    summary:
+      'An agent that learns while deployed is judged on every interaction, not its last checkpoint. FSOL pairs memory for fast adaptation with single-rollout RL for depth, raising average cumulative accuracy from 46.9 (RL alone) and 40.4 (memory alone) to 60.2 on WebShop, ALFWorld, search QA and writing.',
+  },
+  {
     title: 'Building a Foundational Guardrail for General Agentic Systems via Synthetic Data',
     authors: 'Y. Huang, H. Hua, Y. Zhou, P. Jing, M. Nagireddy, I. Padhi, G. Dolcetti, Z. Xu, et al., P. Sattigeri, X. Zhang',
     venue: 'ICLR', year: 2026, url: 'https://arxiv.org/abs/2510.09781',

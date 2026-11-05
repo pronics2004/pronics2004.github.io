@@ -6,9 +6,9 @@ export const threads = [
     id: 'agents',
     title: 'Agents, memory and guardrails',
     framing:
-      'Agents fail between the turns: a bad plan before any action, a risk that builds over a long session, a cache shared with another agent. These papers put the check at that point.',
+      'Agents fail between the turns: a bad plan before any action, a risk that builds over a long session, a cache shared with another agent. These papers put the check at that point, and ask how an agent should keep learning once it is deployed.',
     ships: 'Granite Guardian',
-    papers: ['agentic-guardrail', 'blindspot', 'lcguard', 'granite-guardian', 'cascade'],
+    papers: ['fsol', 'agentic-guardrail', 'blindspot', 'lcguard', 'granite-guardian', 'cascade'],
   },
   {
     id: 'uncertainty',
