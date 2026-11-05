@@ -65,8 +65,8 @@ const stats = [
       <figure class="compose" aria-label="Adapters from three Granite libraries are composed with the base model and a speech encoder into one Granite Switch model with one endpoint.">
         <div class="col">
           <p class="k">Granite libraries</p>
-          <a class="lib card" href={models.guardianLib.hf}><strong>Guardian</strong><span>safety, policy, factuality, tool calls</span><em>I lead</em></a>
-          <a class="lib card" href={models.coreLib.hf}><strong>Core</strong><span>requirements, uncertainty, attribution</span><em>I lead</em></a>
+          <a class="lib card" href={models.guardianLib.hf}><strong>Guardian</strong><span>safety, policy, factuality, tool calls</span></a>
+          <a class="lib card" href={models.coreLib.hf}><strong>Core</strong><span>requirements, uncertainty, attribution</span></a>
           <a class="lib card" href={collection}><strong>RAG</strong><span>answerability, hallucination, query clarification</span></a>
         </div>
         <span class="arrow" aria-hidden="true">→</span>
@@ -232,12 +232,6 @@ const stats = [
   .lib span {
     font-size: 0.84rem;
     color: var(--ink-2);
-  }
-  .lib em {
-    font-style: normal;
-    font-family: var(--mono);
-    font-size: 0.7rem;
-    color: var(--accent);
   }
   .switch {
     display: grid;
